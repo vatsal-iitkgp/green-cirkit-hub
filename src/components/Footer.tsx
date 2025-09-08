@@ -1,8 +1,6 @@
 import { Leaf, Mail, Phone, MapPin, Linkedin, Twitter, Instagram } from "lucide-react";
-
 const Footer = () => {
-  return (
-    <footer className="bg-primary text-primary-foreground">
+  return <footer className="bg-primary text-primary-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid md:grid-cols-4 gap-8">
           {/* Brand */}
@@ -29,14 +27,14 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4">Company</h3>
             <ul className="space-y-3">
               <li><a href="#home" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">Home</a></li>
               <li><a href="#businesses" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">Our Businesses</a></li>
               <li><a href="#why" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">Why GreenCirkit</a></li>
-              <li><a href="#roadmap" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">Roadmap</a></li>
+              
               <li><a href="#impact" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">Impact</a></li>
-              <li><a href="#contact" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">Contact</a></li>
+              
             </ul>
           </div>
 
@@ -53,11 +51,11 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-primary-foreground/60" />
-                <span className="text-primary-foreground/80">info@greencirkit.com</span>
+                <span className="text-primary-foreground/80">vatsal.gupta@greencirkit.com</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-primary-foreground/60" />
-                <span className="text-primary-foreground/80">+91 98765 43212</span>
+                <span className="text-primary-foreground/80">+91 8279712657</span>
               </div>
             </div>
           </div>
@@ -65,19 +63,15 @@ const Footer = () => {
 
         <div className="border-t border-primary-foreground/20 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-primary-foreground/60 text-sm mb-4 md:mb-0">
-              © 2024 GreenCirkit. All rights reserved. Building a circular future.
-            </p>
+            <p className="text-primary-foreground/60 text-sm mb-4 md:mb-0">© 2025 GreenCirkit. All rights reserved. Building a circular future.</p>
             <div className="flex space-x-6 text-sm">
               <a href="#" className="text-primary-foreground/60 hover:text-primary-foreground transition-colors">Privacy Policy</a>
               <a href="#" className="text-primary-foreground/60 hover:text-primary-foreground transition-colors">Terms of Service</a>
-              <a href="#" className="text-primary-foreground/60 hover:text-primary-foreground transition-colors">Sustainability Report</a>
+              
             </div>
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
