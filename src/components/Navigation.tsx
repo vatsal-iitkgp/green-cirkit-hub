@@ -6,11 +6,9 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
-    { name: "Home", href: "#home" },
-    { name: "Businesses", href: "#businesses" },
-    { name: "Why GreenCirkit", href: "#why" },
-    { name: "Roadmap", href: "#roadmap" },
-    { name: "Impact", href: "#impact" },
+    { name: "HDPE Granules", href: "#businesses" },
+    { name: "EPR Solutions", href: "#businesses" },
+    { name: "About Us", href: "#why" },
     { name: "Contact", href: "#contact" },
   ];
 

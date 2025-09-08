@@ -8,39 +8,39 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 142 20% 98%;
-    --foreground: 142 71% 15%;
+    --background: 0 0% 100%;
+    --foreground: 210 11% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 142 71% 15%;
+    --card-foreground: 210 11% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 142 71% 15%;
+    --popover-foreground: 210 11% 15%;
 
-    --primary: 142 71% 19%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 142 30% 95%;
-    --secondary-foreground: 142 71% 15%;
+    --secondary-foreground: 142 100% 15%;
 
-    --muted: 142 10% 96%;
-    --muted-foreground: 142 15% 45%;
+    --muted: 142 30% 95%;
+    --muted-foreground: 210 11% 46%;
 
-    --accent: 142 50% 60%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 142 50% 88%;
+    --accent-foreground: 142 100% 15%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 142 20% 90%;
-    --input: 142 20% 90%;
-    --ring: 142 71% 19%;
+    --border: 142 30% 90%;
+    --input: 142 30% 90%;
+    --ring: 142 76% 36%;
 
     /* GreenCirkit Brand Colors */
-    --green-primary: 142 71% 19%;
-    --green-secondary: 142 50% 60%;
-    --green-light: 142 30% 95%;
-    --green-accent: 142 40% 80%;
+    --green-primary: 142 76% 36%;
+    --green-secondary: 120 100% 25%;
+    --green-light: 142 50% 60%;
+    --green-accent: 85 100% 35%;
 
     /* Gradients */
     --gradient-green: linear-gradient(135deg, hsl(var(--green-primary)), hsl(var(--green-secondary)));
@@ -51,7 +51,7 @@ All colors MUST be HSL.
     --shadow-green: 0 10px 30px -10px hsl(var(--green-primary) / 0.3);
     --shadow-soft: 0 4px 20px -4px hsl(var(--green-primary) / 0.2);
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
