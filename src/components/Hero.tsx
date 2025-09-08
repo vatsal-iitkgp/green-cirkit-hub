@@ -1,39 +1,21 @@
 import { ArrowRight, Recycle, TrendingUp, Globe, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
 
 const Hero = () => {
-  const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  
-  const dynamicTexts = [
-    "GreenCirkit",
-    "Sustainable Solutions",
-    "Circular Economy",
-    "Plastic to Value",
-    "Zero Waste Future"
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTextIndex((prev) => (prev + 1) % dynamicTexts.length);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <section id="home" className="pt-20 min-h-screen bg-gradient-to-br from-background via-green-primary/20 to-green-secondary/30 relative overflow-hidden">
+    <section id="home" className="pt-20 min-h-screen bg-gradient-to-br from-background via-green-primary/10 to-green-secondary/15 relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-40 h-40 bg-green-primary/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-32 h-32 bg-green-accent/30 rounded-full blur-2xl animate-bounce"></div>
-        <div className="absolute bottom-40 left-1/4 w-48 h-48 bg-green-light/25 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute bottom-20 right-1/3 w-36 h-36 bg-green-secondary/20 rounded-full blur-2xl animate-bounce delay-500"></div>
+        <div className="absolute top-20 left-10 w-40 h-40 bg-green-primary/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-40 right-20 w-32 h-32 bg-green-accent/15 rounded-full blur-2xl animate-bounce"></div>
+        <div className="absolute bottom-40 left-1/4 w-48 h-48 bg-green-light/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute bottom-20 right-1/3 w-36 h-36 bg-green-secondary/10 rounded-full blur-2xl animate-bounce delay-500"></div>
         
         {/* Recycling Icons */}
-        <div className="absolute top-32 right-1/4 opacity-10">
+        <div className="absolute top-32 right-1/4 opacity-5">
           <Recycle className="h-24 w-24 text-green-primary animate-spin" style={{animationDuration: '8s'}} />
         </div>
-        <div className="absolute bottom-32 left-1/3 opacity-10">
+        <div className="absolute bottom-32 left-1/3 opacity-5">
           <Leaf className="h-20 w-20 text-green-accent animate-pulse" />
         </div>
       </div>
@@ -43,14 +25,14 @@ const Hero = () => {
         <div className="text-center mb-20">
           <div className="mb-12">
             <div className="h-20 mb-8 flex items-center justify-center">
-              <span className="text-7xl md:text-9xl font-black text-green-primary transition-all duration-700 ease-in-out">
-                {dynamicTexts[currentTextIndex]}
+              <span className="text-7xl md:text-9xl font-black text-green-primary">
+                GreenCirkit
               </span>
             </div>
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-8 leading-tight">
             Engineering Sustainability
-            <span className="block text-green-light mt-4">with Technology</span>
+            <span className="block text-green-primary mt-4">with Technology</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-16 max-w-3xl mx-auto leading-relaxed font-medium">
             Transforming plastic waste into valuable resources through innovative technology and circular economy solutions
@@ -68,26 +50,26 @@ const Hero = () => {
 
         {/* Impact Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="text-center bg-card/60 backdrop-blur-lg border border-green-primary/30 rounded-3xl p-10 hover:shadow-green hover:scale-105 transition-all duration-300">
-            <div className="w-24 h-24 bg-green-primary/20 rounded-3xl flex items-center justify-center mx-auto mb-8">
+          <div className="text-center bg-card/80 backdrop-blur-lg border border-green-primary/20 rounded-3xl p-10 hover:shadow-green hover:scale-105 transition-all duration-300">
+            <div className="w-24 h-24 bg-green-primary/15 rounded-3xl flex items-center justify-center mx-auto mb-8">
               <Recycle className="h-12 w-12 text-green-primary" />
             </div>
-            <div className="text-5xl font-black text-green-primary mb-4">3.3M</div>
-            <div className="text-muted-foreground font-semibold text-lg">Tonnes of Plastic Waste Annually</div>
+            <div className="text-5xl font-black text-green-primary mb-4">1,200+</div>
+            <div className="text-foreground font-semibold text-lg">Tonnes of Plastic Recycled</div>
           </div>
-          <div className="text-center bg-card/60 backdrop-blur-lg border border-green-accent/30 rounded-3xl p-10 hover:shadow-green hover:scale-105 transition-all duration-300">
-            <div className="w-24 h-24 bg-green-accent/20 rounded-3xl flex items-center justify-center mx-auto mb-8">
+          <div className="text-center bg-card/80 backdrop-blur-lg border border-green-accent/20 rounded-3xl p-10 hover:shadow-green hover:scale-105 transition-all duration-300">
+            <div className="w-24 h-24 bg-green-accent/15 rounded-3xl flex items-center justify-center mx-auto mb-8">
               <TrendingUp className="h-12 w-12 text-green-accent" />
             </div>
-            <div className="text-5xl font-black text-green-accent mb-4">$9.6B</div>
-            <div className="text-muted-foreground font-semibold text-lg">Recycling Market by 2025</div>
+            <div className="text-5xl font-black text-green-accent mb-4">500+</div>
+            <div className="text-foreground font-semibold text-lg">EPR Credits Issued</div>
           </div>
-          <div className="text-center bg-card/60 backdrop-blur-lg border border-green-light/30 rounded-3xl p-10 hover:shadow-green hover:scale-105 transition-all duration-300">
-            <div className="w-24 h-24 bg-green-light/20 rounded-3xl flex items-center justify-center mx-auto mb-8">
+          <div className="text-center bg-card/80 backdrop-blur-lg border border-green-light/20 rounded-3xl p-10 hover:shadow-green hover:scale-105 transition-all duration-300">
+            <div className="w-24 h-24 bg-green-light/15 rounded-3xl flex items-center justify-center mx-auto mb-8">
               <Globe className="h-12 w-12 text-green-light" />
             </div>
-            <div className="text-5xl font-black text-green-light mb-4">$2.5B</div>
-            <div className="text-muted-foreground font-semibold text-lg">EPR Market Opportunity</div>
+            <div className="text-5xl font-black text-green-light mb-4">50+</div>
+            <div className="text-foreground font-semibold text-lg">Partner Companies</div>
           </div>
         </div>
       </div>
