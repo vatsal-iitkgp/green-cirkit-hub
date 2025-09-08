@@ -54,22 +54,22 @@ const Hero = () => {
             <div className="w-24 h-24 bg-green-primary/15 rounded-3xl flex items-center justify-center mx-auto mb-8">
               <Recycle className="h-12 w-12 text-green-primary" />
             </div>
-            <div className="text-5xl font-black text-green-primary mb-4">1,200+</div>
+            <div className="text-5xl font-black text-green-primary mb-4">1,200</div>
             <div className="text-foreground font-semibold text-lg">Tonnes of Plastic Recycled</div>
           </div>
           <div className="text-center bg-card/80 backdrop-blur-lg border border-green-accent/20 rounded-3xl p-10 hover:shadow-green hover:scale-105 transition-all duration-300">
             <div className="w-24 h-24 bg-green-accent/15 rounded-3xl flex items-center justify-center mx-auto mb-8">
               <TrendingUp className="h-12 w-12 text-green-accent" />
             </div>
-            <div className="text-5xl font-black text-green-accent mb-4">500+</div>
+            <div className="text-5xl font-black text-green-accent mb-4">850</div>
             <div className="text-foreground font-semibold text-lg">EPR Credits Issued</div>
           </div>
           <div className="text-center bg-card/80 backdrop-blur-lg border border-green-light/20 rounded-3xl p-10 hover:shadow-green hover:scale-105 transition-all duration-300">
             <div className="w-24 h-24 bg-green-light/15 rounded-3xl flex items-center justify-center mx-auto mb-8">
               <Globe className="h-12 w-12 text-green-light" />
             </div>
-            <div className="text-5xl font-black text-green-light mb-4">50+</div>
-            <div className="text-foreground font-semibold text-lg">Partner Companies</div>
+            <div className="text-5xl font-black text-green-light mb-4">2,400</div>
+            <div className="text-foreground font-semibold text-lg">Tonnes CO₂ Emission Reduced</div>
           </div>
         </div>
       </div>

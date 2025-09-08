@@ -8,8 +8,7 @@ const Navigation = () => {
   const navItems = [
     { name: "HDPE Granules", href: "#businesses" },
     { name: "EPR Solutions", href: "#businesses" },
-    { name: "About Us", href: "#why" },
-    { name: "Contact", href: "#contact" },
+    { name: "About Us", href: "#businesses" },
   ];
 
   return (
