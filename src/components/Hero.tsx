@@ -64,32 +64,77 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* RIGHT: image card */}
+        {/* RIGHT: startup-style dashboard card */}
         <div className="relative">
           <div className="rounded-2xl border bg-white/90 backdrop-blur shadow-sm p-6">
-            <div className="h-56 md:h-72 rounded-xl bg-gradient-to-br from-[hsl(var(--secondary))] to-white border flex items-center justify-center">
-              {/* Put your real visual at /public/hero.png */}
-              <img
-                src="/hero.png"
-                alt="Recycling workflow"
-                className="h-40 w-auto object-contain"
-                onError={(e) => ((e.currentTarget.style.display = 'none'))}
-              />
-              <span className="text-sm text-[hsl(var(--primary))]">
-                Add an image at <code>/public/hero.png</code>
+            {/* top ribbon / pipeline */}
+            <div className="flex items-center gap-2 text-xs">
+              <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 border border-[hsl(var(--border))] bg-[hsl(var(--secondary))] text-[hsl(var(--primary))]">
+                ♻️ Real-time Quality & EPR
               </span>
+              <span className="text-muted-foreground">•</span>
+              <span className="text-muted-foreground">Live KPIs</span>
             </div>
 
-            <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-              <div className="rounded-lg border p-3">
-                <div className="font-semibold text-foreground">HDPE Granules</div>
-                <div className="text-muted-foreground">MFI as per spec</div>
+            {/* main row: KPI ring + two tiles */}
+            <div className="mt-5 grid grid-cols-3 gap-3">
+              {/* KPI ring */}
+              <div className="col-span-1 rounded-xl border p-4 grid place-items-center">
+                <div className="relative h-28 w-28">
+                  <div
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background:
+                        "conic-gradient(hsl(var(--primary)) 0 290deg, hsl(var(--border)) 290deg 360deg)",
+                    }}
+                  />
+                  <div className="absolute inset-[10px] rounded-full bg-white grid place-items-center">
+                    <div className="text-center">
+                      <div className="text-xl font-bold text-foreground">96%</div>
+                      <div className="text-[10px] text-muted-foreground">Quality Score</div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="rounded-lg border p-3">
-                <div className="font-semibold text-foreground">EPR Credits</div>
-                <div className="text-muted-foreground">Audit trail provided</div>
+
+              {/* MFI tile */}
+              <div className="col-span-1 rounded-xl border p-4">
+                <div className="text-xs text-muted-foreground">MFI (Target)</div>
+                <div className="mt-1 text-lg font-semibold text-foreground">0.8–1.2</div>
+                <div className="mt-2 h-2 w-full rounded bg-[hsl(var(--secondary))]">
+                  <div className="h-2 rounded bg-[hsl(var(--primary))]" style={{ width: "72%" }} />
+                </div>
+                <div className="mt-1 text-[10px] text-muted-foreground">Spec adherence</div>
+              </div>
+
+              {/* Moisture tile */}
+              <div className="col-span-1 rounded-xl border p-4">
+                <div className="text-xs text-muted-foreground">Moisture</div>
+                <div className="mt-1 text-lg font-semibold text-foreground">&lt; 0.2%</div>
+                <div className="mt-2 h-2 w-full rounded bg-[hsl(var(--secondary))]">
+                  <div className="h-2 rounded bg-[hsl(var(--primary))]" style={{ width: "90%" }} />
+                </div>
+                <div className="mt-1 text-[10px] text-muted-foreground">Odor-free output</div>
               </div>
             </div>
+
+            {/* bottom row: EPR / Granules badges */}
+            <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <div className="rounded-lg border p-3">
+                <div className="font-semibold text-foreground">EPR Credits</div>
+                <div className="text-muted-foreground">Audit trail • CPCB compliant</div>
+              </div>
+              <div className="rounded-lg border p-3">
+                <div className="font-semibold text-foreground">HDPE Granules</div>
+                <div className="text-muted-foreground">Near-virgin • Degassed</div>
+              </div>
+            </div>
+          </div>
+
+          {/* floating badge */}
+          <div className="absolute -bottom-3 -right-3 rounded-xl border bg-white/90 backdrop-blur shadow px-3 py-2 text-xs">
+            <span className="text-[hsl(var(--primary))] font-semibold">On-time dispatch</span>{" "}
+            <span className="text-muted-foreground">99.2%</span>
           </div>
         </div>
       </div>
