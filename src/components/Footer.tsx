@@ -10,11 +10,11 @@ const Footer = () => {
               <span className="text-2xl font-bold">GreenCirkit</span>
             </div>
             <p className="text-primary-foreground/80 mb-6 leading-relaxed">
-              Engineering sustainability with technology. We transform plastic waste into valuable resources through innovative technology and strategic partnerships, building a circular economy for a sustainable future.
+              Engineering sustainability with technology. Closing the loop in plastics through innovative solutions.
             </p>
             <div className="flex space-x-4">
-              <div className="w-10 h-10 bg-primary-foreground/10 rounded-full flex items-center justify-center hover:bg-primary-foreground/20 transition-colors cursor-pointer">
-                <Linkedin className="h-5 w-5" />
+              <div className="w-12 h-12 bg-primary-foreground/20 rounded-full flex items-center justify-center hover:bg-primary-foreground/30 transition-all duration-300 cursor-pointer hover:scale-110 shadow-lg">
+                <Linkedin className="h-6 w-6" />
               </div>
               <div className="w-10 h-10 bg-primary-foreground/10 rounded-full flex items-center justify-center hover:bg-primary-foreground/20 transition-colors cursor-pointer">
                 <Twitter className="h-5 w-5" />
@@ -27,14 +27,11 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Company</h3>
+            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-3">
-              <li><a href="#home" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">Home</a></li>
-              <li><a href="#businesses" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">Our Businesses</a></li>
-              <li><a href="#why" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">Why GreenCirkit</a></li>
-              
+              <li><a href="#businesses" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">Services</a></li>
               <li><a href="#impact" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">Impact</a></li>
-              
+              <li><a href="#" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">Partner With Us</a></li>
             </ul>
           </div>
 
@@ -63,7 +60,7 @@ const Footer = () => {
 
         <div className="border-t border-primary-foreground/20 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-primary-foreground/60 text-sm mb-4 md:mb-0">© 2025 GreenCirkit. All rights reserved. Building a circular future.</p>
+            <p className="text-primary-foreground/60 text-sm mb-4 md:mb-0">© 2025 GreenCirkit – Closing the Loop in Plastics. All rights reserved.</p>
             <div className="flex space-x-6 text-sm">
               <a href="#" className="text-primary-foreground/60 hover:text-primary-foreground transition-colors">Privacy Policy</a>
               <a href="#" className="text-primary-foreground/60 hover:text-primary-foreground transition-colors">Terms of Service</a>
