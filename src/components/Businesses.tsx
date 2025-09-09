@@ -8,31 +8,43 @@ import { useState } from "react";
 const Businesses = () => {
   const [selectedBusiness, setSelectedBusiness] = useState<string | null>(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
-  return <section id="businesses" className="py-20 bg-gradient-to-b from-green-light/30 to-green-primary/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-6">Our Services</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Click to explore our two main business streams
+  return <section id="businesses" className="py-24 bg-gradient-to-br from-green-light/20 via-green-primary/5 to-green-accent/10 relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-green-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-green-accent/5 rounded-full blur-3xl"></div>
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="text-center mb-20">
+          <h2 className="text-5xl md:text-6xl font-black text-primary mb-8 bg-gradient-to-r from-primary to-green-accent bg-clip-text text-transparent">Our Services</h2>
+          <p className="text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Discover our comprehensive solutions for sustainable plastic management
           </p>
         </div>
 
-        {/* Business Category Buttons */}
-        <div className="flex flex-col md:flex-row gap-6 mb-12 justify-center">
+        {/* Enhanced Business Category Buttons */}
+        <div className="flex flex-col md:flex-row gap-8 mb-16 justify-center">
           <Button size="lg" variant={selectedBusiness === "hdpe" ? "default" : "outline"} onClick={() => {
           setSelectedBusiness(selectedBusiness === "hdpe" ? null : "hdpe");
           setSelectedSubCategory(null);
-        }} className="text-lg px-8 py-6 h-auto flex flex-col items-center space-y-2">
-            <Factory className="h-8 w-8" />
-            <span>HDPE Granules</span>
+        }} className="text-2xl px-16 py-12 h-auto flex flex-col items-center space-y-4 rounded-3xl border-2 hover:scale-105 transition-all duration-300 shadow-2xl backdrop-blur bg-gradient-to-br from-card/90 to-card/60">
+            <div className="w-20 h-20 bg-gradient-to-br from-primary to-primary/70 rounded-2xl flex items-center justify-center shadow-lg">
+              <Factory className="h-10 w-10 text-primary-foreground" />
+            </div>
+            <span className="font-bold">HDPE Granules</span>
+            <span className="text-sm text-muted-foreground font-normal">Premium recycled materials</span>
           </Button>
           
           <Button size="lg" variant={selectedBusiness === "epr" ? "default" : "outline"} onClick={() => {
           setSelectedBusiness(selectedBusiness === "epr" ? null : "epr");
           setSelectedSubCategory(null);
-        }} className="text-lg px-8 py-6 h-auto flex flex-col items-center space-y-2">
-            <Shield className="h-8 w-8" />
-            <span>EPR Services</span>
+        }} className="text-2xl px-16 py-12 h-auto flex flex-col items-center space-y-4 rounded-3xl border-2 hover:scale-105 transition-all duration-300 shadow-2xl backdrop-blur bg-gradient-to-br from-card/90 to-card/60">
+            <div className="w-20 h-20 bg-gradient-to-br from-green-accent to-green-accent/70 rounded-2xl flex items-center justify-center shadow-lg">
+              <Shield className="h-10 w-10 text-primary-foreground" />
+            </div>
+            <span className="font-bold">EPR Services</span>
+            <span className="text-sm text-muted-foreground font-normal">Compliance made simple</span>
           </Button>
         </div>
 
