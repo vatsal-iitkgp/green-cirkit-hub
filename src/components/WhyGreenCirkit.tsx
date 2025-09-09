@@ -1,18 +1,19 @@
 import React from "react";
-import {
-  Cpu,
-  ShieldCheck,
-  Truck,
-  Globe,
-  LineChart,
-  Link2,
-} from "lucide-react";
+import { Cpu, ShieldCheck, Truck } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function WhyGreenCirkit() {
+  // KPI data for the ticker
+  const KPIS: { label: string; value: string; hint: string }[] = [
+    { label: "Lower EPR Costs", value: "15%", hint: "Tech-optimized compliance" },
+    { label: "Traceability", value: "100%", hint: "Verifiable certificates" },
+    { label: "Live Visibility", value: "24/7", hint: "Realtime dashboard" },
+    { label: "Coverage", value: "PAN", hint: "Pan-India network" },
+  ];
+
   return (
     <section className="relative overflow-hidden">
-      {/* gradient background */}
+      {/* soft background wash */}
       <div
         className="absolute inset-0 -z-10"
         style={{
@@ -33,11 +34,12 @@ export default function WhyGreenCirkit() {
           <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">
             We combine <span className="text-foreground font-medium">smart tech</span>,
             <span className="text-foreground font-medium"> guaranteed purity</span> and
-            <span className="text-foreground font-medium"> nationwide execution</span> so brands can scale sustainability with certainty.
+            <span className="text-foreground font-medium"> nationwide execution</span>{" "}
+            so brands can scale sustainability with certainty.
           </p>
         </div>
 
-        {/* floating feature cards */}
+        {/* feature cards (enter animation) */}
         <motion.div
           className="mt-10 grid gap-6 md:grid-cols-3"
           initial={{ x: 100, opacity: 0 }}
@@ -62,25 +64,37 @@ export default function WhyGreenCirkit() {
           />
         </motion.div>
 
-        {/* floating KPI strip */}
-        <motion.div
-          className="mt-10 rounded-2xl border bg-white/80 backdrop-blur px-4 py-5 shadow-sm"
-          initial={{ x: -100, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
-            <KPI label="Lower EPR Costs" value="15%" hint="Tech-optimized compliance" />
-            <KPI label="Traceability" value="100%" hint="Verifiable certificates" />
-            <KPI label="Live Visibility" value="24/7" hint="Realtime dashboard" />
-            <KPI label="Coverage" value="PAN" hint="Pan-India network" />
-          </div>
-        </motion.div>
+        {/* continuous-scrolling KPI ticker */}
+        <div className="mt-10 rounded-2xl border bg-white/60 backdrop-blur p-0 overflow-hidden">
+          <motion.div
+            className="flex gap-4 py-5"
+            // slide the whole strip left forever
+            animate={{ x: ["0%", "-100%"] }}
+            transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+          >
+            {/* duplicate content once to make it seamless */}
+            {[...Array(2)].map((_, idx) => (
+              <div key={idx} className="flex gap-4 px-4">
+                {KPIS.map((kpi, i) => (
+                  <KPIBox
+                    key={`${kpi.label}-${idx}-${i}`}
+                    label={kpi.label}
+                    value={kpi.value}
+                    hint={kpi.hint}
+                  />
+                ))}
+              </div>
+            ))}
+          </motion.div>
+        </div>
       </div>
     </section>
   );
 }
+
+/* ---------------------------------- */
+/* subcomponents                      */
+/* ---------------------------------- */
 
 type FeatureProps = {
   Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -95,8 +109,10 @@ function FeatureCard({ Icon, title, desc }: FeatureProps) {
       whileHover={{ y: -6 }}
     >
       <div className="p-6">
-        <div className="inline-grid place-items-center h-12 w-12 rounded-xl bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--green-accent))] text-white shadow"
-             aria-hidden="true">
+        <div
+          className="inline-grid place-items-center h-12 w-12 rounded-xl bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--green-accent))] text-white shadow"
+          aria-hidden="true"
+        >
           <Icon className="h-6 w-6" />
         </div>
         <h3 className="mt-5 text-xl font-semibold text-foreground">{title}</h3>
@@ -107,17 +123,23 @@ function FeatureCard({ Icon, title, desc }: FeatureProps) {
   );
 }
 
-type KPIProps = { label: string; value: string; hint: string };
-
-function KPI({ label, value, hint }: KPIProps) {
+/** Non-animated box used inside the moving ticker */
+function KPIBox({
+  label,
+  value,
+  hint,
+}: {
+  label: string;
+  value: string;
+  hint: string;
+}) {
   return (
-    <motion.div
-      className="rounded-xl border bg-white p-4 text-center shadow-xs"
-      whileHover={{ scale: 1.05 }}
-    >
-      <div className="text-2xl font-extrabold text-foreground tracking-tight">{value}</div>
+    <div className="min-w-[220px] rounded-xl border bg-white p-4 text-center shadow-xs">
+      <div className="text-2xl font-extrabold text-foreground tracking-tight">
+        {value}
+      </div>
       <div className="mt-1 text-xs font-medium text-foreground">{label}</div>
       <div className="text-[11px] text-muted-foreground">{hint}</div>
-    </motion.div>
+    </div>
   );
 }
