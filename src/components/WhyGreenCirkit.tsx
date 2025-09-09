@@ -7,18 +7,12 @@ import {
   LineChart,
   Link2,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
-/**
- * Clean, startup-style section:
- * - Subtle gradient background
- * - Glassy feature cards with icon blobs
- * - Compact KPI strip
- * - Fully theme-aware via CSS vars (index.css)
- */
 export default function WhyGreenCirkit() {
   return (
     <section className="relative overflow-hidden">
-      {/* background wash */}
+      {/* gradient background */}
       <div
         className="absolute inset-0 -z-10"
         style={{
@@ -28,7 +22,7 @@ export default function WhyGreenCirkit() {
       />
 
       <div className="max-w-6xl mx-auto px-4 py-16 md:py-24">
-        {/* kicker + headline */}
+        {/* header */}
         <div className="text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--border))] bg-white/70 backdrop-blur px-3 py-1 text-xs text-[hsl(var(--primary))] shadow-sm">
             Why GreenCirkit
@@ -43,8 +37,14 @@ export default function WhyGreenCirkit() {
           </p>
         </div>
 
-        {/* feature cards */}
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        {/* floating feature cards */}
+        <motion.div
+          className="mt-10 grid gap-6 md:grid-cols-3"
+          initial={{ x: 100, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.8, staggerChildren: 0.2 }}
+          viewport={{ once: true }}
+        >
           <FeatureCard
             Icon={Cpu}
             title="Smart Recycling Tech"
@@ -60,41 +60,27 @@ export default function WhyGreenCirkit() {
             title="Nationwide, Zero-Hassle"
             desc="Pan-India logistics and CPCB-compliant EPR handled end-to-end. One partner, complete coverage."
           />
-        </div>
+        </motion.div>
 
-        {/* KPI strip */}
-        <div className="mt-10 rounded-2xl border bg-white/80 backdrop-blur px-4 py-5 shadow-sm">
+        {/* floating KPI strip */}
+        <motion.div
+          className="mt-10 rounded-2xl border bg-white/80 backdrop-blur px-4 py-5 shadow-sm"
+          initial={{ x: -100, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
             <KPI label="Lower EPR Costs" value="15%" hint="Tech-optimized compliance" />
             <KPI label="Traceability" value="100%" hint="Verifiable certificates" />
             <KPI label="Live Visibility" value="24/7" hint="Realtime dashboard" />
             <KPI label="Coverage" value="PAN" hint="Pan-India network" />
           </div>
-        </div>
-
-        {/* mini proof row */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-xs text-muted-foreground">
-          <span className="inline-flex items-center gap-2 rounded-full border bg-white/70 px-3 py-1">
-            <LineChart className="h-3.5 w-3.5 text-[hsl(var(--primary))]" />
-            Process analytics
-          </span>
-          <span className="inline-flex items-center gap-2 rounded-full border bg-white/70 px-3 py-1">
-            <Link2 className="h-3.5 w-3.5 text-[hsl(var(--primary))]" />
-            API-ready integrations
-          </span>
-          <span className="inline-flex items-center gap-2 rounded-full border bg-white/70 px-3 py-1">
-            <Globe className="h-3.5 w-3.5 text-[hsl(var(--primary))]" />
-            Multi-location ops
-          </span>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 }
-
-/* ---------------------------------- */
-/* subcomponents                      */
-/* ---------------------------------- */
 
 type FeatureProps = {
   Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -104,10 +90,10 @@ type FeatureProps = {
 
 function FeatureCard({ Icon, title, desc }: FeatureProps) {
   return (
-    <div className="group relative overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:shadow-lg">
-      {/* subtle top highlight */}
-      <div className="absolute -top-12 right-0 h-28 w-28 rounded-full blur-3xl opacity-30"
-           style={{ background: "var(--gradient-green)" }} />
+    <motion.div
+      className="group relative overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:shadow-lg"
+      whileHover={{ y: -6 }}
+    >
       <div className="p-6">
         <div className="inline-grid place-items-center h-12 w-12 rounded-xl bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--green-accent))] text-white shadow"
              aria-hidden="true">
@@ -116,9 +102,8 @@ function FeatureCard({ Icon, title, desc }: FeatureProps) {
         <h3 className="mt-5 text-xl font-semibold text-foreground">{title}</h3>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{desc}</p>
       </div>
-      {/* hover underline accent */}
       <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--green-accent))] opacity-0 transition group-hover:opacity-100" />
-    </div>
+    </motion.div>
   );
 }
 
@@ -126,10 +111,13 @@ type KPIProps = { label: string; value: string; hint: string };
 
 function KPI({ label, value, hint }: KPIProps) {
   return (
-    <div className="rounded-xl border bg-white p-4 text-center shadow-xs">
+    <motion.div
+      className="rounded-xl border bg-white p-4 text-center shadow-xs"
+      whileHover={{ scale: 1.05 }}
+    >
       <div className="text-2xl font-extrabold text-foreground tracking-tight">{value}</div>
       <div className="mt-1 text-xs font-medium text-foreground">{label}</div>
       <div className="text-[11px] text-muted-foreground">{hint}</div>
-    </div>
+    </motion.div>
   );
 }
