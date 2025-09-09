@@ -3,7 +3,7 @@ import React from "react";
 export default function Hero() {
   return (
     <section className="relative overflow-hidden">
-      {/* subtle green background / blob */}
+      {/* soft green background glow */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_70%_at_10%_10%,#d1fae5_0%,transparent_60%)]" />
 
       <div className="max-w-6xl mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 gap-10 items-center">
@@ -55,11 +55,11 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* RIGHT: illustration / card */}
+        {/* RIGHT: illustration card */}
         <div className="relative">
           <div className="rounded-2xl border bg-white shadow-sm p-6">
             <div className="h-56 md:h-72 rounded-xl bg-gradient-to-br from-green-100 to-emerald-50 border flex items-center justify-center">
-              {/* Replace /hero.png with your real image placed in /public/hero.png */}
+              {/* Place a real image at /public/hero.png to replace this placeholder */}
               <img
                 src="/hero.png"
                 alt="Recycling workflow"
