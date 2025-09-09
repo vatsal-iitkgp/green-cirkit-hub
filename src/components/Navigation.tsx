@@ -1,82 +1,111 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link, NavLink } from "react-router-dom";
 
 const Navigation = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const navItems = [
-    { name: "HDPE Granules", href: "#businesses" },
-    { name: "EPR Solutions", href: "#businesses" },
-    { name: "About Us", href: "#businesses" },
+    { name: "HDPE Granules", to: "/granules/buy" },
+    { name: "EPR Credits", to: "/epr" },
+    { name: "About", to: "/about" },
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <header
+      className={[
+        "fixed top-0 inset-x-0 z-50 border-b",
+        "backdrop-blur supports-[backdrop-filter]:bg-background/70 bg-background/70",
+        scrolled ? "shadow-sm" : "shadow-none",
+      ].join(" ")}
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="h-14 flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <Leaf className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold text-primary">GreenCirkit</span>
-          </div>
+          <Link to="/" className="flex items-center gap-2">
+            <div className="h-6 w-6 rounded-md bg-gradient-to-br from-green-600 to-emerald-400 grid place-items-center">
+              <Leaf className="h-4 w-4 text-white" />
+            </div>
+            <span className="text-base md:text-lg font-semibold">
+              GreenCirkit
+            </span>
+          </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-6">
             {navItems.map((item) => (
-              <a
+              <NavLink
                 key={item.name}
-                href={item.href}
-                className="text-foreground hover:text-primary transition-colors duration-200 font-medium"
+                to={item.to}
+                className={({ isActive }) =>
+                  [
+                    "text-sm font-medium transition-colors",
+                    isActive
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
+                  ].join(" ")
+                }
               >
                 {item.name}
-              </a>
+              </NavLink>
             ))}
-            <Button variant="default" className="ml-4">
-              Get Started
-            </Button>
-          </div>
+            <Link to="/contact">
+              <Button size="sm" className="ml-2">
+                Get Quote
+              </Button>
+            </Link>
+          </nav>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </Button>
-          </div>
+          {/* Mobile button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setOpen((s) => !s)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-card border-t border-border">
+        {/* Mobile menu */}
+        {open && (
+          <div className="md:hidden pb-4">
+            <div className="rounded-xl border bg-card p-2 space-y-1">
               {navItems.map((item) => (
-                <a
+                <NavLink
                   key={item.name}
-                  href={item.href}
-                  className="block px-3 py-2 text-foreground hover:text-primary transition-colors duration-200"
-                  onClick={() => setIsMenuOpen(false)}
+                  to={item.to}
+                  className={({ isActive }) =>
+                    [
+                      "block px-3 py-2 rounded-lg text-sm font-medium",
+                      isActive
+                        ? "bg-muted text-foreground"
+                        : "text-muted-foreground hover:text-foreground",
+                    ].join(" ")
+                  }
+                  onClick={() => setOpen(false)}
                 >
                   {item.name}
-                </a>
+                </NavLink>
               ))}
-              <div className="px-3 py-2">
-                <Button variant="default" className="w-full">
-                  Get Started
-                </Button>
-              </div>
+              <Link to="/contact" onClick={() => setOpen(false)}>
+                <Button className="w-full">Get Quote</Button>
+              </Link>
             </div>
           </div>
         )}
       </div>
-    </nav>
+    </header>
   );
 };
 
