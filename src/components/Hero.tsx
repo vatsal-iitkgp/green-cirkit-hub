@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 const Hero = () => {
   return (
-    <section id="home" className="pt-20 min-h-screen bg-gradient-to-br from-background via-green-primary/10 to-green-secondary/15 relative overflow-hidden">
+    <section id="home" className="pt-20 pb-8 min-h-screen bg-gradient-to-br from-background via-green-primary/10 to-green-secondary/15 relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-40 h-40 bg-green-primary/10 rounded-full blur-3xl animate-pulse"></div>

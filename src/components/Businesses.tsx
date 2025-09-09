@@ -1,9 +1,17 @@
+import { useState } from "react";
 import { ArrowRight, Factory, Shield, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import HDPEEnquiryModal from "./HDPEEnquiryModal";
+import EPREnquiryModal from "./EPREnquiryModal";
 
 const Businesses = () => {
-  return <section id="businesses" className="py-24 bg-gradient-to-br from-green-light/20 via-green-primary/5 to-green-accent/10 relative overflow-hidden">
+  const [isHDPEModalOpen, setIsHDPEModalOpen] = useState(false);
+  const [isEPRModalOpen, setIsEPRModalOpen] = useState(false);
+
+  return (
+    <>
+      <section id="businesses" className="py-24 bg-gradient-to-br from-green-light/20 via-green-primary/5 to-green-accent/10 relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-72 h-72 bg-green-primary/5 rounded-full blur-3xl"></div>
@@ -44,7 +52,11 @@ const Businesses = () => {
                   <span>Competitive pricing with guaranteed supply</span>
                 </div>
               </div>
-              <Button className="w-full text-lg py-6 rounded-xl" size="lg">
+              <Button 
+                className="w-full text-lg py-6 rounded-xl" 
+                size="lg"
+                onClick={() => setIsHDPEModalOpen(true)}
+              >
                 Buy HDPE Granules
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -75,7 +87,12 @@ const Businesses = () => {
                   <span>24/7 compliance support and monitoring</span>
                 </div>
               </div>
-              <Button variant="secondary" className="w-full text-lg py-6 rounded-xl" size="lg">
+              <Button 
+                variant="secondary" 
+                className="w-full text-lg py-6 rounded-xl" 
+                size="lg"
+                onClick={() => setIsEPRModalOpen(true)}
+              >
                 Get EPR Credits
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -84,6 +101,17 @@ const Businesses = () => {
         </div>
 
       </div>
-    </section>;
+      </section>
+
+      <HDPEEnquiryModal 
+        isOpen={isHDPEModalOpen} 
+        onClose={() => setIsHDPEModalOpen(false)} 
+      />
+      <EPREnquiryModal 
+        isOpen={isEPRModalOpen} 
+        onClose={() => setIsEPRModalOpen(false)} 
+      />
+    </>
+  );
 };
 export default Businesses;
