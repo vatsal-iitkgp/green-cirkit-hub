@@ -2,10 +2,8 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Target, Eye, Users, Award, Leaf, Shield } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
 const About = () => {
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <Navigation />
       
       {/* Hero Section */}
@@ -15,10 +13,8 @@ const About = () => {
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               About GreenCirkit
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Engineering sustainability through technology. We're transforming the plastic waste 
-              ecosystem with innovative solutions that benefit both business and the environment.
-            </p>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">Engineering sustainability through technology. 
+We're transforming the plastic waste ecosystem with innovative solutions that benefit both business and the environment.</p>
           </div>
 
           {/* What We Do */}
@@ -70,11 +66,7 @@ const About = () => {
                   <CardTitle className="text-2xl">Our Mission</CardTitle>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <p className="text-muted-foreground text-lg">
-                    To create a circular economy for plastics by connecting waste generators, 
-                    recyclers, and manufacturers through innovative technology solutions that 
-                    make sustainability profitable and scalable.
-                  </p>
+                  <p className="text-muted-foreground text-lg">To revolutionize waste management in India by providing transparent, tech-enabled recycling solutions that fulfill corporate EPR commitments while unlocking maximum value from waste. </p>
                 </CardContent>
               </Card>
 
@@ -84,11 +76,7 @@ const About = () => {
                   <CardTitle className="text-2xl">Our Vision</CardTitle>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <p className="text-muted-foreground text-lg">
-                    To be the leading platform enabling a zero-waste plastic ecosystem in India, 
-                    where every piece of plastic waste finds its way back into the circular economy 
-                    through transparent and traceable processes.
-                  </p>
+                  <p className="text-muted-foreground text-lg">To establish India’s most advanced tech-driven recycling enterprise, pioneering digital traceability and EPR compliance — creating a future where sustainability, innovation, and profitability go hand in hand.</p>
                 </CardContent>
               </Card>
             </div>
@@ -103,49 +91,26 @@ const About = () => {
                   <div className="w-24 h-24 bg-gradient-to-br from-primary to-primary/60 rounded-full mx-auto mb-4 flex items-center justify-center">
                     <Users className="h-12 w-12 text-white" />
                   </div>
-                  <CardTitle>Rajesh Kumar</CardTitle>
-                  <CardDescription>Founder & CEO</CardDescription>
+                  <CardTitle>Anuj Gupta</CardTitle>
+                  <CardDescription>Managing Director</CardDescription>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <p className="text-muted-foreground">
-                    15+ years in waste management and sustainability. Previously led recycling 
-                    initiatives at major corporations. IIT Delhi alumnus with expertise in 
-                    circular economy solutions.
-                  </p>
+                  <p className="text-muted-foreground">Launching his first venture in his early 20s, Anuj Gupta quickly emerged as a visionary consultant in the real estate industry known for futuristic ideas and bold risk-taking. With decades of business acumen and strong networks across India, he has built a reputation for scaling ventures with innovation. A long-term believer in the future, he now leads GreenCirkit with a vision for a circular and sustainable future.</p>
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader className="text-center">
-                  <div className="w-24 h-24 bg-gradient-to-br from-secondary to-secondary/60 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <Shield className="h-12 w-12 text-white" />
-                  </div>
-                  <CardTitle>Priya Sharma</CardTitle>
-                  <CardDescription>CTO</CardDescription>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <p className="text-muted-foreground">
-                    Technology leader with 12+ years in building scalable platforms. 
-                    Former engineering head at leading startups. Specializes in blockchain 
-                    and traceability systems.
-                  </p>
-                </CardContent>
-              </Card>
+              
 
               <Card>
                 <CardHeader className="text-center">
                   <div className="w-24 h-24 bg-gradient-to-br from-accent to-accent/60 rounded-full mx-auto mb-4 flex items-center justify-center">
                     <Award className="h-12 w-12 text-white" />
                   </div>
-                  <CardTitle>Amit Patel</CardTitle>
-                  <CardDescription>Head of Operations</CardDescription>
+                  <CardTitle>Vatsal Gupta</CardTitle>
+                  <CardDescription>Managing Director</CardDescription>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <p className="text-muted-foreground">
-                    Operations expert with 10+ years in supply chain and logistics. 
-                    Built nationwide networks for recycling companies. Ensures quality 
-                    and compliance across all processes.
-                  </p>
+                  <p className="text-muted-foreground">A next-generation leader from IIT Kharagpur, Vatsal Gupta blends financial strategy with a deep passion for technology. Known for his data-driven mindset and bold use of digital innovation, he spearheads product development, EPR tech platforms, and market expansion. His vision positions GreenCirkit at the forefront of India’s recycling revolution and scalable tech driven growth.</p>
                 </CardContent>
               </Card>
             </div>
@@ -197,17 +162,11 @@ const About = () => {
           {/* Why Choose Us */}
           <div className="bg-muted/50 rounded-2xl p-8 text-center">
             <h2 className="text-3xl font-bold mb-4">Why Choose GreenCirkit?</h2>
-            <p className="text-muted-foreground mb-6 max-w-3xl mx-auto">
-              We combine deep industry expertise with cutting-edge technology to deliver 
-              solutions that are not just sustainable, but also profitable and scalable. 
-              Our commitment to transparency and quality has earned the trust of over 500 companies.
-            </p>
+            <p className="text-muted-foreground mb-6 max-w-3xl mx-auto">We combine deep industry expertise with cutting-edge technology to deliver solutions that are not just sustainable, but also profitable and scalable. </p>
             <div className="grid md:grid-cols-3 gap-6 text-left">
               <div>
-                <h4 className="font-semibold mb-2">Proven Track Record</h4>
-                <p className="text-sm text-muted-foreground">
-                  1200+ tonnes recycled, 850+ EPR credits issued
-                </p>
+                <h4 className="font-semibold mb-2">IIT Leadership Credibility</h4>
+                <p className="text-sm text-muted-foreground">Commitment to scalable innovative solutions</p>
               </div>
               <div>
                 <h4 className="font-semibold mb-2">Technology-First Approach</h4>
@@ -227,8 +186,6 @@ const About = () => {
       </section>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default About;
