@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { Menu, X, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, NavLink } from "react-router-dom";
+import QuoteModal from "@/components/QuoteModal";
 
 const Navigation = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [quoteModalOpen, setQuoteModalOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -58,11 +60,9 @@ const Navigation = () => {
                 {item.name}
               </NavLink>
             ))}
-            <Link to="/contact">
-              <Button size="sm" className="ml-2">
-                Get Quote
-              </Button>
-            </Link>
+            <Button size="sm" className="ml-2" onClick={() => setQuoteModalOpen(true)}>
+              Get Quote
+            </Button>
           </nav>
 
           {/* Mobile button */}
@@ -98,13 +98,24 @@ const Navigation = () => {
                   {item.name}
                 </NavLink>
               ))}
-              <Link to="/contact" onClick={() => setOpen(false)}>
-                <Button className="w-full">Get Quote</Button>
-              </Link>
+              <Button 
+                className="w-full" 
+                onClick={() => {
+                  setOpen(false);
+                  setQuoteModalOpen(true);
+                }}
+              >
+                Get Quote
+              </Button>
             </div>
           </div>
         )}
       </div>
+      
+      <QuoteModal 
+        isOpen={quoteModalOpen} 
+        onClose={() => setQuoteModalOpen(false)} 
+      />
     </header>
   );
 };

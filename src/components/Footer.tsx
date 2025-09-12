@@ -1,5 +1,16 @@
 import { Leaf, Mail, Phone, MapPin, Linkedin, Twitter, Instagram } from "lucide-react";
+import { useState } from "react";
+import PartnerModal from "@/components/PartnerModal";
+
 const Footer = () => {
+  const [partnerModalOpen, setPartnerModalOpen] = useState(false);
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   return <footer className="bg-primary text-primary-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid md:grid-cols-4 gap-8">
@@ -29,9 +40,30 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-3">
-              <li><a href="#businesses" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">Services</a></li>
-              <li><a href="#impact" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">Impact</a></li>
-              <li><a href="#" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">Partner With Us</a></li>
+              <li>
+                <button 
+                  onClick={() => scrollToSection('businesses')} 
+                  className="text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                >
+                  Services
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => scrollToSection('impact')} 
+                  className="text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                >
+                  Impact
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => setPartnerModalOpen(true)} 
+                  className="text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                >
+                  Partner With Us
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -69,6 +101,11 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      
+      <PartnerModal 
+        isOpen={partnerModalOpen} 
+        onClose={() => setPartnerModalOpen(false)} 
+      />
     </footer>;
 };
 export default Footer;
