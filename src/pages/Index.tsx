@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import WhyGreenCirkit from "@/components/WhyGreenCirkit";
 import Businesses from "@/components/Businesses";
 import Impact from "@/components/Impact";
+import IndustryInsights from "@/components/IndustryInsights";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -13,6 +14,7 @@ const Index = () => {
       <WhyGreenCirkit />
       <Businesses />
       <Impact />
+      <IndustryInsights />
       <Footer />
     </div>
   );

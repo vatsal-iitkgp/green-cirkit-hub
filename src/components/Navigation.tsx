@@ -34,7 +34,7 @@ const Navigation = () => {
         <div className="h-14 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-md bg-gradient-to-br from-green-600 to-emerald-400 grid place-items-center">
+            <div className="h-6 w-6 rounded-md bg-gradient-to-br from-primary to-accent grid place-items-center">
               <Leaf className="h-4 w-4 text-white" />
             </div>
             <span className="text-base md:text-lg font-semibold">
