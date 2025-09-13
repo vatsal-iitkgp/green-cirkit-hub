@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Menu, X, Leaf } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import logoImage from "@/assets/greencirkit-logo.jpg";
 import { Button } from "@/components/ui/button";
 import { Link, NavLink } from "react-router-dom";
 import QuoteModal from "@/components/QuoteModal";
@@ -34,8 +35,12 @@ const Navigation = () => {
         <div className="h-14 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-md bg-gradient-to-br from-primary to-accent grid place-items-center">
-              <Leaf className="h-4 w-4 text-white" />
+            <div className="h-8 w-8 rounded-md overflow-hidden bg-white/10 backdrop-blur border border-white/20">
+              <img 
+                src={logoImage} 
+                alt="GreenCirkit Logo" 
+                className="h-full w-full object-cover"
+              />
             </div>
             <span className="text-base md:text-lg font-semibold">
               GreenCirkit
