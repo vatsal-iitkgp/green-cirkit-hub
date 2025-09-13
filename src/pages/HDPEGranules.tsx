@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 import HDPEEnquiryModal from "@/components/HDPEEnquiryModal";
+import ImpactCalculatorModal from "@/components/ImpactCalculatorModal";
 
 const HDPEGranules = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
@@ -24,13 +26,23 @@ const HDPEGranules = () => {
               High-quality recycled HDPE granules engineered for superior performance. 
               Sustainable, cost-effective, and ready for your manufacturing needs.
             </p>
-            <Button 
-              size="lg" 
-              onClick={() => setIsModalOpen(true)}
-              className="px-8 py-6 text-lg"
-            >
-              Get Quote Now
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                size="lg" 
+                onClick={() => setIsModalOpen(true)}
+                className="px-8 py-6 text-lg"
+              >
+                Get Quote Now
+              </Button>
+              <Button 
+                variant="outline"
+                size="lg" 
+                onClick={() => setIsCalculatorOpen(true)}
+                className="px-8 py-6 text-lg"
+              >
+                🧮 Calculate Environmental Impact
+              </Button>
+            </div>
           </div>
 
           {/* Product Specifications */}
@@ -164,6 +176,11 @@ const HDPEGranules = () => {
       <HDPEEnquiryModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
+      />
+      
+      <ImpactCalculatorModal
+        isOpen={isCalculatorOpen}
+        onClose={() => setIsCalculatorOpen(false)}
       />
       
       <Footer />
