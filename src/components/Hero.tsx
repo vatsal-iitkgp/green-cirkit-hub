@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
+import logoImage from "@/assets/greencirkit-logo.jpg";
+import { Button } from "@/components/ui/button";
+import ImpactCalculatorModal from "@/components/ImpactCalculatorModal";
 
 export default function Hero() {
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
+
   return (
+    <>
     <section className="relative overflow-hidden">
       {/* Background: brand gradients */}
       <div
@@ -39,12 +45,13 @@ export default function Hero() {
             >
               Buy HDPE Granules
             </a>
-            <a
-              href="/granules/sell"
-              className="px-6 py-3 rounded-xl border border-[hsl(var(--border))] bg-white/70 backdrop-blur text-[hsl(var(--primary))] font-semibold hover:bg-[hsl(var(--secondary))] transition"
+            <Button
+              variant="outline"
+              onClick={() => setIsCalculatorOpen(true)}
+              className="px-6 py-3 rounded-xl font-semibold"
             >
-              Sell HDPE Scrap
-            </a>
+              🧮 Calculate Impact
+            </Button>
           </div>
 
           {/* trust stats */}
@@ -139,5 +146,12 @@ export default function Hero() {
         </div>
       </div>
     </section>
+
+    {/* Impact Calculator Modal */}
+    <ImpactCalculatorModal
+      isOpen={isCalculatorOpen}
+      onClose={() => setIsCalculatorOpen(false)}
+    />
+    </>
   );
 }
