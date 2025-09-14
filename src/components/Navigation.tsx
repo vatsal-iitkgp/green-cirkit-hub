@@ -4,11 +4,13 @@ import logoImage from "@/assets/greencirkit-logo.jpg";
 import { Button } from "@/components/ui/button";
 import { Link, NavLink } from "react-router-dom";
 import QuoteModal from "@/components/QuoteModal";
+import ImpactCalculatorModal from "@/components/ImpactCalculatorModal";
 
 const Navigation = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
+  const [calculatorModalOpen, setCalculatorModalOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -65,6 +67,14 @@ const Navigation = () => {
                 {item.name}
               </NavLink>
             ))}
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="ml-2" 
+              onClick={() => setCalculatorModalOpen(true)}
+            >
+              🧮 Impact Calculator
+            </Button>
             <Button size="sm" className="ml-2" onClick={() => setQuoteModalOpen(true)}>
               Get Quote
             </Button>
@@ -104,6 +114,16 @@ const Navigation = () => {
                 </NavLink>
               ))}
               <Button 
+                variant="outline"
+                className="w-full mb-2" 
+                onClick={() => {
+                  setOpen(false);
+                  setCalculatorModalOpen(true);
+                }}
+              >
+                🧮 Impact Calculator
+              </Button>
+              <Button 
                 className="w-full" 
                 onClick={() => {
                   setOpen(false);
@@ -120,6 +140,11 @@ const Navigation = () => {
       <QuoteModal 
         isOpen={quoteModalOpen} 
         onClose={() => setQuoteModalOpen(false)} 
+      />
+      
+      <ImpactCalculatorModal
+        isOpen={calculatorModalOpen}
+        onClose={() => setCalculatorModalOpen(false)}
       />
     </header>
   );
