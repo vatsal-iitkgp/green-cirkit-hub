@@ -39,7 +39,7 @@ const About = () => {
               {/* Main heading with creative typography */}
               <div className="space-y-4">
                 <h1 className="text-5xl md:text-6xl font-bold leading-tight">
-                  <span className="block text-foreground">About</span>
+                  <span className="block text-foreground">About Us</span>
                   <span className="block bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--primary-variant))] bg-clip-text text-transparent">
                     GreenCirkit
                   </span>
