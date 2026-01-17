@@ -12,7 +12,7 @@ export default function PreProductionBanner() {
         </p>
 
         <p className="mt-1 text-xs text-green-700">
-          We are actively engaging with PIBOs, suppliers, and ecosystem partners.
+          We are actively engaging with PIBOs, suppliers, investors, and ecosystem partners.
         </p>
       </div>
     </section>
