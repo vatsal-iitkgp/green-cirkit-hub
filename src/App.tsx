@@ -8,6 +8,7 @@ import HDPEGranules from "./pages/HDPEGranules";
 import EPRCredits from "./pages/EPRCredits";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import PreOperationalNotice from "./components/PreOperationalNotice";
 
 const queryClient = new QueryClient();
 
@@ -16,16 +17,17 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/granules/buy" element={<HDPEGranules />} />
-          <Route path="/epr" element={<EPRCredits />} />
-          <Route path="/about" element={<About />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+   <BrowserRouter>
+  <PreOperationalNotice />
+  <Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="/granules/buy" element={<HDPEGranules />} />
+    <Route path="/epr" element={<EPRCredits />} />
+    <Route path="/about" element={<About />} />
+    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+    <Route path="*" element={<NotFound />} />
+  </Routes>
+</BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
