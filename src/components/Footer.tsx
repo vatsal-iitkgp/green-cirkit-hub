@@ -92,7 +92,7 @@ const Footer = () => {
 
         <div className="border-t border-primary-foreground/20 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-primary-foreground/60 text-sm mb-4 md:mb-0">© 2025 GreenCirkit – Closing the Loop in Plastics. All rights reserved.</p>
+            <p className="text-primary-foreground/60 text-sm mb-4 md:mb-0">© 2026 GreenCirkit – Engineering Sustainability with Technology. All rights reserved.</p>
             <div className="flex space-x-6 text-sm">
               <a href="#" className="text-primary-foreground/60 hover:text-primary-foreground transition-colors">Privacy Policy</a>
               <a href="#" className="text-primary-foreground/60 hover:text-primary-foreground transition-colors">Terms of Service</a>
