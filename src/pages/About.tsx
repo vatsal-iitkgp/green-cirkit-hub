@@ -227,7 +227,7 @@ const About = () => {
                   <CardDescription>Managing Director</CardDescription>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <p className="text-muted-foreground">Launching his first venture in his early 20s, Anuj Gupta quickly emerged as a visionary consultant in the real estate industry known for futuristic ideas and bold risk-taking. With decades of business acumen and strong networks across India, he has built a reputation for scaling ventures with innovation. A long-term believer in the future, he now leads GreenCirkit with a vision for a circular and sustainable future.</p>
+                  <p className="text-muted-foreground">An IIT Roorkee alumnus, Anuj Gupta launched his first venture in his early 20s and went on to build a strong track record across the real estate sector. Known for his forward-looking approach and execution-driven mindset, he has developed deep business acumen and long-standing networks across India. With a sustained focus on building scalable ventures, he now leads GreenCirkit with a vision to enable a circular and sustainable future.</p>
                 </CardContent>
               </Card>
 
