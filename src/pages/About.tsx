@@ -202,11 +202,11 @@ const About = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-secondary/5 border-secondary/20">
-                <CardHeader className="text-center">
-                  <Eye className="h-12 w-12 text-secondary mx-auto mb-4" />
-                  <CardTitle className="text-2xl">Our Vision</CardTitle>
-                </CardHeader>
+              <Card className="bg-primary/5 border-primary/20">
+  <CardHeader className="text-center">
+    <Eye className="h-12 w-12 text-primary mx-auto mb-4" />
+    <CardTitle className="text-2xl">Our Vision</CardTitle>
+  </CardHeader>
                 <CardContent className="text-center">
                   <p className="text-muted-foreground text-lg">To establish India's most advanced tech-driven recycling enterprise, pioneering digital traceability and EPR compliance — creating a future where sustainability, innovation, and profitability go hand in hand.</p>
                 </CardContent>
