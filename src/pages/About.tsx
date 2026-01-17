@@ -217,7 +217,7 @@ const About = () => {
           {/* Leadership Team */}
           <div className="mb-16">
             <h2 className="text-3xl font-bold text-center mb-8">Leadership Team</h2>
-            <div className="grid md:grid-cols-3 gap-8">
+              <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
               <Card>
                 <CardHeader className="text-center">
                   <div className="w-24 h-24 bg-gradient-to-br from-primary to-primary/60 rounded-full mx-auto mb-4 flex items-center justify-center">
