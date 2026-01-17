@@ -19,12 +19,12 @@ export default function Navbar() {
         </nav>
 
         {/* CTA */}
-        <a
-          href="/granules/sell"
-          className="inline-flex items-center px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium hover:bg-green-700 transition"
-        >
-          Sell Scrap
-        </a>
+   <a
+  href="/contact"
+  className="inline-flex items-center px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium hover:bg-green-700 transition"
+>
+  Get in touch with us
+</a>
       </div>
     </header>
   );
