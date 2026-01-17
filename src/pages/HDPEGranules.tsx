@@ -23,8 +23,8 @@ const HDPEGranules = () => {
               Premium HDPE Granules
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              High-quality recycled HDPE granules engineered for superior performance. 
-              Sustainable, cost-effective, and ready for your manufacturing needs.
+              We are developing high-quality recycled HDPE granules engineered for superior performance. 
+              Sustainable, cost-effective solutions designed for your manufacturing needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 

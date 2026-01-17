@@ -32,10 +32,10 @@ export default function WhyGreenCirkit() {
             Recycling built for the next decade
           </h2>
           <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">
-            We combine <span className="text-foreground font-medium">smart tech</span>,
-            <span className="text-foreground font-medium"> guaranteed purity</span> and
+            We are building <span className="text-foreground font-medium">smart tech</span>,
+            <span className="text-foreground font-medium"> guaranteed purity standards</span> and
             <span className="text-foreground font-medium"> nationwide execution</span>{" "}
-            so brands can scale sustainability with certainty.
+            to help brands scale sustainability with certainty.
           </p>
         </div>
 
@@ -50,17 +50,17 @@ export default function WhyGreenCirkit() {
           <FeatureCard
             Icon={Cpu}
             title="Smart Recycling Tech"
-            desc="AI-assisted sorting, live MFI/moisture monitoring and a traceable digital trail from scrap to credits."
+            desc="We are developing AI-assisted sorting, MFI/moisture monitoring and traceable digital trails from scrap to credits."
           />
           <FeatureCard
             Icon={ShieldCheck}
             title="Guaranteed Purity"
-            desc="Near-virgin HDPE granules, zero odour, moisture controlled at source. Spec adherence, every batch."
+            desc="We aim to produce near-virgin HDPE granules, zero odour, moisture controlled at source. Spec adherence, every batch."
           />
           <FeatureCard
             Icon={Truck}
             title="Nationwide, Zero-Hassle"
-            desc="Pan-India logistics and CPCB-compliant EPR handled end-to-end. One partner, complete coverage."
+            desc="We are building Pan-India logistics and CPCB-compliant EPR capabilities. One partner, complete coverage."
           />
         </motion.div>
 

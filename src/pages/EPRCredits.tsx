@@ -22,8 +22,8 @@ const EPRCredits = () => {
               EPR Credits & Compliance
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              Seamless EPR compliance with verified credits. Meet your Extended Producer 
-              Responsibility obligations with our transparent and traceable solutions.
+              We are building seamless EPR compliance solutions with verified credits. Our goal is to help you meet your Extended Producer 
+              Responsibility obligations with transparent and traceable solutions.
             </p>
             <Button 
               size="lg" 
@@ -210,12 +210,11 @@ const EPRCredits = () => {
             </div>
           </div>
 
-          {/* CTA Section */}
           <div className="text-center bg-muted/50 rounded-2xl p-8">
-            <h2 className="text-3xl font-bold mb-4">Ready to Achieve EPR Compliance?</h2>
+            <h2 className="text-3xl font-bold mb-4">Interested in EPR Compliance?</h2>
             <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-              Join 500+ companies who trust GreenCirkit for their EPR compliance needs. 
-              Get competitive rates and guaranteed certificates.
+              We are building comprehensive EPR solutions. Register your interest now 
+              to be among the first to access our services when we launch.
             </p>
             <Button 
               size="lg" 

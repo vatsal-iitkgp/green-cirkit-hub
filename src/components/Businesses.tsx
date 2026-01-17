@@ -20,9 +20,9 @@ const Businesses = () => {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-20">
-          <h2 className="text-5xl md:text-6xl font-black text-primary mb-8 bg-gradient-to-r from-primary to-green-accent bg-clip-text text-transparent">Our Services</h2>
+          <h2 className="text-5xl md:text-6xl font-black text-primary mb-8 bg-gradient-to-r from-primary to-green-accent bg-clip-text text-transparent">Planned Services</h2>
           <p className="text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Comprehensive solutions for sustainable plastic management and EPR compliance
+            We are developing comprehensive solutions for sustainable plastic management and EPR compliance
           </p>
         </div>
 
@@ -76,15 +76,15 @@ const Businesses = () => {
               <div className="space-y-4 mb-8">
                 <div className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-accent mr-3 flex-shrink-0" />
-                  <span>99.9% traceable EPR certificates</span>
+                  <span>Fully traceable EPR certificates (planned)</span>
                 </div>
                 <div className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-accent mr-3 flex-shrink-0" />
-                  <span>15% lower costs than market alternatives</span>
+                  <span>Competitive pricing through tech optimization</span>
                 </div>
                 <div className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-accent mr-3 flex-shrink-0" />
-                  <span>24/7 compliance support and monitoring</span>
+                  <span>Dedicated compliance support (planned)</span>
                 </div>
               </div>
               <Button 

@@ -31,8 +31,8 @@ export default function Hero() {
           </h1>
 
           <p className="mt-4 text-lg text-muted-foreground">
-            We buy HDPE scrap and supply near-virgin recycled granules. We also
-            deliver end-to-end EPR credits for PIBOs.
+            We are building capabilities to buy HDPE scrap and supply near-virgin recycled granules. 
+            We aim to deliver end-to-end EPR credits for PIBOs.
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
@@ -50,19 +50,19 @@ export default function Hero() {
             </a>
           </div>
 
-          {/* trust stats */}
+          {/* Planned capabilities */}
           <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 gap-6 text-left">
             <div>
               <div className="text-2xl font-bold text-foreground">20 TPD</div>
-              <div className="text-xs text-muted-foreground">Scalable operations</div>
+              <div className="text-xs text-muted-foreground">Planned capacity</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-foreground">A+ Quality</div>
-              <div className="text-xs text-muted-foreground">Odor-free, low moisture</div>
+              <div className="text-xs text-muted-foreground">Target specs</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-foreground">EPR</div>
-              <div className="text-xs text-muted-foreground">Compliant credits</div>
+              <div className="text-xs text-muted-foreground">Planned offerings</div>
             </div>
           </div>
         </div>
@@ -73,10 +73,10 @@ export default function Hero() {
             {/* top ribbon / pipeline */}
             <div className="flex items-center gap-2 text-xs">
               <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 border border-[hsl(var(--border))] bg-[hsl(var(--secondary))] text-[hsl(var(--primary))]">
-                ♻️ Real-time Quality & EPR
+                ♻️ Quality & EPR Dashboard
               </span>
               <span className="text-muted-foreground">•</span>
-              <span className="text-muted-foreground">Live KPIs</span>
+              <span className="text-muted-foreground">Target KPIs</span>
             </div>
 
             {/* main row: KPI ring + two tiles */}
@@ -136,8 +136,8 @@ export default function Hero() {
 
           {/* floating badge */}
           <div className="absolute -bottom-3 -right-3 rounded-xl border bg-white/90 backdrop-blur shadow px-3 py-2 text-xs">
-            <span className="text-[hsl(var(--primary))] font-semibold">On-time dispatch</span>{" "}
-            <span className="text-muted-foreground">99.2%</span>
+            <span className="text-[hsl(var(--primary))] font-semibold">Target dispatch</span>{" "}
+            <span className="text-muted-foreground">99%+</span>
           </div>
         </div>
       </div>

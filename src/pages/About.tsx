@@ -33,7 +33,7 @@ const About = () => {
               {/* Badge */}
               <div className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--border))] bg-white/80 backdrop-blur px-4 py-2 text-sm text-[hsl(var(--primary))] shadow-sm animate-fade-in">
                 <Recycle className="h-4 w-4" />
-                Engineering Sustainability Since 2023
+                Building India's Next-Gen Recycling Infrastructure
               </div>
 
               {/* Main heading with creative typography */}
@@ -48,53 +48,53 @@ const About = () => {
               </div>
 
               <p className="text-xl text-muted-foreground leading-relaxed max-w-lg">
-                Engineering sustainability through technology. We're transforming India's plastic waste ecosystem with innovative solutions that benefit both business and the environment.
+                We are building technology-driven sustainability solutions. Our goal is to transform India's plastic waste ecosystem with innovative solutions that benefit both business and the environment.
               </p>
 
-              {/* Interactive stats */}
+              {/* Planned capabilities */}
               <div className="grid grid-cols-2 gap-6 pt-4">
                 <div className="group cursor-default">
                   <div className="text-3xl font-bold text-foreground group-hover:text-[hsl(var(--primary))] transition-colors">
                     20+ TPD
                   </div>
-                  <div className="text-sm text-muted-foreground">Processing Capacity</div>
+                  <div className="text-sm text-muted-foreground">Planned Capacity</div>
                 </div>
                 <div className="group cursor-default">
                   <div className="text-3xl font-bold text-foreground group-hover:text-[hsl(var(--primary))] transition-colors">
                     100%
                   </div>
-                  <div className="text-sm text-muted-foreground">CPCB Compliant</div>
+                  <div className="text-sm text-muted-foreground">Target CPCB Compliance</div>
                 </div>
               </div>
             </div>
 
-            {/* Right: Interactive Dashboard */}
+            {/* Right: Status Dashboard */}
             <div className="relative">
               {/* Floating cards with animations */}
               <div className="relative z-10 space-y-4">
                 {/* Main dashboard card */}
                 <div className="bg-white/90 backdrop-blur border border-white/20 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.02]">
                   <div className="flex items-center justify-between mb-6">
-                    <div className="text-sm font-medium text-muted-foreground">Live Operations</div>
+                    <div className="text-sm font-medium text-muted-foreground">Current Status</div>
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      <span className="text-xs text-muted-foreground">Active</span>
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                      <span className="text-xs text-muted-foreground">Pre-Operational</span>
                     </div>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <div className="text-2xl font-bold text-foreground">2.5K+</div>
-                      <div className="text-xs text-muted-foreground">Tons Recycled</div>
+                      <div className="text-2xl font-bold text-foreground">Setup</div>
+                      <div className="text-xs text-muted-foreground">Infrastructure Phase</div>
                       <div className="w-full bg-[hsl(var(--secondary))] rounded-full h-2">
-                        <div className="bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--primary-variant))] h-2 rounded-full" style={{ width: "85%" }}></div>
+                        <div className="bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--primary-variant))] h-2 rounded-full" style={{ width: "40%" }}></div>
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <div className="text-2xl font-bold text-foreground">98.5%</div>
-                      <div className="text-xs text-muted-foreground">Quality Score</div>
+                      <div className="text-2xl font-bold text-foreground">Target</div>
+                      <div className="text-xs text-muted-foreground">98%+ Quality Score</div>
                       <div className="w-full bg-[hsl(var(--secondary))] rounded-full h-2">
-                        <div className="bg-gradient-to-r from-green-500 to-emerald-600 h-2 rounded-full" style={{ width: "98%" }}></div>
+                        <div className="bg-gradient-to-r from-green-500 to-emerald-600 h-2 rounded-full" style={{ width: "0%" }}></div>
                       </div>
                     </div>
                   </div>
@@ -112,9 +112,9 @@ const About = () => {
                   <div className="flex-1 bg-white/80 backdrop-blur border border-white/20 rounded-2xl p-4 hover:bg-white/90 transition-all duration-300">
                     <div className="flex items-center gap-2 mb-1">
                       <TrendingUp className="h-4 w-4 text-green-500" />
-                      <span className="text-xs text-muted-foreground">Growth</span>
+                      <span className="text-xs text-muted-foreground">Phase</span>
                     </div>
-                    <div className="text-lg font-bold text-foreground">500%+</div>
+                    <div className="text-lg font-bold text-foreground">Building</div>
                   </div>
                 </div>
               </div>
@@ -164,8 +164,8 @@ const About = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    We transform plastic waste into high-quality HDPE granules through advanced 
-                    processing technology. Our granules meet stringent quality standards and 
+                    We aim to transform plastic waste into high-quality HDPE granules through advanced 
+                    processing technology. Our goal is to produce granules that meet stringent quality standards and 
                     provide a sustainable alternative to virgin plastic.
                   </p>
                 </CardContent>
@@ -181,9 +181,8 @@ const About = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    We simplify Extended Producer Responsibility compliance through our 
-                    comprehensive platform. From credit generation to certificate issuance, 
-                    we handle the entire EPR lifecycle with complete transparency.
+                    We are developing a comprehensive EPR compliance platform. From credit generation 
+                    to certificate issuance, we aim to handle the entire EPR lifecycle with complete transparency.
                   </p>
                 </CardContent>
               </Card>

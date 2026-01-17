@@ -21,7 +21,7 @@ const Footer = () => {
               <span className="text-2xl font-bold">GreenCirkit</span>
             </div>
             <p className="text-primary-foreground/80 mb-6 leading-relaxed">
-              Engineering sustainability with technology. Closing the loop in plastics through innovative solutions.
+              We are building India's next-generation plastic recycling infrastructure. Currently in pre-operational phase.
             </p>
             <div className="flex space-x-4">
               <div className="w-12 h-12 bg-primary-foreground/20 rounded-full flex items-center justify-center hover:bg-primary-foreground/30 transition-all duration-300 cursor-pointer hover:scale-110 shadow-lg">
