@@ -20,9 +20,9 @@ const Navigation = () => {
   }, []);
 
   const navItems = [
-    { name: "HDPE Granules", to: "/granules/buy" },
-    { name: "EPR Credits", to: "/epr" },
-    { name: "About", to: "/about" },
+    { name: "Buy HDPE Granules", to: "/granules/buy" },
+    { name: "Buy EPR Credits", to: "/epr" },
+    { name: "About Us", to: "/about" },
   ];
 
   return (
