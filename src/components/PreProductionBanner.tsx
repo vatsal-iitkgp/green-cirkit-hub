@@ -7,7 +7,7 @@ export default function PreProductionBanner() {
         </h2>
 
         <p className="mt-1 text-sm text-green-800 max-w-4xl mx-auto leading-relaxed">
-          Green Cirkit is currently in the pre-production stage. We are finalising
+          GreenCirkit is currently in the pre-production stage. We are finalising
           recycling machinery and preparing operational infrastructure.
         </p>
 
