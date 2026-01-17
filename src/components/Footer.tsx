@@ -14,15 +14,14 @@ const Footer = () => {
   return <footer className="bg-primary text-primary-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid md:grid-cols-4 gap-8">
-          {/* Brand */}
-          <div className="md:col-span-2">
-            <div className="flex items-center space-x-3 mb-4">
-              <Leaf className="h-8 w-8" />
-              <span className="text-2xl font-bold">GreenCirkit Private Limited </span>
-            </div>
-            <p className="text-primary-foreground/80 mb-6 leading-relaxed">
-              We are building India's next-generation plastic recycling infrastructure. Currently in pre-operational phase.
-            </p>
+    {/* Brand */}
+<div className="md:col-span-2">
+  <div className="flex items-center mb-4">
+    <span className="text-2xl font-bold">GreenCirkit Private Limited</span>
+  </div>
+  <p className="text-primary-foreground/80 mb-6 leading-relaxed">
+    We are building India's next-generation plastic recycling infrastructure. Currently in pre-operational phase.
+  </p>
             <div className="flex space-x-4">
               <div className="w-12 h-12 bg-primary-foreground/20 rounded-full flex items-center justify-center hover:bg-primary-foreground/30 transition-all duration-300 cursor-pointer hover:scale-110 shadow-lg">
                 <Linkedin className="h-6 w-6" />
