@@ -1,4 +1,4 @@
-import { Leaf, Mail, Phone, MapPin, Linkedin, Twitter, Instagram } from "lucide-react";
+import {Mail, Phone, MapPin, Linkedin, Twitter, Instagram } from "lucide-react";
 import { useState } from "react";
 import PartnerModal from "@/components/PartnerModal";
 
