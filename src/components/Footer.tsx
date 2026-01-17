@@ -18,7 +18,7 @@ const Footer = () => {
           <div className="md:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
               <Leaf className="h-8 w-8" />
-              <span className="text-2xl font-bold">GreenCirkit</span>
+              <span className="text-2xl font-bold">GreenCirkit Private Limited </span>
             </div>
             <p className="text-primary-foreground/80 mb-6 leading-relaxed">
               We are building India's next-generation plastic recycling infrastructure. Currently in pre-operational phase.
