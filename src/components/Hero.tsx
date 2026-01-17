@@ -16,7 +16,7 @@ export default function Hero() {
         style={{ backgroundImage: "var(--gradient-green)" }}
       />
 
-      <div className="max-w-6xl mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 gap-10 items-center">
+      <div className="max-w-6xl mx-auto px-4 pt-10 pb-14 md:pt-12 md:pb-16 grid md:grid-cols-2 gap-10 items-center">
         {/* LEFT: copy + CTAs */}
         <div>
           <div className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--border))] bg-white/80 backdrop-blur px-3 py-1 text-xs text-[hsl(var(--primary))] shadow-sm">
