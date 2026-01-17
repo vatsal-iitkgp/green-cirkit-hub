@@ -76,8 +76,8 @@ const Navigation = () => {
               🧮 Impact Calculator
             </Button>
             <Button size="sm" className="ml-2" onClick={() => setQuoteModalOpen(true)}>
-              Get Quote
-            </Button>
+  Get in touch with us
+</Button>
           </nav>
 
           {/* Mobile button */}
