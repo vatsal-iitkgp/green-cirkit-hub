@@ -25,7 +25,7 @@ const Footer = () => {
   </p>
 
   {/* Social Links */}
-  <div className="flex items-center space-x-4">
+  <div className="flex items-center space-x-4 mt-6 md:mt-0">
     <a
       href="https://www.linkedin.com/company/greencirkit-private-limited"
       target="_blank"
