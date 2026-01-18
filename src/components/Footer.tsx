@@ -1,4 +1,4 @@
-import {Mail, Phone, MapPin, Linkedin, Twitter, Instagram } from "lucide-react";
+import {Mail, Phone, MapPin, Linkedin, Instagram } from "lucide-react";
 import { useState } from "react";
 import PartnerModal from "@/components/PartnerModal";
 
@@ -22,13 +22,15 @@ const Footer = () => {
   <p className="text-primary-foreground/80 mb-6 leading-relaxed">
     We are building India's next-generation plastic recycling infrastructure. Currently in pre-operational phase.
   </p>
-            <div className="flex space-x-4">
-              <div className="w-12 h-12 bg-primary-foreground/20 rounded-full flex items-center justify-center hover:bg-primary-foreground/30 transition-all duration-300 cursor-pointer hover:scale-110 shadow-lg">
-                <Linkedin className="h-6 w-6" />
-              </div>
-              <div className="w-10 h-10 bg-primary-foreground/10 rounded-full flex items-center justify-center hover:bg-primary-foreground/20 transition-colors cursor-pointer">
-                <Twitter className="h-5 w-5" />
-              </div>
+         <a
+  href="https://www.linkedin.com/company/greencirkit-private-limited"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="w-12 h-12 bg-primary-foreground/20 rounded-full flex items-center justify-center hover:bg-primary-foreground/30 transition-all duration-300 hover:scale-110 shadow-lg"
+>
+  <Linkedin className="h-6 w-6" />
+</a>
+    
               <div className="w-10 h-10 bg-primary-foreground/10 rounded-full flex items-center justify-center hover:bg-primary-foreground/20 transition-colors cursor-pointer">
                 <Instagram className="h-5 w-5" />
               </div>
