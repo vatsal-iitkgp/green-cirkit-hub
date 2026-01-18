@@ -19,23 +19,28 @@ const Footer = () => {
   <div className="flex items-center mb-4">
     <span className="text-2xl font-bold">GreenCirkit Private Limited</span>
   </div>
+
   <p className="text-primary-foreground/80 mb-6 leading-relaxed">
     We are building India's next-generation plastic recycling infrastructure. Currently in pre-operational phase.
   </p>
-         <a
-  href="https://www.linkedin.com/company/greencirkit-private-limited"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="w-12 h-12 bg-primary-foreground/20 rounded-full flex items-center justify-center hover:bg-primary-foreground/30 transition-all duration-300 hover:scale-110 shadow-lg"
->
-  <Linkedin className="h-6 w-6" />
-</a>
-    
-              <div className="w-10 h-10 bg-primary-foreground/10 rounded-full flex items-center justify-center hover:bg-primary-foreground/20 transition-colors cursor-pointer">
-                <Instagram className="h-5 w-5" />
-              </div>
-            </div>
-          </div>
+
+  {/* Social Links */}
+  <div className="flex items-center space-x-4">
+    <a
+      href="https://www.linkedin.com/company/greencirkit-private-limited"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-12 h-12 bg-primary-foreground/20 rounded-full flex items-center justify-center hover:bg-primary-foreground/30 transition-all duration-300 hover:scale-110 shadow-lg"
+      aria-label="GreenCirkit LinkedIn"
+    >
+      <Linkedin className="h-6 w-6" />
+    </a>
+
+    <div className="w-10 h-10 bg-primary-foreground/10 rounded-full flex items-center justify-center hover:bg-primary-foreground/20 transition-colors cursor-pointer">
+      <Instagram className="h-5 w-5" />
+    </div>
+  </div>
+</div>
 
           {/* Quick Links */}
           <div>
