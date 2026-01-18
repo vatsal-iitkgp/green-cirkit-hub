@@ -16,26 +16,26 @@ export default function Hero() {
         style={{ backgroundImage: "var(--gradient-green)" }}
       />
 
-      <div className="max-w-6xl mx-auto px-4 pt-10 pb-14 md:pt-12 md:pb-16 grid md:grid-cols-2 gap-10 items-center">
+       <div className="max-w-6xl mx-auto px-4 pt-10 pb-14 md:pt-12 md:pb-16 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-center">
         {/* LEFT: copy + CTAs */}
         <div>
           <div className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--border))] bg-white/80 backdrop-blur px-3 py-1 text-xs text-[hsl(var(--primary))] shadow-sm">
             CPCB-compliant • Pan-India logistics
           </div>
 
-          <h1 className="mt-4 text-4xl md:text-5xl font-extrabold leading-tight text-foreground">
+          <h1 className="mt-4 text-3xl md:text-5xl font-extrabold leading-tight text-foreground">
             Tech-driven{" "}
             <span className="text-[hsl(var(--primary))]">plastic recycling</span>
             <br />
             for brands & recyclers
           </h1>
 
-          <p className="mt-4 text-lg text-muted-foreground">
+          <p className="mt-4 text-base md:text-lg text-muted-foreground">
             We are building capabilities to buy HDPE scrap and supply near-virgin recycled granules. 
             We aim to deliver end-to-end EPR credits for PIBOs.
           </p>
 
-          <div className="mt-8 flex flex-col sm:flex-row gap-4">
+          <div className="mt-6 flex flex-col gap-3 md:flex-row md:gap-4">
             <a
               href="/granules/buy"
               className="px-6 py-3 rounded-xl bg-[hsl(var(--primary))] text-white font-semibold hover:brightness-95 transition shadow"
@@ -68,7 +68,7 @@ export default function Hero() {
         </div>
 
         {/* RIGHT: startup-style dashboard card */}
-        <div className="relative">
+        <div className="relative hidden md:block">
           <div className="rounded-2xl border bg-white/90 backdrop-blur shadow-sm p-6">
             {/* top ribbon / pipeline */}
             <div className="flex items-center gap-2 text-xs">
