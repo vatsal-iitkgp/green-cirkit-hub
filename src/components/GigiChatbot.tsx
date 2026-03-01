@@ -22,6 +22,28 @@ const CATEGORIES = [
 ];
 
 const REACH_OPTIONS = ["Phone Call", "Email", "WhatsApp"];
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xreeerdv";
+
+const submitToFormspree = async (data: Record<string, string>) => {
+  try {
+    await fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        _subject: `Gigi Chat Lead: ${data.name} (${data.category})`,
+        name: data.name,
+        company: data.company,
+        email: data.email,
+        phone: data.phone,
+        category: data.category,
+        preferred_contact: data.reach,
+        source: "Gigi Chatbot",
+      }),
+    });
+  } catch (e) {
+    console.error("Failed to submit lead to Formspree", e);
+  }
+};
 
 const GigiChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -75,7 +97,9 @@ const GigiChatbot = () => {
         }, 500);
       }
     } else if (flowStep === "reach") {
-      setLeadData((d) => ({ ...d, reach: option }));
+      const finalData = { ...leadData, reach: option };
+      setLeadData(finalData);
+      submitToFormspree(finalData);
       setTimeout(() => {
         addGigi("Thank you! 🎉 Someone from our team will reach out to you within the next 24 hours. Looking forward to connecting!");
         setFlowStep("done");
