@@ -150,7 +150,7 @@ const GigiChatbot = () => {
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            className="fixed bottom-6 left-6 z-50 flex items-end gap-3"
+            className="fixed bottom-6 right-6 z-50 flex items-end gap-3"
           >
             <div className="relative cursor-pointer" onClick={openChat}>
               {/* Waving Gigi avatar */}
@@ -159,16 +159,16 @@ const GigiChatbot = () => {
                 transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3 }}
                 className="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-2xl shadow-lg border-2 border-primary-foreground/20"
               >
-                🤖
+                🙋‍♀️
               </motion.div>
               <motion.div
-                initial={{ opacity: 0, x: -10 }}
+                initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1 }}
-                className="absolute bottom-full left-16 mb-2 -translate-x-0 bg-card border border-border rounded-lg px-3 py-2 text-sm shadow-md whitespace-nowrap text-foreground"
+                className="absolute bottom-full right-16 mb-2 bg-card border border-border rounded-lg px-3 py-2 text-sm shadow-md whitespace-nowrap text-foreground"
               >
                 <span className="font-semibold text-primary">Gigi:</span> Let me know if you need any help! 👋
-                <div className="absolute -bottom-1 left-4 w-2 h-2 bg-card border-b border-r border-border rotate-45" />
+                <div className="absolute -bottom-1 right-4 w-2 h-2 bg-card border-b border-r border-border rotate-45" />
               </motion.div>
             </div>
           </motion.div>
@@ -183,12 +183,12 @@ const GigiChatbot = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", damping: 25, stiffness: 350 }}
-            className="fixed bottom-6 left-6 z-50 w-[360px] max-w-[calc(100vw-3rem)] h-[500px] max-h-[70vh] bg-card border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+            className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-3rem)] h-[500px] max-h-[70vh] bg-card border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="bg-primary px-4 py-3 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
-                <span className="text-xl">🤖</span>
+                <span className="text-xl">🙋‍♀️</span>
                 <div>
                   <p className="text-primary-foreground font-semibold text-sm">Gigi</p>
                   <p className="text-primary-foreground/70 text-xs">Green Cirkit Assistant</p>
