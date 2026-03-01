@@ -74,7 +74,7 @@ const GigiChatbot = () => {
     if (!hasGreeted) {
       setHasGreeted(true);
       setTimeout(() => {
-        addGigi("Hi there! I'm Gigi 👋 Welcome to Green Cirkit. How can I help you today?", CATEGORIES);
+        addGigi("Hi there! I'm Gigi 👋 Welcome to GreenCirkit. How can I help you today?", CATEGORIES);
         setFlowStep("category");
       }, 400);
     }
@@ -92,7 +92,7 @@ const GigiChatbot = () => {
         }, 500);
       } else {
         setTimeout(() => {
-          addGigi("Thanks for reaching out! Feel free to ask me anything about Green Cirkit, and I'll do my best to help. 😊");
+          addGigi("Thanks for reaching out! Feel free to ask me anything about GreenCirkit, and I'll do my best to help. 😊");
           setFlowStep("idle");
         }, 500);
       }
@@ -215,7 +215,7 @@ const GigiChatbot = () => {
                 <span className="text-xl">🙋‍♀️</span>
                 <div>
                   <p className="text-primary-foreground font-semibold text-sm">Gigi</p>
-                  <p className="text-primary-foreground/70 text-xs">Green Cirkit Assistant</p>
+                  <p className="text-primary-foreground/70 text-xs">GreenCirkit AI Assistant</p>
                 </div>
               </div>
               <button onClick={() => setIsOpen(false)} className="text-primary-foreground/80 hover:text-primary-foreground">
