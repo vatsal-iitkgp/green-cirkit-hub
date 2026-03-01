@@ -10,6 +10,7 @@ import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import PreOperationalNotice from "./components/PreOperationalNotice";
 import PreProductionBanner from "./components/PreProductionBanner";
+import GigiChatbot from "./components/GigiChatbot";
 
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
     <Route path="/about" element={<About />} />
     <Route path="*" element={<NotFound />} />
   </Routes>
+  <GigiChatbot />
 </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
