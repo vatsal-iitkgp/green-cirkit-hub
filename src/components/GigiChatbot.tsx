@@ -3,12 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
 
 type Message = {
   id: number;
   from: "gigi" | "user";
   text: string;
   options?: string[];
+  isTyping?: boolean;
 };
 
 type FlowStep = "idle" | "category" | "name" | "company" | "email" | "phone" | "reach" | "done";
@@ -21,6 +23,7 @@ const CATEGORIES = [
   "General Enquiry",
 ];
 
+const LEAD_CATEGORIES = ["Brand Owner / PIBO", "Raw Material Supplier", "Looking to Invest", "Recycling / EPR Query"];
 const REACH_OPTIONS = ["Phone Call", "Email", "WhatsApp"];
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xreeerdv";
 
@@ -52,6 +55,8 @@ const GigiChatbot = () => {
   const [flowStep, setFlowStep] = useState<FlowStep>("idle");
   const [leadData, setLeadData] = useState<Record<string, string>>({});
   const [hasGreeted, setHasGreeted] = useState(false);
+  const [isAiThinking, setIsAiThinking] = useState(false);
+  const [conversationHistory, setConversationHistory] = useState<{ role: string; content: string }[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
   const idRef = useRef(0);
 
@@ -67,6 +72,52 @@ const GigiChatbot = () => {
 
   const addUser = (text: string) => {
     setMessages((prev) => [...prev, { id: nextId(), from: "user", text }]);
+  };
+
+  const showTyping = () => {
+    const typingId = nextId();
+    setMessages((prev) => [...prev, { id: typingId, from: "gigi", text: "", isTyping: true }]);
+    return typingId;
+  };
+
+  const removeTyping = (typingId: number) => {
+    setMessages((prev) => prev.filter((m) => m.id !== typingId));
+  };
+
+  const askAi = async (userMessage: string) => {
+    const newHistory = [...conversationHistory, { role: "user", content: userMessage }];
+    setConversationHistory(newHistory);
+    setIsAiThinking(true);
+    const typingId = showTyping();
+
+    try {
+      const { data, error } = await supabase.functions.invoke("gigi-chat", {
+        body: { messages: newHistory },
+      });
+
+      removeTyping(typingId);
+
+      if (error || data?.error) {
+        addGigi("I'm having a little trouble right now. Could you try again? 😊");
+      } else {
+        const reply = data.reply;
+        addGigi(reply);
+        setConversationHistory((prev) => [...prev, { role: "assistant", content: reply }]);
+
+        // Check if AI response suggests lead capture
+        const lower = reply.toLowerCase();
+        if (lower.includes("connect you") || lower.includes("team can help") || lower.includes("share your details")) {
+          setTimeout(() => {
+            addGigi("Would you like me to connect you with our team? Just share your name to get started! 😊");
+            setFlowStep("name");
+          }, 1500);
+        }
+      }
+    } catch {
+      removeTyping(typingId);
+      addGigi("Oops, something went wrong. Please try again! 🙏");
+    }
+    setIsAiThinking(false);
   };
 
   const openChat = () => {
@@ -85,14 +136,14 @@ const GigiChatbot = () => {
 
     if (flowStep === "category") {
       setLeadData((d) => ({ ...d, category: option }));
-      if (["Brand Owner / PIBO", "Raw Material Supplier", "Looking to Invest", "Recycling / EPR Query"].includes(option)) {
+      if (LEAD_CATEGORIES.includes(option)) {
         setTimeout(() => {
           addGigi("Great! I'd love to connect you with our team. Could you share your full name?");
           setFlowStep("name");
         }, 500);
       } else {
         setTimeout(() => {
-          addGigi("Thanks for reaching out! Feel free to ask me anything about GreenCirkit, and I'll do my best to help. 😊");
+          addGigi("Sure! Ask me anything about GreenCirkit — recycling, EPR credits, HDPE granules, or anything else. I'm here to help! 😊");
           setFlowStep("idle");
         }, 500);
       }
@@ -102,6 +153,7 @@ const GigiChatbot = () => {
       submitToFormspree(finalData);
       setTimeout(() => {
         addGigi("Thank you! 🎉 Someone from our team will reach out to you within the next 24 hours. Looking forward to connecting!");
+        addGigi("Feel free to ask me anything else about GreenCirkit in the meantime! 😊");
         setFlowStep("done");
       }, 500);
     }
@@ -109,7 +161,7 @@ const GigiChatbot = () => {
 
   const handleSend = () => {
     const text = input.trim();
-    if (!text) return;
+    if (!text || isAiThinking) return;
     setInput("");
     addUser(text);
 
@@ -144,19 +196,8 @@ const GigiChatbot = () => {
         break;
       case "idle":
       case "done":
-        setTimeout(() => {
-          const lower = text.toLowerCase();
-          if (lower.includes("epr") || lower.includes("recycl") || lower.includes("plastic") || lower.includes("hdpe") || lower.includes("granule")) {
-            addGigi("That sounds like something our team can help with! Let me get a few details. What's your full name?");
-            setFlowStep("name");
-          } else if (lower.includes("hello") || lower.includes("hi") || lower.includes("hey")) {
-            addGigi("Hey! 😊 How can I assist you today?", CATEGORIES);
-            setFlowStep("category");
-          } else {
-            addGigi("Thanks for your message! If you'd like to connect with our team, just let me know your area of interest.", CATEGORIES);
-            setFlowStep("category");
-          }
-        }, 500);
+        // Use AI for conversational responses
+        askAi(text);
         break;
       default:
         break;
@@ -177,7 +218,6 @@ const GigiChatbot = () => {
             className="fixed bottom-6 right-6 z-50 flex items-end gap-3"
           >
             <div className="relative cursor-pointer" onClick={openChat}>
-              {/* Waving Gigi avatar */}
               <motion.div
                 animate={{ rotate: [0, 14, -8, 14, -4, 10, 0] }}
                 transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3 }}
@@ -228,15 +268,37 @@ const GigiChatbot = () => {
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex ${msg.from === "user" ? "justify-end" : "justify-start"}`}>
                   <div className="max-w-[80%] space-y-2">
-                    <div
-                      className={`px-3 py-2 rounded-xl text-sm leading-relaxed ${
-                        msg.from === "user"
-                          ? "bg-primary text-primary-foreground rounded-br-sm"
-                          : "bg-muted text-foreground rounded-bl-sm"
-                      }`}
-                    >
-                      {msg.text}
-                    </div>
+                    {msg.isTyping ? (
+                      <div className="bg-muted text-foreground rounded-xl rounded-bl-sm px-4 py-3">
+                        <div className="flex gap-1.5 items-center">
+                          <motion.span
+                            className="w-2 h-2 bg-foreground/40 rounded-full"
+                            animate={{ opacity: [0.3, 1, 0.3] }}
+                            transition={{ duration: 1, repeat: Infinity, delay: 0 }}
+                          />
+                          <motion.span
+                            className="w-2 h-2 bg-foreground/40 rounded-full"
+                            animate={{ opacity: [0.3, 1, 0.3] }}
+                            transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
+                          />
+                          <motion.span
+                            className="w-2 h-2 bg-foreground/40 rounded-full"
+                            animate={{ opacity: [0.3, 1, 0.3] }}
+                            transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div
+                        className={`px-3 py-2 rounded-xl text-sm leading-relaxed ${
+                          msg.from === "user"
+                            ? "bg-primary text-primary-foreground rounded-br-sm"
+                            : "bg-muted text-foreground rounded-bl-sm"
+                        }`}
+                      >
+                        {msg.text}
+                      </div>
+                    )}
                     {msg.options && (
                       <div className="flex flex-wrap gap-1.5">
                         {msg.options.map((opt) => (
@@ -269,10 +331,11 @@ const GigiChatbot = () => {
                   <Input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder="Type a message..."
+                    placeholder={isAiThinking ? "Gigi is thinking..." : "Type a message..."}
                     className="flex-1 text-sm h-9"
+                    disabled={isAiThinking}
                   />
-                  <Button type="submit" size="icon" className="h-9 w-9 shrink-0">
+                  <Button type="submit" size="icon" className="h-9 w-9 shrink-0" disabled={isAiThinking}>
                     <Send size={16} />
                   </Button>
                 </form>
