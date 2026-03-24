@@ -69,8 +69,8 @@ const GigiChatbot = () => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const addGigi = (text: string, options?: string[]) => {
-    setMessages((prev) => [...prev, { id: nextId(), from: "gigi", text, options }]);
+  const addGigi = (text: string, options?: string[], quickReplies?: string[]) => {
+    setMessages((prev) => [...prev, { id: nextId(), from: "gigi", text, options, quickReplies }]);
   };
 
   const addUser = (text: string) => {
