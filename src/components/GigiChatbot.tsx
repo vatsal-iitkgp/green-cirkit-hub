@@ -149,7 +149,7 @@ const GigiChatbot = () => {
         }, 500);
       } else {
         setTimeout(() => {
-          addGigi("Ask me anything about GreenCirkit! 😊");
+          addGigi("Ask me anything about GreenCirkit! 😊", undefined, QUICK_REPLIES_GENERAL);
           setFlowStep("idle");
         }, 500);
       }
