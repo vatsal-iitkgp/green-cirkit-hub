@@ -26,6 +26,8 @@ const CATEGORIES = [
 
 const LEAD_CATEGORIES = ["Brand Owner / PIBO", "Raw Material Supplier", "Looking to Invest", "Recycling / EPR Query"];
 const REACH_OPTIONS = ["Phone Call", "Email", "WhatsApp"];
+const QUICK_REPLIES_GENERAL = ["GCPrime™ specs", "Pricing info", "EPR services", "Talk to team"];
+const QUICK_REPLIES_POST_LEAD = ["GCPrime™ details", "Your facility", "Certifications"];
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xreeerdv";
 
 const submitToFormspree = async (data: Record<string, string>) => {
