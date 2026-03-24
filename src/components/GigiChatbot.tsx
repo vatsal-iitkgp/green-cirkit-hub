@@ -210,6 +210,21 @@ const GigiChatbot = () => {
     }
   };
 
+  const handleQuickReply = (text: string) => {
+    if (isAiThinking) return;
+    // Clear quick replies from all messages
+    setMessages((prev) => prev.map((m) => ({ ...m, quickReplies: undefined })));
+    addUser(text);
+    if (text === "Talk to team") {
+      setTimeout(() => {
+        addGigi("Sure! Let me connect you with our team. What's your full name?");
+        setFlowStep("name");
+      }, 500);
+    } else {
+      askAi(text);
+    }
+  };
+
   const isTextInputStep = ["name", "company", "email", "phone", "idle", "done"].includes(flowStep);
 
   return (
