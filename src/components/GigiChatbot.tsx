@@ -125,9 +125,12 @@ const GigiChatbot = () => {
     if (!hasGreeted) {
       setHasGreeted(true);
       setTimeout(() => {
-        addGigi("Hi there! I'm Gigi 👋 Welcome to GreenCirkit. How can I help you today?", CATEGORIES);
-        setFlowStep("category");
+        addGigi("Hi there! I'm Gigi 👋");
       }, 400);
+      setTimeout(() => {
+        addGigi("Welcome to GreenCirkit! How can I help you today?", CATEGORIES);
+        setFlowStep("category");
+      }, 1200);
     }
   };
 
