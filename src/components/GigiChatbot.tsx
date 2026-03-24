@@ -341,6 +341,24 @@ const GigiChatbot = () => {
                         ))}
                       </div>
                     )}
+                    {msg.quickReplies && msg.quickReplies.length > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="flex flex-wrap gap-1.5 pt-1"
+                      >
+                        {msg.quickReplies.map((chip) => (
+                          <button
+                            key={chip}
+                            onClick={() => handleQuickReply(chip)}
+                            className="text-[11px] px-3 py-1.5 rounded-full border border-primary/25 text-primary bg-primary/5 hover:bg-primary/15 hover:border-primary/40 transition-all whitespace-nowrap"
+                          >
+                            {chip}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
                   </div>
                 </div>
               ))}
