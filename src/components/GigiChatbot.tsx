@@ -104,7 +104,7 @@ const GigiChatbot = () => {
         addGigi("I'm having a little trouble right now. Could you try again? 😊");
       } else {
         const reply = data.reply;
-        addGigi(reply);
+        addGigi(reply, undefined, QUICK_REPLIES_GENERAL);
         setConversationHistory((prev) => [...prev, { role: "assistant", content: reply }]);
 
         // Check if AI response suggests lead capture
