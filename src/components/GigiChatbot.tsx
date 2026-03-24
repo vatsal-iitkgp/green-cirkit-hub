@@ -141,12 +141,12 @@ const GigiChatbot = () => {
       setLeadData((d) => ({ ...d, category: option }));
       if (LEAD_CATEGORIES.includes(option)) {
         setTimeout(() => {
-          addGigi("Great! I'd love to connect you with our team. Could you share your full name?");
+          addGigi("Great choice! 🙌 Let me connect you with our team. What's your full name?");
           setFlowStep("name");
         }, 500);
       } else {
         setTimeout(() => {
-          addGigi("Sure! Ask me anything about GreenCirkit — recycling, EPR credits, HDPE granules, or anything else. I'm here to help! 😊");
+          addGigi("Ask me anything about GreenCirkit! 😊");
           setFlowStep("idle");
         }, 500);
       }
