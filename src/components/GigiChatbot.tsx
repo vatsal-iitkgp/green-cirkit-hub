@@ -125,9 +125,12 @@ const GigiChatbot = () => {
     if (!hasGreeted) {
       setHasGreeted(true);
       setTimeout(() => {
-        addGigi("Hi there! I'm Gigi 👋 Welcome to GreenCirkit. How can I help you today?", CATEGORIES);
-        setFlowStep("category");
+        addGigi("Hi there! I'm Gigi 👋");
       }, 400);
+      setTimeout(() => {
+        addGigi("Welcome to GreenCirkit! How can I help you today?", CATEGORIES);
+        setFlowStep("category");
+      }, 1200);
     }
   };
 
@@ -138,12 +141,12 @@ const GigiChatbot = () => {
       setLeadData((d) => ({ ...d, category: option }));
       if (LEAD_CATEGORIES.includes(option)) {
         setTimeout(() => {
-          addGigi("Great! I'd love to connect you with our team. Could you share your full name?");
+          addGigi("Great choice! 🙌 Let me connect you with our team. What's your full name?");
           setFlowStep("name");
         }, 500);
       } else {
         setTimeout(() => {
-          addGigi("Sure! Ask me anything about GreenCirkit — recycling, EPR credits, HDPE granules, or anything else. I'm here to help! 😊");
+          addGigi("Ask me anything about GreenCirkit! 😊");
           setFlowStep("idle");
         }, 500);
       }
@@ -289,26 +292,34 @@ const GigiChatbot = () => {
                         </div>
                       </div>
                     ) : (
-                      <div
-                        className={`px-3 py-2 rounded-xl text-sm leading-relaxed ${
+                      <motion.div
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className={`px-3.5 py-2.5 rounded-xl text-sm leading-relaxed ${
                           msg.from === "user"
                             ? "bg-primary text-primary-foreground rounded-br-sm"
                             : "bg-muted text-foreground rounded-bl-sm"
                         }`}
                       >
                         {msg.text}
-                      </div>
+                      </motion.div>
                     )}
                     {msg.options && (
-                      <div className="flex flex-wrap gap-1.5">
-                        {msg.options.map((opt) => (
-                          <button
+                      <div className="flex flex-col gap-1.5 w-full">
+                        {msg.options.map((opt, i) => (
+                          <motion.button
                             key={opt}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: i * 0.08 }}
                             onClick={() => handleOption(opt)}
-                            className="text-xs px-3 py-1.5 rounded-full border border-primary/30 text-primary bg-primary/5 hover:bg-primary/10 transition-colors"
+                            className="text-xs px-4 py-2.5 rounded-xl border border-primary/20 text-primary bg-primary/5 hover:bg-primary/15 hover:border-primary/40 transition-all text-left flex items-center gap-2 group"
                           >
+                            <span className="w-5 h-5 rounded-full bg-primary/10 group-hover:bg-primary/20 flex items-center justify-center text-[10px] font-semibold shrink-0 transition-colors">
+                              {String.fromCharCode(65 + i)}
+                            </span>
                             {opt}
-                          </button>
+                          </motion.button>
                         ))}
                       </div>
                     )}
