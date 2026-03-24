@@ -292,15 +292,17 @@ const GigiChatbot = () => {
                         </div>
                       </div>
                     ) : (
-                      <div
-                        className={`px-3 py-2 rounded-xl text-sm leading-relaxed ${
+                      <motion.div
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className={`px-3.5 py-2.5 rounded-xl text-sm leading-relaxed ${
                           msg.from === "user"
                             ? "bg-primary text-primary-foreground rounded-br-sm"
                             : "bg-muted text-foreground rounded-bl-sm"
                         }`}
                       >
                         {msg.text}
-                      </div>
+                      </motion.div>
                     )}
                     {msg.options && (
                       <div className="flex flex-col gap-1.5 w-full">
