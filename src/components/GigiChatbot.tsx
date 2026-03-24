@@ -159,7 +159,7 @@ const GigiChatbot = () => {
       submitToFormspree(finalData);
       setTimeout(() => {
         addGigi("Thank you! 🎉 Someone from our team will reach out to you within the next 24 hours. Looking forward to connecting!");
-        addGigi("Feel free to ask me anything else about GreenCirkit in the meantime! 😊");
+        addGigi("Feel free to ask me anything else about GreenCirkit in the meantime! 😊", undefined, QUICK_REPLIES_POST_LEAD);
         setFlowStep("done");
       }, 500);
     }
