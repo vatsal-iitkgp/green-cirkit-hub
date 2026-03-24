@@ -11,6 +11,7 @@ type Message = {
   text: string;
   options?: string[];
   isTyping?: boolean;
+  quickReplies?: string[];
 };
 
 type FlowStep = "idle" | "category" | "name" | "company" | "email" | "phone" | "reach" | "done";
