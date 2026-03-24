@@ -11,6 +11,7 @@ type Message = {
   text: string;
   options?: string[];
   isTyping?: boolean;
+  quickReplies?: string[];
 };
 
 type FlowStep = "idle" | "category" | "name" | "company" | "email" | "phone" | "reach" | "done";
@@ -25,6 +26,8 @@ const CATEGORIES = [
 
 const LEAD_CATEGORIES = ["Brand Owner / PIBO", "Raw Material Supplier", "Looking to Invest", "Recycling / EPR Query"];
 const REACH_OPTIONS = ["Phone Call", "Email", "WhatsApp"];
+const QUICK_REPLIES_GENERAL = ["GCPrime™ specs", "Pricing info", "EPR services", "Talk to team"];
+const QUICK_REPLIES_POST_LEAD = ["GCPrime™ details", "Your facility", "Certifications"];
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xreeerdv";
 
 const submitToFormspree = async (data: Record<string, string>) => {
@@ -66,8 +69,8 @@ const GigiChatbot = () => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const addGigi = (text: string, options?: string[]) => {
-    setMessages((prev) => [...prev, { id: nextId(), from: "gigi", text, options }]);
+  const addGigi = (text: string, options?: string[], quickReplies?: string[]) => {
+    setMessages((prev) => [...prev, { id: nextId(), from: "gigi", text, options, quickReplies }]);
   };
 
   const addUser = (text: string) => {
@@ -101,7 +104,7 @@ const GigiChatbot = () => {
         addGigi("I'm having a little trouble right now. Could you try again? 😊");
       } else {
         const reply = data.reply;
-        addGigi(reply);
+        addGigi(reply, undefined, QUICK_REPLIES_GENERAL);
         setConversationHistory((prev) => [...prev, { role: "assistant", content: reply }]);
 
         // Check if AI response suggests lead capture
@@ -146,7 +149,7 @@ const GigiChatbot = () => {
         }, 500);
       } else {
         setTimeout(() => {
-          addGigi("Ask me anything about GreenCirkit! 😊");
+          addGigi("Ask me anything about GreenCirkit! 😊", undefined, QUICK_REPLIES_GENERAL);
           setFlowStep("idle");
         }, 500);
       }
@@ -156,7 +159,7 @@ const GigiChatbot = () => {
       submitToFormspree(finalData);
       setTimeout(() => {
         addGigi("Thank you! 🎉 Someone from our team will reach out to you within the next 24 hours. Looking forward to connecting!");
-        addGigi("Feel free to ask me anything else about GreenCirkit in the meantime! 😊");
+        addGigi("Feel free to ask me anything else about GreenCirkit in the meantime! 😊", undefined, QUICK_REPLIES_POST_LEAD);
         setFlowStep("done");
       }, 500);
     }
@@ -204,6 +207,21 @@ const GigiChatbot = () => {
         break;
       default:
         break;
+    }
+  };
+
+  const handleQuickReply = (text: string) => {
+    if (isAiThinking) return;
+    // Clear quick replies from all messages
+    setMessages((prev) => prev.map((m) => ({ ...m, quickReplies: undefined })));
+    addUser(text);
+    if (text === "Talk to team") {
+      setTimeout(() => {
+        addGigi("Sure! Let me connect you with our team. What's your full name?");
+        setFlowStep("name");
+      }, 500);
+    } else {
+      askAi(text);
     }
   };
 
@@ -322,6 +340,24 @@ const GigiChatbot = () => {
                           </motion.button>
                         ))}
                       </div>
+                    )}
+                    {msg.quickReplies && msg.quickReplies.length > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="flex flex-wrap gap-1.5 pt-1"
+                      >
+                        {msg.quickReplies.map((chip) => (
+                          <button
+                            key={chip}
+                            onClick={() => handleQuickReply(chip)}
+                            className="text-[11px] px-3 py-1.5 rounded-full border border-primary/25 text-primary bg-primary/5 hover:bg-primary/15 hover:border-primary/40 transition-all whitespace-nowrap"
+                          >
+                            {chip}
+                          </button>
+                        ))}
+                      </motion.div>
                     )}
                   </div>
                 </div>
