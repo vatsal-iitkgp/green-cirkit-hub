@@ -169,9 +169,9 @@ const Door = ({
 const Doors = () => (
   <section className="container max-w-6xl py-28 md:py-36">
     <Reveal>
-      <Eyebrow>Two ways to work with us</Eyebrow>
+      <Eyebrow>Buy · Sell</Eyebrow>
     </Reveal>
-    <SplitHeadline text={"Buy. *Or sell.*"} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
+    <SplitHeadline text={"Pick your *side*\nof the circuit."} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
     <div className="mt-14 grid gap-5 md:grid-cols-2">
       <Reveal>
         <Door
