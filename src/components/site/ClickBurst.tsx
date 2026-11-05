@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 /**
  * Pressing any button or link pops a small burst of rHDPE pellets from the
- * press point, with a soft ring, plus a short glassy "pop" sound file.
+ * press point, with a soft ring. Visual only, no sound.
  */
 const COLORS = [
   "radial-gradient(circle at 32% 28%, #fff 0%, #8fe3a7 30%, #2f7a3e 100%)",
@@ -11,29 +11,9 @@ const COLORS = [
 ];
 
 
-/* ---------- press sound: a tiny pre-rendered file (public/sfx/press.mp3, 8 KB) ---------- */
-let base: HTMLAudioElement | null = null;
-const getBase = () => {
-  if (!base) {
-    base = new Audio("/sfx/press.mp3");
-    base.preload = "auto";
-    base.volume = 0.9;
-  }
-  return base;
-};
-const playPress = () => {
-  const b = getBase();
-  // clone so rapid clicks can overlap
-  const a = b.cloneNode(true) as HTMLAudioElement;
-  a.volume = b.volume;
-  a.play().catch(() => {
-    /* blocked or unavailable: stay silent */
-  });
-};
-
 const ClickBurst = () => {
   useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const layer = document.createElement("div");
     layer.setAttribute("aria-hidden", "true");
@@ -81,27 +61,11 @@ const ClickBurst = () => {
     const onDown = (e: PointerEvent) => {
       const target = (e.target as HTMLElement | null)?.closest("button, a, [role=button]");
       if (!target) return;
-      if (!reduce) burst(e.clientX, e.clientY);
+      burst(e.clientX, e.clientY);
     };
-    // Sound plays on the completed tap/click: phones only allow audio to start on
-    // touch-end / click, not on touch-start.
-    const onClick = (e: MouseEvent) => {
-      const target = (e.target as HTMLElement | null)?.closest("button, a, [role=button]");
-      if (!target) return;
-      try {
-        playPress();
-      } catch {
-        /* audio unavailable */
-      }
-    };
-    // warm the file cache early
-    getBase().load();
-
     document.addEventListener("pointerdown", onDown, { passive: true });
-    document.addEventListener("click", onClick, true);
     return () => {
       document.removeEventListener("pointerdown", onDown);
-      document.removeEventListener("click", onClick, true);
       layer.remove();
     };
   }, []);
