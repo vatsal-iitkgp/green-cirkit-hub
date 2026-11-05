@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { sound } from "@/lib/sound";
 import { cn } from "@/lib/utils";
 
-/** Bottom-left "Sound on/off" pill with animated bars. Off by default. */
+/** Bottom-left "Sound on/off" pill. Off by default; effects only, no music. */
 const SoundToggle = () => {
   const [on, setOn] = useState(sound.on);
   useEffect(() => {
@@ -31,8 +31,8 @@ const SoundToggle = () => {
           <motion.span
             key={i}
             className={cn("w-[2px] rounded-full", on ? "bg-primary" : "bg-foreground/40")}
-            animate={on ? { height: ["30%", "100%", "45%", "80%", "30%"] } : { height: "30%" }}
-            transition={on ? { duration: 1.1 + i * 0.15, repeat: Infinity, ease: "easeInOut" } : { duration: 0.3 }}
+            animate={on ? { height: ["30%", "100%", "55%", "85%", "60%"][i % 5] } : { height: "30%" }}
+            transition={{ duration: 0.3, delay: i * 0.04 }}
             style={{ height: "30%" }}
           />
         ))}
