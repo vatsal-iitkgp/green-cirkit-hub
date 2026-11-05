@@ -70,7 +70,7 @@ export const Nav = () => {
             ))}
           </div>
           <div className="hidden md:block">
-            <Btn to="/granules#quote">Get a quote</Btn>
+            <Btn to="/granules#sample">Request sample</Btn>
           </div>
           <button
             onClick={() => setOpen((o) => !o)}
@@ -122,7 +122,7 @@ export const Footer = () => (
         <div className="md:col-span-5">
           <Logo />
           <p className="mt-5 max-w-sm text-muted-foreground leading-relaxed">
-            Bottle-grade recycled HDPE for brands that can't compromise. Built in India, for a circular one.
+            Premium, near-virgin recycled HDPE for brands that can't compromise. Built in India, for a circular one.
           </p>
           <p className="mt-6 serif italic text-2xl text-foreground/80">Go Green. Close the Circuit.</p>
         </div>
@@ -261,7 +261,7 @@ export const Intro = () => {
           />
           <p className="mt-6 serif italic text-2xl text-foreground/80">Close the circuit.</p>
           <div className="absolute bottom-8 left-6 right-6 flex items-end justify-between font-mono text-xs text-muted-foreground">
-            <span>rHDPE · Bottle grade</span>
+            <span>Near-virgin rHDPE</span>
             <span className="text-5xl md:text-7xl font-sans font-medium text-foreground tabular-nums tracking-tighter">{n}</span>
           </div>
           <div className="absolute bottom-0 left-0 h-[2px] bg-primary" style={{ width: `${n}%` }} />

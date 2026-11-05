@@ -22,14 +22,15 @@ const FLOWS: Record<"buy" | "sell", Flow> = {
   buy: {
     type: "Buy Granules",
     steps: [
-      { key: "volume", ask: "Great. Roughly how much rHDPE do you need per month?", chips: ["< 5 t", "5–25 t", "25–100 t", "100 t +"] },
-      { key: "application", ask: "What will it go into?", chips: ["Home-care bottles", "Personal-care bottles", "Containers", "Other"] },
+      { key: "volume", ask: "Great. Our live grade is GC Prime™ BM 115, blue HDPE for blow moulding. Roughly how much do you need per month?", chips: ["< 5 t", "5–25 t", "25–100 t", "100 t +"] },
+      { key: "request", ask: "Would you like to start with a sample?", chips: ["Yes, send a sample", "Just a price quote"] },
+      { key: "application", ask: "What will it go into?", chips: ["Jerry cans", "Bottles up to 15 L", "Personal care", "Other"] },
       { key: "name", ask: "Got it. Your name?" },
       { key: "company", ask: "And your company?" },
       { key: "phone", ask: "Best phone / WhatsApp number to reach you?", validate: phoneCheck },
     ],
     done: (d) =>
-      `Thanks ${d.name?.split(" ")[0] || ""}! I've passed this to our team. Expect a call within one working day with pricing and a sample plan.`,
+      `Thanks ${d.name?.split(" ")[0] || ""}! I've passed this to our team. Expect a call within one working day${d.request?.startsWith("Yes") ? " to plan your sample" : " with pricing"}.`,
   },
   sell: {
     type: "Sell Scrap",
@@ -46,19 +47,20 @@ const FLOWS: Record<"buy" | "sell", Flow> = {
 };
 
 const START_CHIPS = ["I want to buy granules", "I want to sell scrap", "I have a question"];
-const ASK_CHIPS = ["What grade do you sell?", "What scrap do you buy?", "Pricing", "Talk to a human"];
+const ASK_CHIPS = ["What grades do you have?", "What scrap do you buy?", "Pricing", "Talk to a human"];
 
 /** Used when the AI is unreachable, so Gigi never goes silent. */
 const fallbackAnswer = (q: string) => {
   const s = q.toLowerCase();
   if (/(price|rate|cost|₹|rs)/.test(s))
     return "Pricing depends on grade, colour and monthly volume. Share your requirement and the team will send a firm quote within one working day.";
-  if (/(spec|mfi|melt|density|grade|tds)/.test(s))
-    return "GC Prime™ is bottle-grade rHDPE: target MFI 0.3–0.6 g/10 min (190°C/2.16 kg), density ~0.96 g/cm³, >95% post-consumer content, packed in 25 kg bags. Every batch ships with a test report.";
+  if (/(spec|mfi|melt|density|grade|tds|sample)/.test(s))
+    return "Our live grade is GC Prime™ BM 115, blue rHDPE for blow moulding: MFI 1.15 g/10 min (190°C/5 kg), density 0.958 g/cm³, tensile at yield 24 MPa, flexural modulus 975 MPa. Full TDS is on the Buy Granules page. Want a sample?";
   if (/(scrap|sell|buy.*(bottle|drum)|material)/.test(s))
     return "We buy HDPE only: detergent and cleaner bottles (top priority), other HDPE bottles, blue drums and caps. Loose, baled or grinded. We don't buy PET, PVC, films or multilayer.";
   if (/(where|location|address|office|plant)/.test(s)) return `Our office is at ${SITE.office}.`;
-  if (/(food|fda|contact)/.test(s)) return "Our granules are for non-food-contact packaging, like home-care and personal-care bottles.";
+  if (/(food|fda|contact)/.test(s)) return "Our granules are for non-food-contact packaging: jerry cans, bottles up to 15 L, personal-care packaging and general blow-moulded containers.";
+  if (/(machine|plant|capacity|technology|equipment)/.test(s)) return "We'd rather let the material speak. Request a sample and test it on your own line. The team can share more on a call.";
   return "Good question. Let me get a human on it. Tap 'Talk to a human' or message us on WhatsApp.";
 };
 
@@ -108,7 +110,7 @@ const GigiChatbot = () => {
 
   const greet = async () => {
     await say("Hi, I'm Gigi 👋");
-    await say("Buying bottle-grade rHDPE or selling HDPE scrap? I can get you sorted in about 30 seconds.", START_CHIPS);
+    await say("Looking for near-virgin rHDPE, or selling HDPE scrap? I can get you sorted in about 30 seconds.", START_CHIPS);
   };
 
   const openChat = () => {

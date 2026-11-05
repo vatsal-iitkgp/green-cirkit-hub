@@ -29,6 +29,7 @@ export const LeadForm = ({
   whatsappText,
   successTitle,
   successBody,
+  initial = {},
 }: {
   type: LeadType;
   fields: FieldDef[];
@@ -36,8 +37,9 @@ export const LeadForm = ({
   whatsappText: string;
   successTitle: string;
   successBody: string;
+  initial?: Record<string, string>;
 }) => {
-  const [data, setData] = useState<Record<string, string>>({});
+  const [data, setData] = useState<Record<string, string>>(initial);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
 

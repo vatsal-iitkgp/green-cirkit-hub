@@ -39,7 +39,7 @@ const Hero = () => {
           as="h1"
           animateOnMount
           delay={0.6}
-          text={"Recycled HDPE,\n*engineered* to\nbottle grade."}
+          text={"Recycled HDPE,\nthis close to\n*virgin.*"}
           className="font-medium leading-[0.92] text-[clamp(2.9rem,9vw,7.6rem)] tracking-[-0.055em]"
         />
 
@@ -49,7 +49,7 @@ const Hero = () => {
           transition={{ delay: 1.3, duration: 0.9, ease: EASE }}
           className="mt-8 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed text-balance"
         >
-          Premium rHDPE granules for packaging that has to look, run and perform like virgin. And a fair, fast buyer for your HDPE scrap.
+          Premium, near-virgin rHDPE granules. Sorted, cleaned and tested so they run on your line like fresh polymer. And a fair, fast buyer for your HDPE scrap.
         </motion.p>
 
         <motion.div
@@ -88,7 +88,7 @@ const Hero = () => {
 };
 
 /* ---------------- Marquee ---------------- */
-const WORDS = ["Bottle-grade rHDPE", "Colour-sorted", "Batch traceable", "Odour-controlled", "Consistent MFI", "Made in India"];
+const WORDS = ["Near-virgin rHDPE", "Colour-consistent", "Batch traceable", "Lab-tested lots", "Consistent MFI", "Made in India"];
 const Marquee = () => (
   <div className="relative border-y border-foreground/10 py-6 overflow-hidden">
     <div className="marquee flex w-max gap-12 whitespace-nowrap">
@@ -154,9 +154,9 @@ const Doors = () => (
         <Door
           to="/granules"
           tag="For brands & converters"
-          title="Buy bottle-grade granules"
-          body="rHDPE built for blow-moulded bottles. Colour-sorted, tested every batch, traceable to source."
-          cta="See specs & get a quote"
+          title="Buy near-virgin granules"
+          body="Premium rHDPE grades that perform like virgin. Tested every lot, traceable to source, sample before you commit."
+          cta="See grades & request a sample"
           art={<PelletCluster />}
         />
       </Reveal>
@@ -208,10 +208,10 @@ const Manifesto = () => {
 
 /* ---------------- The Circuit: horizontal scroll ---------------- */
 const STAGES = [
-  { k: "01", t: "Source", d: "Post-consumer HDPE — detergent and home-care bottles — bought from a vetted dealer network with origin on record." },
-  { k: "02", t: "Sort", d: "AI optical sorting pulls out PP, PET and off-colours. Purity is decided here, so we don't compromise here." },
-  { k: "03", t: "Wash", d: "Hot friction wash strips labels, glue and residue. Clean flakes in, nothing hidden downstream." },
-  { k: "04", t: "Extrude", d: "Melt-filtered, degassed for odour and pelletised. Every batch tested before it ships with a TDS." },
+  { k: "01", t: "Source", d: "Post-consumer HDPE from a vetted dealer network, with origin on record for every lot." },
+  { k: "02", t: "Sort", d: "Other polymers and off-colours come out first. Purity is decided here, so we don't compromise here." },
+  { k: "03", t: "Clean", d: "Labels, glue and residue are removed. Clean flakes in, nothing hidden downstream." },
+  { k: "04", t: "Re-granulate", d: "Filtered and turned into uniform granules. Every lot is tested before it ships with its TDS." },
 ];
 
 const Circuit = () => {
@@ -235,7 +235,7 @@ const Circuit = () => {
           <div>
             <Eyebrow>The process</Eyebrow>
             <h2 className="mt-5 text-6xl font-medium leading-[0.95]">
-              Bottle to bottle, <span className="serif italic text-primary">in four moves.</span>
+              Waste to near-virgin, <span className="serif italic text-primary">in four moves.</span>
             </h2>
           </div>
           <div className="w-48 h-px bg-foreground/15 relative mb-4">
@@ -262,7 +262,7 @@ const Circuit = () => {
           <div className="shrink-0 w-[30vw] h-[58vh] flex flex-col justify-center pr-20">
             <p className="serif italic text-5xl leading-tight">…and the circuit closes.</p>
             <div className="mt-8">
-              <Btn to="/granules">See the granules</Btn>
+              <Btn to="/granules">See the grades</Btn>
             </div>
           </div>
         </motion.div>
@@ -275,7 +275,7 @@ const CircuitMobile = () => (
   <section className="md:hidden container py-20">
     <Eyebrow>The process</Eyebrow>
     <h2 className="mt-5 text-5xl font-medium leading-[0.95]">
-      Bottle to bottle, <span className="serif italic text-primary">in four moves.</span>
+      Waste to near-virgin, <span className="serif italic text-primary">in four moves.</span>
     </h2>
     <div className="mt-10 flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar -mx-5 px-5">
       {STAGES.map((s, i) => (
@@ -294,10 +294,10 @@ const CircuitMobile = () => (
 
 /* ---------------- Product spotlight ---------------- */
 const SPEC_PREVIEW = [
-  { l: "Melt flow index", v: <><Counter to={0.3} decimals={1} />–<Counter to={0.6} decimals={1} /></>, u: "g/10 min · 190°C/2.16 kg" },
-  { l: "Density", v: <Counter to={0.96} decimals={2} prefix="~" />, u: "g/cm³" },
-  { l: "PCR content", v: <Counter to={95} prefix=">" suffix="%" />, u: "post-consumer" },
-  { l: "Pack", v: <Counter to={25} />, u: "kg bags" },
+  { l: "Melt flow index", v: <Counter to={1.15} decimals={2} />, u: "g/10 min · 190°C/5 kg" },
+  { l: "Density", v: <Counter to={0.958} decimals={3} />, u: "g/cm³" },
+  { l: "Tensile at yield", v: <Counter to={24} />, u: "MPa" },
+  { l: "Flexural modulus", v: <Counter to={975} />, u: "MPa" },
 ];
 
 const Product = () => (
@@ -311,10 +311,10 @@ const Product = () => (
         <Reveal>
           <Eyebrow>The product</Eyebrow>
         </Reveal>
-        <SplitHeadline text={"GC Prime™\n*rHDPE* bottle grade."} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
+        <SplitHeadline text={"GC Prime™\n*near-virgin* rHDPE."} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
         <Reveal delay={0.2}>
           <p className="mt-6 max-w-md text-muted-foreground text-lg leading-relaxed">
-            Made from post-consumer HDPE bottles, for blow moulding new ones. Natural and colour-sorted lots.
+            Our first grade is live: BM 115, blue HDPE for blow moulding. More grades are on the way.
           </p>
         </Reveal>
         <div className="mt-10 grid grid-cols-2 border-t border-foreground/10">
@@ -327,8 +327,8 @@ const Product = () => (
           ))}
         </div>
         <Reveal delay={0.3} className="mt-10 flex items-center gap-5">
-          <Btn to="/granules">Full spec sheet</Btn>
-          <span className="text-xs text-muted-foreground">Target specs · TDS with every batch</span>
+          <Btn to="/granules">View grades</Btn>
+          <Btn to="/granules#sample" variant="ghost">Request sample</Btn>
         </Reveal>
       </div>
     </div>
@@ -337,9 +337,9 @@ const Product = () => (
 
 /* ---------------- Why (bento) ---------------- */
 const WHY = [
-  { i: ScanLine, t: "Sorted by machine, not by eye", d: "AI optical sorting by polymer and colour. Fewer specks, fewer rejects on your line.", span: "md:col-span-4" },
+  { i: ScanLine, t: "Purity you can see", d: "Sorted by polymer and colour before anything is melted. Fewer specks, fewer rejects on your line.", span: "md:col-span-4" },
   { i: Fingerprint, t: "Traceable to the batch", d: "Every bag maps back to its source lot. Audit questions answered in minutes, not weeks.", span: "md:col-span-2" },
-  { i: Droplets, t: "Odour-controlled", d: "Hot wash plus vacuum degassing during extrusion. Bottles that don't smell recycled.", span: "md:col-span-2" },
+  { i: Droplets, t: "Runs like virgin", d: "Same processing window as virgin HDPE (190–230°C). No re-tuning your machines.", span: "md:col-span-2" },
   { i: FlaskConical, t: "Lab-tested, every lot", d: "MFI, density, ash and moisture checked before dispatch. Results go with the shipment.", span: "md:col-span-4" },
 ];
 
@@ -373,8 +373,8 @@ const Numbers = () => (
     <div className="container max-w-6xl grid md:grid-cols-3">
       {[
         { n: <Counter to={60} suffix="%" />, l: "Recycled content required in rigid plastic packaging by FY29 under India's EPR rules." },
-        { n: <Counter to={10} suffix="Mt" prefix="~" />, l: "Plastic waste India generates every year. Most of it is never recycled into bottles again." },
-        { n: <Counter to={1.5} decimals={1} suffix=" t/hr" />, l: "Planned washing and sorting capacity at our own plant, sized to scale from day one." },
+        { n: <Counter to={10} suffix="Mt" prefix="~" />, l: "Plastic waste India generates every year. Most of it never comes back as quality material." },
+        { n: <Counter to={100} suffix="%" />, l: "Of our lots are lab-tested before dispatch. The report travels with the material." },
       ].map((x, i) => (
         <Reveal key={i} delay={i * 0.1} className={`py-14 md:py-20 ${i ? "md:border-l md:pl-10" : ""} ${i < 2 ? "border-b md:border-b-0" : ""} border-foreground/10 md:pr-10`}>
           <p className="text-6xl md:text-7xl font-medium tracking-[-0.05em]">{x.n}</p>
@@ -403,7 +403,7 @@ const About = () => (
         </Reveal>
         <Reveal delay={0.1}>
           <p>
-            GreenCirkit is the organised alternative: a vetted sourcing network, machine-grade sorting and washing, and batch-level traceability, built for the brands that need it.
+            GreenCirkit is the organised alternative: a vetted sourcing network, disciplined processing, and batch-level traceability, built for the brands that need it.
           </p>
         </Reveal>
         <Reveal delay={0.2} className="grid sm:grid-cols-2 gap-4 pt-6">
@@ -431,8 +431,8 @@ const FinalCTA = () => (
       <SplitHeadline text={"Let's close the\n*circuit* together."} className="relative text-[clamp(3rem,8vw,7rem)] font-medium leading-[0.92]" />
       <Reveal delay={0.3} className="relative mt-12 flex flex-col sm:flex-row gap-3 justify-center">
         <Magnetic>
-          <Btn to="/granules#quote" size="lg">
-            Get a granule quote
+          <Btn to="/granules#sample" size="lg">
+            Request a sample
           </Btn>
         </Magnetic>
         <Magnetic>

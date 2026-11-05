@@ -15,7 +15,7 @@ const FILL: Record<string, string> = {
   l: "radial-gradient(circle at 32% 28%, #fff 0%, #7fdc98 22%, #23663a 100%)",
 };
 
-export const PelletCluster = ({ className }: { className?: string }) => (
+export const PelletCluster = ({ className, tone }: { className?: string; tone?: "blue" }) => (
   <div className={cn("relative aspect-square", className)}>
     <div className="absolute inset-[12%] rounded-full bg-primary/20 blur-[80px]" />
     {PELLETS.map(([x, y, s, c], i) => (
@@ -27,7 +27,7 @@ export const PelletCluster = ({ className }: { className?: string }) => (
           top: `${y}%`,
           width: `${s}%`,
           height: `${s * 0.74}%`,
-          background: FILL[c],
+          background: FILL[tone === "blue" ? (i % 5 === 3 ? "n" : "b") : c],
           translateX: "-50%",
           translateY: "-50%",
         }}

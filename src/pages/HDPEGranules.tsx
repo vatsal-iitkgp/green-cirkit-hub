@@ -1,32 +1,108 @@
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { FileText, Plus } from "lucide-react";
 import { Page } from "@/components/site/Chrome";
 import { Btn, Eyebrow, Magnetic, Reveal, SplitHeadline, spotlightMove } from "@/components/site/motion";
 import { PelletCluster } from "@/components/site/visuals";
 import { LeadForm } from "@/components/site/Form";
-
-const SPECS = [
-  ["Melt flow index", "190°C / 2.16 kg", "0.3 – 0.6", "g/10 min", "ASTM D1238"],
-  ["Density", "at 23°C", "0.950 – 0.965", "g/cm³", "ASTM D792"],
-  ["Tensile strength", "at yield", "19 – 27", "MPa", "ASTM D638"],
-  ["Flexural modulus", "", "700 – 1,250", "MPa", "ASTM D790"],
-  ["ESCR", "", "≥ 40", "hours", "ASTM D1693"],
-  ["Ash content", "", "< 2.5", "%", "ASTM D5630"],
-  ["Moisture", "", "< 0.5", "%", "—"],
-  ["PCR content", "post-consumer", "> 95", "%", "—"],
-];
-
-const USES = [
-  { t: "Home-care bottles", d: "Detergent, floor and toilet-cleaner bottles. Our feedstock is exactly this, so it goes back where it came from." },
-  { t: "Personal-care bottles", d: "Shampoo and lotion bottles (non-food contact) where colour and finish matter." },
-  { t: "Containers & jerry cans", d: "Blow-moulded containers that need stiffness and stress-crack resistance." },
-];
+import { GRADES, type Grade } from "@/lib/grades";
 
 const STEPS = [
-  { k: "01", t: "Tell us what you need", d: "Grade, colour, monthly volume, application. Two minutes." },
-  { k: "02", t: "Sample + TDS", d: "We send a sample lot with its test report. Run it on your line." },
-  { k: "03", t: "Lock supply", d: "Agreed spec, steady monthly volume, test report with every batch." },
+  { k: "01", t: "Request a sample", d: "Pick a grade, tell us your application. Two minutes." },
+  { k: "02", t: "Run it on your line", d: "Sample lot with its TDS. Test it on your own machines." },
+  { k: "03", t: "Lock supply", d: "Agreed spec, steady monthly volume, test report with every lot." },
 ];
+
+const GradeCard = ({ g }: { g: Grade }) => (
+  <div onMouseMove={spotlightMove} className="spotlight rounded-[32px] border border-foreground/10 bg-card overflow-hidden">
+    {/* Header */}
+    <div className="grid md:grid-cols-12 gap-10 p-8 md:p-12 border-b border-foreground/10">
+      <div className="md:col-span-5 flex flex-col">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 text-xs font-medium text-primary">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" /> Available now
+          </span>
+          <span className="rounded-full border border-foreground/10 px-3 py-1 text-xs text-muted-foreground">{g.family}</span>
+          <span className="rounded-full border border-foreground/10 px-3 py-1 text-xs text-muted-foreground">{g.colour}</span>
+        </div>
+        <h3 className="mt-6 text-4xl md:text-5xl font-medium leading-[0.95]">{g.name}</h3>
+        <p className="mt-2 serif italic text-2xl text-primary">{g.colour} HDPE · {g.family.toLowerCase()}</p>
+        <p className="mt-5 text-muted-foreground leading-relaxed">{g.summary}</p>
+        <PelletCluster tone="blue" className="mt-6 w-56 md:w-64 self-center md:self-start" />
+        <dl className="mt-auto grid grid-cols-2 gap-4 pt-6 text-sm">
+          <div>
+            <dt className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground">Process</dt>
+            <dd className="mt-1">{g.process}</dd>
+          </div>
+          <div>
+            <dt className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground">Melt temp</dt>
+            <dd className="mt-1">{g.processTemp}</dd>
+          </div>
+          <div>
+            <dt className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground">Colour</dt>
+            <dd className="mt-1">{g.colour}</dd>
+          </div>
+          <div>
+            <dt className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground">Pack</dt>
+            <dd className="mt-1">{g.pack}</dd>
+          </div>
+        </dl>
+      </div>
+
+      {/* TDS */}
+      <div className="md:col-span-7">
+        <div className="flex items-center justify-between">
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Technical data · typical values</p>
+          <Link to={`/tds/${g.id}`} className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline underline-offset-4">
+            <FileText className="h-4 w-4" /> Download TDS
+          </Link>
+        </div>
+        <div className="mt-4 border-t border-foreground/10">
+          {g.tds.map((r, i) => (
+            <motion.div
+              key={r.property + r.condition}
+              initial={{ opacity: 0, x: -14 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-30px" }}
+              transition={{ delay: i * 0.05, duration: 0.5 }}
+              className="group grid grid-cols-12 items-baseline gap-3 border-b border-foreground/10 py-4"
+            >
+              <div className="col-span-7 sm:col-span-6">
+                <p className="group-hover:text-primary transition-colors">{r.property}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {r.condition ? `${r.condition} · ` : ""}
+                  <span className="font-mono">{r.method}</span>
+                </p>
+              </div>
+              <p className="col-span-5 sm:col-span-6 text-right text-2xl md:text-3xl font-medium tracking-tight tabular-nums">
+                {r.value} <span className="text-sm text-muted-foreground font-normal">{r.unit}</span>
+              </p>
+            </motion.div>
+          ))}
+        </div>
+        <p className="mt-4 text-xs text-muted-foreground">{g.note}</p>
+      </div>
+    </div>
+
+    {/* Footer */}
+    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 md:px-12">
+      <div>
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-3">Applications</p>
+        <div className="flex flex-wrap gap-2">
+          {g.applications.map((a) => (
+            <span key={a} className="rounded-full border border-foreground/15 px-3.5 py-1.5 text-sm">
+              {a}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="flex flex-wrap gap-3 shrink-0">
+        <Btn href="#sample">Request sample</Btn>
+      </div>
+    </div>
+  </div>
+);
 
 const Granules = () => {
   const ref = useRef<HTMLElement>(null);
@@ -37,7 +113,7 @@ const Granules = () => {
   return (
     <Page>
       {/* Hero */}
-      <section ref={ref} className="relative overflow-hidden pt-36 md:pt-44 pb-20">
+      <section ref={ref} className="relative overflow-hidden pt-36 md:pt-44 pb-16">
         <div className="absolute inset-0 grid-bg [mask-image:radial-gradient(ellipse_at_70%_40%,black_20%,transparent_70%)]" />
         <div className="relative container max-w-6xl grid md:grid-cols-12 gap-10 items-center">
           <div className="md:col-span-7">
@@ -46,22 +122,22 @@ const Granules = () => {
               as="h1"
               animateOnMount
               delay={0.2}
-              text={"GC Prime™\n*rHDPE,* bottle grade."}
-              className="mt-6 text-[clamp(3rem,8vw,6.5rem)] font-medium leading-[0.92]"
+              text={"Recycled grades\nthat run *like virgin.*"}
+              className="mt-6 text-[clamp(2.9rem,7.5vw,6.2rem)] font-medium leading-[0.92]"
             />
             <Reveal delay={0.6}>
               <p className="mt-8 max-w-lg text-lg text-muted-foreground leading-relaxed">
-                Post-consumer HDPE bottles, sorted, washed and re-extruded into granules your blow-moulding line can run like virgin.
+                GC Prime™ is our family of near-virgin rHDPE grades. Every lot is tested, traceable, and backed by a TDS. Start with a sample.
               </p>
             </Reveal>
             <Reveal delay={0.75} className="mt-10 flex flex-wrap gap-3">
               <Magnetic>
-                <Btn href="#quote" size="lg">
+                <Btn href="#sample" size="lg">
                   Request a sample
                 </Btn>
               </Magnetic>
-              <Btn href="#specs" size="lg" variant="ghost">
-                View specs
+              <Btn href="#grades" size="lg" variant="ghost">
+                View grades
               </Btn>
             </Reveal>
           </div>
@@ -71,90 +147,48 @@ const Granules = () => {
         </div>
       </section>
 
-      {/* Variants */}
-      <section className="container max-w-6xl py-16">
-        <div className="grid gap-5 md:grid-cols-2">
-          {[
-            { n: "GC Prime™ Natural", d: "Light, natural-tone granules for bottles that get coloured downstream.", sw: "radial-gradient(circle at 32% 28%, #fff, #f1f0e6 25%, #a9a89d)" },
-            { n: "GC Prime™ Colour-sorted", d: "Sorted by colour (blue and more) so your bottles match lot after lot.", sw: "radial-gradient(circle at 32% 28%, #fff, #86aee6 25%, #23447a)" },
-          ].map((v, i) => (
-            <Reveal key={v.n} delay={i * 0.1}>
-              <div onMouseMove={spotlightMove} className="spotlight rounded-[24px] border border-foreground/10 bg-card p-8 md:p-10 flex items-center gap-8">
-                <span className="shrink-0 h-20 w-24 rounded-[50%] shadow-[0_20px_40px_-14px_rgba(0,0,0,0.9)]" style={{ background: v.sw }} />
-                <div>
-                  <h3 className="text-2xl md:text-3xl font-medium">{v.n}</h3>
-                  <p className="mt-2 text-muted-foreground">{v.d}</p>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* Specs */}
-      <section id="specs" className="container max-w-6xl py-20 md:py-28 scroll-mt-24">
+      {/* Grades */}
+      <section id="grades" className="container max-w-6xl py-16 md:py-24 scroll-mt-24">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <Reveal>
-              <Eyebrow>Technical data</Eyebrow>
+              <Eyebrow>Grades</Eyebrow>
             </Reveal>
-            <SplitHeadline text={"The *numbers* that\nmatter on your line."} className="mt-5 text-4xl md:text-6xl font-medium leading-[0.95]" />
+            <SplitHeadline text={"Pick your *grade.*"} className="mt-5 text-4xl md:text-6xl font-medium leading-[0.95]" />
           </div>
           <Reveal>
-            <p className="text-sm text-muted-foreground max-w-xs">Target specification. Every batch ships with its own test report.</p>
+            <p className="text-sm text-muted-foreground max-w-xs">
+              {GRADES.length} grade available today. More on the way.
+            </p>
           </Reveal>
         </div>
-        <div className="mt-12 border-t border-foreground/10">
-          {SPECS.map(([name, cond, val, unit, method], i) => (
-            <motion.div
-              key={name}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ delay: i * 0.05, duration: 0.6 }}
-              className="group grid grid-cols-12 items-baseline gap-4 border-b border-foreground/10 py-5 md:py-6 transition-colors hover:bg-foreground/[0.02]"
-            >
-              <div className="col-span-7 md:col-span-5">
-                <p className="text-lg md:text-xl group-hover:text-primary transition-colors">{name}</p>
-                {cond && <p className="text-xs text-muted-foreground mt-0.5">{cond}</p>}
-              </div>
-              <p className="col-span-5 md:col-span-4 text-right md:text-left text-2xl md:text-3xl font-medium tracking-tight tabular-nums">
-                {val} <span className="text-sm text-muted-foreground font-normal">{unit}</span>
-              </p>
-              <p className="hidden md:block md:col-span-3 text-right font-mono text-xs text-muted-foreground">{method}</p>
-            </motion.div>
-          ))}
-        </div>
-        <Reveal className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-sm text-muted-foreground">
-          <span>Packing · 25 kg bags</span>
-          <span>Store dry, below 50°C, away from sunlight</span>
-          <span>Non-food-contact applications</span>
-        </Reveal>
-      </section>
 
-      {/* Uses */}
-      <section className="container max-w-6xl py-20">
-        <Reveal>
-          <Eyebrow>Built for</Eyebrow>
-        </Reveal>
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {USES.map((u, i) => (
-            <Reveal key={u.t} delay={i * 0.08}>
-              <div onMouseMove={spotlightMove} className="spotlight h-full rounded-[24px] border border-foreground/10 bg-card p-8 min-h-[240px] flex flex-col justify-between">
-                <span className="font-mono text-xs text-primary">0{i + 1}</span>
-                <div>
-                  <h3 className="text-2xl font-medium">{u.t}</h3>
-                  <p className="mt-3 text-muted-foreground leading-relaxed">{u.d}</p>
-                </div>
-              </div>
+        <div className="mt-12 space-y-6">
+          {GRADES.map((g) => (
+            <Reveal key={g.id}>
+              <GradeCard g={g} />
             </Reveal>
           ))}
+          <Reveal>
+            <a
+              href="#sample"
+              className="group flex items-center justify-between gap-6 rounded-[32px] border border-dashed border-foreground/15 p-8 md:p-10 hover:border-primary/60 transition-colors"
+            >
+              <div>
+                <h3 className="text-2xl md:text-3xl font-medium">Need a different grade?</h3>
+                <p className="mt-2 text-muted-foreground">Other colours, MFI ranges or processes. Tell us your spec and we'll tell you what's possible.</p>
+              </div>
+              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-foreground/15 transition-all duration-500 group-hover:bg-primary group-hover:text-primary-foreground group-hover:rotate-90">
+                <Plus className="h-6 w-6" />
+              </span>
+            </a>
+          </Reveal>
         </div>
       </section>
 
       {/* How ordering works */}
       <section className="container max-w-6xl py-20">
-        <SplitHeadline text={"From first call to\n*steady supply.*"} className="text-4xl md:text-6xl font-medium leading-[0.95]" />
+        <SplitHeadline text={"From sample to\n*steady supply.*"} className="text-4xl md:text-6xl font-medium leading-[0.95]" />
         <div className="mt-12 grid md:grid-cols-3 border-t border-foreground/10">
           {STEPS.map((s, i) => (
             <Reveal key={s.k} delay={i * 0.1} className={`py-10 ${i ? "md:border-l md:pl-8" : ""} md:pr-8 border-foreground/10`}>
@@ -166,32 +200,34 @@ const Granules = () => {
         </div>
       </section>
 
-      {/* Quote */}
-      <section id="quote" className="container max-w-6xl py-24 md:py-32 scroll-mt-20">
-        <div className="grid md:grid-cols-12 gap-12 rounded-[32px] border border-foreground/10 bg-card p-8 md:p-14">
+      {/* Sample / quote */}
+      <section id="sample" className="container max-w-6xl py-24 md:py-32 scroll-mt-20">
+        <div className="forest grid md:grid-cols-12 gap-12 rounded-[32px] border border-primary/20 p-8 md:p-14">
           <div className="md:col-span-4">
-            <Eyebrow>Get a quote</Eyebrow>
+            <Eyebrow>Request a sample</Eyebrow>
             <h2 className="mt-5 text-4xl md:text-5xl font-medium leading-[0.95]">
-              Tell us your <span className="serif italic text-primary">spec.</span>
+              Test it on <span className="serif italic text-primary">your line.</span>
             </h2>
-            <p className="mt-5 text-muted-foreground leading-relaxed">We reply within one working day with price, availability and a sample plan.</p>
+            <p className="mt-5 text-muted-foreground leading-relaxed">We reply within one working day to plan your sample, along with pricing and the TDS.</p>
           </div>
           <div className="md:col-span-8">
             <LeadForm
               type="Buy Granules"
-              submitLabel="Request quote"
-              whatsappText="Hi GreenCirkit, I'd like a quote for rHDPE bottle-grade granules."
-              successTitle="Got it. Thank you."
-              successBody="Our team will reach out within one working day with pricing and a sample plan."
+              submitLabel="Send request"
+              whatsappText="Hi GreenCirkit, I'd like a sample of your rHDPE granules."
+              successTitle="Request received."
+              successBody="Our team will reach out within one working day to plan your sample."
+              initial={{ request: "Sample", grade: GRADES[0].name }}
               fields={[
+                { name: "request", label: "I'd like", type: "chips", options: ["Sample", "Price quote", "TDS"], multi: true, required: true },
+                { name: "grade", label: "Grade", type: "chips", options: [...GRADES.map((g) => g.name), "Something else"], required: true },
                 { name: "name", label: "Your name", type: "text", required: true, half: true },
                 { name: "company", label: "Company", type: "text", required: true, half: true },
                 { name: "phone", label: "Phone / WhatsApp", type: "tel", required: true, half: true },
                 { name: "email", label: "Work email", type: "email", half: true },
-                { name: "volume", label: "Monthly volume", type: "chips", options: ["< 5 t", "5–25 t", "25–100 t", "100 t +"], required: true },
-                { name: "colour", label: "Colour", type: "chips", options: ["Natural", "Blue", "Other colour", "Not sure yet"] },
-                { name: "application", label: "Application", type: "chips", options: ["Home-care bottles", "Personal-care bottles", "Containers / jerry cans", "Other"], multi: true },
-                { name: "message", label: "Anything else? (target MFI, delivery city…)", type: "textarea" },
+                { name: "volume", label: "Monthly volume", type: "chips", options: ["< 5 t", "5–25 t", "25–100 t", "100 t +"] },
+                { name: "application", label: "Application", type: "chips", options: [...GRADES[0].applications, "Other"], multi: true },
+                { name: "message", label: "Anything else? (delivery city, target spec…)", type: "textarea" },
               ]}
             />
           </div>
