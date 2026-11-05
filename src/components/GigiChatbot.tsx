@@ -1,393 +1,387 @@
-import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUp, X, MessageCircle, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import mark from "@/assets/gc-mark.png";
+import { isPhone, submitLead, whatsappLink, SITE } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
-type Message = {
-  id: number;
-  from: "gigi" | "user";
-  text: string;
-  options?: string[];
-  isTyping?: boolean;
-  quickReplies?: string[];
+/* ------------------------------------------------------------------ */
+/* Gigi — GreenCirkit's assistant.                                     */
+/* Two guided flows (buy granules / sell scrap) that capture a lead in */
+/* ~30 seconds, plus free-form AI chat with an offline fallback.        */
+/* ------------------------------------------------------------------ */
+
+type Msg = { id: number; from: "gigi" | "user"; text: string; typing?: boolean };
+type Step = { key: string; ask: string; chips?: string[]; multi?: boolean; validate?: (v: string) => string | null; optional?: boolean };
+type Flow = { type: "Buy Granules" | "Sell Scrap"; steps: Step[]; done: (d: Record<string, string>) => string };
+
+const phoneCheck = (v: string) => (isPhone(v) ? null : "That number looks short. Mind re-entering with 10 digits?");
+
+const FLOWS: Record<"buy" | "sell", Flow> = {
+  buy: {
+    type: "Buy Granules",
+    steps: [
+      { key: "volume", ask: "Great. Roughly how much rHDPE do you need per month?", chips: ["< 5 t", "5–25 t", "25–100 t", "100 t +"] },
+      { key: "application", ask: "What will it go into?", chips: ["Home-care bottles", "Personal-care bottles", "Containers", "Other"] },
+      { key: "name", ask: "Got it. Your name?" },
+      { key: "company", ask: "And your company?" },
+      { key: "phone", ask: "Best phone / WhatsApp number to reach you?", validate: phoneCheck },
+    ],
+    done: (d) =>
+      `Thanks ${d.name?.split(" ")[0] || ""}! I've passed this to our team. Expect a call within one working day with pricing and a sample plan.`,
+  },
+  sell: {
+    type: "Sell Scrap",
+    steps: [
+      { key: "material", ask: "Nice. What material do you have?", chips: ["Detergent bottles", "Other HDPE bottles", "Blue drums", "Caps", "Mixed HDPE"] },
+      { key: "volume", ask: "How much per month, roughly?", chips: ["< 5 t", "5–20 t", "20–50 t", "50 t +"] },
+      { key: "city", ask: "Which city is the material in?" },
+      { key: "name", ask: "Your name?" },
+      { key: "phone", ask: "Phone / WhatsApp number? Our sourcing team will call with a rate.", validate: phoneCheck },
+    ],
+    done: (d) =>
+      `Done, ${d.name?.split(" ")[0] || ""}! Our sourcing team will call you with a rate, usually the same day. Sending a few photos on WhatsApp speeds it up.`,
+  },
 };
 
-type FlowStep = "idle" | "category" | "name" | "company" | "email" | "phone" | "reach" | "done";
+const START_CHIPS = ["I want to buy granules", "I want to sell scrap", "I have a question"];
+const ASK_CHIPS = ["What grade do you sell?", "What scrap do you buy?", "Pricing", "Talk to a human"];
 
-const CATEGORIES = [
-  "Brand Owner / PIBO",
-  "Raw Material Supplier",
-  "Looking to Invest",
-  "Recycling / EPR Query",
-  "General Enquiry",
-];
-
-const LEAD_CATEGORIES = ["Brand Owner / PIBO", "Raw Material Supplier", "Looking to Invest", "Recycling / EPR Query"];
-const REACH_OPTIONS = ["Phone Call", "Email", "WhatsApp"];
-const QUICK_REPLIES_GENERAL = ["GCPrime™ specs", "Pricing info", "EPR services", "Talk to team"];
-const QUICK_REPLIES_POST_LEAD = ["GCPrime™ details", "Your facility", "Certifications"];
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/xreeerdv";
-
-const submitToFormspree = async (data: Record<string, string>) => {
-  try {
-    await fetch(FORMSPREE_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        _subject: `Gigi Chat Lead: ${data.name} (${data.category})`,
-        name: data.name,
-        company: data.company,
-        email: data.email,
-        phone: data.phone,
-        category: data.category,
-        preferred_contact: data.reach,
-        source: "Gigi Chatbot",
-      }),
-    });
-  } catch (e) {
-    console.error("Failed to submit lead to Formspree", e);
-  }
+/** Used when the AI is unreachable, so Gigi never goes silent. */
+const fallbackAnswer = (q: string) => {
+  const s = q.toLowerCase();
+  if (/(price|rate|cost|₹|rs)/.test(s))
+    return "Pricing depends on grade, colour and monthly volume. Share your requirement and the team will send a firm quote within one working day.";
+  if (/(spec|mfi|melt|density|grade|tds)/.test(s))
+    return "GC Prime™ is bottle-grade rHDPE: target MFI 0.3–0.6 g/10 min (190°C/2.16 kg), density ~0.96 g/cm³, >95% post-consumer content, packed in 25 kg bags. Every batch ships with a test report.";
+  if (/(scrap|sell|buy.*(bottle|drum)|material)/.test(s))
+    return "We buy HDPE only: detergent and cleaner bottles (top priority), other HDPE bottles, blue drums and caps. Loose, baled or grinded. We don't buy PET, PVC, films or multilayer.";
+  if (/(where|location|address|office|plant)/.test(s)) return `Our office is at ${SITE.office}.`;
+  if (/(food|fda|contact)/.test(s)) return "Our granules are for non-food-contact packaging, like home-care and personal-care bottles.";
+  return "Good question. Let me get a human on it. Tap 'Talk to a human' or message us on WhatsApp.";
 };
 
 const GigiChatbot = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [open, setOpen] = useState(false);
+  const [teaser, setTeaser] = useState(false);
+  const [msgs, setMsgs] = useState<Msg[]>([]);
+  const [chips, setChips] = useState<string[]>([]);
   const [input, setInput] = useState("");
-  const [flowStep, setFlowStep] = useState<FlowStep>("idle");
-  const [leadData, setLeadData] = useState<Record<string, string>>({});
-  const [hasGreeted, setHasGreeted] = useState(false);
-  const [isAiThinking, setIsAiThinking] = useState(false);
-  const [conversationHistory, setConversationHistory] = useState<{ role: string; content: string }[]>([]);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const [busy, setBusy] = useState(false);
+  const [flow, setFlow] = useState<{ id: "buy" | "sell"; i: number; data: Record<string, string> } | null>(null);
+  const [history, setHistory] = useState<{ role: string; content: string }[]>([]);
   const idRef = useRef(0);
-
-  const nextId = () => ++idRef.current;
+  const endRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [msgs, chips]);
 
-  const addGigi = (text: string, options?: string[], quickReplies?: string[]) => {
-    setMessages((prev) => [...prev, { id: nextId(), from: "gigi", text, options, quickReplies }]);
-  };
-
-  const addUser = (text: string) => {
-    setMessages((prev) => [...prev, { id: nextId(), from: "user", text }]);
-  };
-
-  const showTyping = () => {
-    const typingId = nextId();
-    setMessages((prev) => [...prev, { id: typingId, from: "gigi", text: "", isTyping: true }]);
-    return typingId;
-  };
-
-  const removeTyping = (typingId: number) => {
-    setMessages((prev) => prev.filter((m) => m.id !== typingId));
-  };
-
-  const askAi = async (userMessage: string) => {
-    const newHistory = [...conversationHistory, { role: "user", content: userMessage }];
-    setConversationHistory(newHistory);
-    setIsAiThinking(true);
-    const typingId = showTyping();
-
+  useEffect(() => {
+    let seen = false;
     try {
-      const { data, error } = await supabase.functions.invoke("gigi-chat", {
-        body: { messages: newHistory },
-      });
-
-      removeTyping(typingId);
-
-      if (error || data?.error) {
-        addGigi("I'm having a little trouble right now. Could you try again? 😊");
-      } else {
-        const reply = data.reply;
-        addGigi(reply, undefined, QUICK_REPLIES_GENERAL);
-        setConversationHistory((prev) => [...prev, { role: "assistant", content: reply }]);
-
-        // Check if AI response suggests lead capture
-        const lower = reply.toLowerCase();
-        if (lower.includes("connect you") || lower.includes("team can help") || lower.includes("share your details")) {
-          setTimeout(() => {
-            addGigi("Would you like me to connect you with our team? Just share your name to get started! 😊");
-            setFlowStep("name");
-          }, 1500);
-        }
-      }
+      seen = !!sessionStorage.getItem("gigi-teaser");
     } catch {
-      removeTyping(typingId);
-      addGigi("Oops, something went wrong. Please try again! 🙏");
+      /* ignore */
     }
-    setIsAiThinking(false);
+    if (seen) return;
+    const t = setTimeout(() => setTeaser(true), 7000);
+    return () => clearTimeout(t);
+  }, []);
+
+  const push = (from: Msg["from"], text: string) => setMsgs((m) => [...m, { id: ++idRef.current, from, text }]);
+
+  /** Gigi "types" before speaking, for a human pace. */
+  const say = (text: string, nextChips: string[] = []) =>
+    new Promise<void>((resolve) => {
+      const id = ++idRef.current;
+      setChips([]);
+      setMsgs((m) => [...m, { id, from: "gigi", text: "", typing: true }]);
+      setTimeout(() => {
+        setMsgs((m) => m.map((x) => (x.id === id ? { ...x, text, typing: false } : x)));
+        setChips(nextChips);
+        resolve();
+      }, Math.min(1100, 350 + text.length * 8));
+    });
+
+  const greet = async () => {
+    await say("Hi, I'm Gigi 👋");
+    await say("Buying bottle-grade rHDPE or selling HDPE scrap? I can get you sorted in about 30 seconds.", START_CHIPS);
   };
 
   const openChat = () => {
-    setIsOpen(true);
-    if (!hasGreeted) {
-      setHasGreeted(true);
-      setTimeout(() => {
-        addGigi("Hi there! I'm Gigi 👋");
-      }, 400);
-      setTimeout(() => {
-        addGigi("Welcome to GreenCirkit! How can I help you today?", CATEGORIES);
-        setFlowStep("category");
-      }, 1200);
+    setOpen(true);
+    setTeaser(false);
+    try {
+      sessionStorage.setItem("gigi-teaser", "1");
+    } catch {
+      /* ignore */
     }
+    if (!msgs.length) greet();
+    setTimeout(() => inputRef.current?.focus(), 400);
   };
 
-  const handleOption = (option: string) => {
-    addUser(option);
-
-    if (flowStep === "category") {
-      setLeadData((d) => ({ ...d, category: option }));
-      if (LEAD_CATEGORIES.includes(option)) {
-        setTimeout(() => {
-          addGigi("Great choice! 🙌 Let me connect you with our team. What's your full name?");
-          setFlowStep("name");
-        }, 500);
-      } else {
-        setTimeout(() => {
-          addGigi("Ask me anything about GreenCirkit! 😊", undefined, QUICK_REPLIES_GENERAL);
-          setFlowStep("idle");
-        }, 500);
-      }
-    } else if (flowStep === "reach") {
-      const finalData = { ...leadData, reach: option };
-      setLeadData(finalData);
-      submitToFormspree(finalData);
-      setTimeout(() => {
-        addGigi("Thank you! 🎉 Someone from our team will reach out to you within the next 24 hours. Looking forward to connecting!");
-        addGigi("Feel free to ask me anything else about GreenCirkit in the meantime! 😊", undefined, QUICK_REPLIES_POST_LEAD);
-        setFlowStep("done");
-      }, 500);
-    }
+  const reset = () => {
+    setMsgs([]);
+    setChips([]);
+    setFlow(null);
+    setHistory([]);
+    greet();
   };
 
-  const handleSend = () => {
-    const text = input.trim();
-    if (!text || isAiThinking) return;
+  const startFlow = async (id: "buy" | "sell") => {
+    setFlow({ id, i: 0, data: {} });
+    const s = FLOWS[id].steps[0];
+    await say(s.ask, s.chips);
+  };
+
+  const advance = async (value: string) => {
+    if (!flow) return;
+    const f = FLOWS[flow.id];
+    const step = f.steps[flow.i];
+    const err = step.validate?.(value);
+    if (err) {
+      await say(err);
+      return;
+    }
+    const data = { ...flow.data, [step.key]: value };
+    const next = flow.i + 1;
+    if (next < f.steps.length) {
+      setFlow({ ...flow, i: next, data });
+      const s = f.steps[next];
+      await say(s.ask, s.chips);
+      return;
+    }
+    setFlow(null);
+    setBusy(true);
+    const ok = await submitLead(f.type, data, "Gigi chatbot");
+    setBusy(false);
+    if (ok) await say(f.done(data), ["I have a question", "Start over"]);
+    else await say("Hmm, I couldn't send that just now. Could you message us on WhatsApp instead? The button is at the top.", ["Start over"]);
+  };
+
+  const askAi = async (q: string) => {
+    const h = [...history, { role: "user", content: q }];
+    setHistory(h);
+    setBusy(true);
+    const id = ++idRef.current;
+    setChips([]);
+    setMsgs((m) => [...m, { id, from: "gigi", text: "", typing: true }]);
+    let reply = "";
+    try {
+      const { data, error } = await supabase.functions.invoke("gigi-chat", { body: { messages: h.slice(-12) } });
+      if (!error && data?.reply) reply = data.reply;
+    } catch {
+      /* fall through */
+    }
+    if (!reply) reply = fallbackAnswer(q);
+    setMsgs((m) => m.map((x) => (x.id === id ? { ...x, text: reply, typing: false } : x)));
+    setHistory((p) => [...p, { role: "assistant", content: reply }]);
+    setChips(["I want to buy granules", "I want to sell scrap", "Talk to a human"]);
+    setBusy(false);
+  };
+
+  const handle = async (raw: string) => {
+    const text = raw.trim();
+    if (!text || busy) return;
+    push("user", text);
     setInput("");
-    addUser(text);
+    setChips([]);
 
-    switch (flowStep) {
-      case "name":
-        setLeadData((d) => ({ ...d, name: text }));
-        setTimeout(() => {
-          addGigi("Thanks! And your company name?");
-          setFlowStep("company");
-        }, 500);
-        break;
-      case "company":
-        setLeadData((d) => ({ ...d, company: text }));
-        setTimeout(() => {
-          addGigi("What's the best email to reach you at?");
-          setFlowStep("email");
-        }, 500);
-        break;
-      case "email":
-        setLeadData((d) => ({ ...d, email: text }));
-        setTimeout(() => {
-          addGigi("And a phone / WhatsApp number?");
-          setFlowStep("phone");
-        }, 500);
-        break;
-      case "phone":
-        setLeadData((d) => ({ ...d, phone: text }));
-        setTimeout(() => {
-          addGigi("How would you prefer us to reach out?", REACH_OPTIONS);
-          setFlowStep("reach");
-        }, 500);
-        break;
-      case "idle":
-      case "done":
-        // Use AI for conversational responses
-        askAi(text);
-        break;
-      default:
-        break;
-    }
+    if (flow) return advance(text);
+
+    const low = text.toLowerCase();
+    if (text === "Start over") return reset();
+    if (text === START_CHIPS[0] || /^buy\b|buy granule|need granule/.test(low)) return startFlow("buy");
+    if (text === START_CHIPS[1] || /sell (my )?scrap|^sell\b/.test(low)) return startFlow("sell");
+    if (text === START_CHIPS[2]) return say("Ask away. Specs, scrap, pricing, anything.", ASK_CHIPS);
+    if (text === "Talk to a human")
+      return say(`Sure. WhatsApp us at ${SITE.phone} or email ${SITE.email}. Or leave your details and we'll call you:`, START_CHIPS.slice(0, 2));
+    return askAi(text);
   };
 
-  const handleQuickReply = (text: string) => {
-    if (isAiThinking) return;
-    // Clear quick replies from all messages
-    setMessages((prev) => prev.map((m) => ({ ...m, quickReplies: undefined })));
-    addUser(text);
-    if (text === "Talk to team") {
-      setTimeout(() => {
-        addGigi("Sure! Let me connect you with our team. What's your full name?");
-        setFlowStep("name");
-      }, 500);
-    } else {
-      askAi(text);
-    }
-  };
-
-  const isTextInputStep = ["name", "company", "email", "phone", "idle", "done"].includes(flowStep);
+  const step = flow ? FLOWS[flow.id].steps[flow.i] : null;
+  const placeholder = step ? (step.chips ? "Pick an option or type…" : step.key === "phone" ? "+91 …" : "Type here…") : "Ask Gigi anything…";
 
   return (
     <>
-      {/* Floating Gigi Button */}
+      {/* Launcher */}
       <AnimatePresence>
-        {!isOpen && (
+        {!open && (
           <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            className="fixed bottom-6 right-6 z-50 flex items-end gap-3"
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 30, opacity: 0 }}
+            transition={{ delay: 1.8 }}
+            className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3"
           >
-            <div className="relative cursor-pointer" onClick={openChat}>
-              <motion.div
-                animate={{ rotate: [0, 14, -8, 14, -4, 10, 0] }}
-                transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3 }}
-                className="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-2xl shadow-lg border-2 border-primary-foreground/20"
-              >
-                🙋‍♀️
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1 }}
-                className="absolute bottom-full right-16 mb-2 bg-card border border-border rounded-lg px-3 py-2 text-sm shadow-md whitespace-nowrap text-foreground"
-              >
-                <span className="font-semibold text-primary">Gigi:</span> Let me know if you need any help! 👋
-                <div className="absolute -bottom-1 right-4 w-2 h-2 bg-card border-b border-r border-border rotate-45" />
-              </motion.div>
-            </div>
+            <AnimatePresence>
+              {teaser && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="relative max-w-[260px] rounded-2xl rounded-br-md border border-foreground/10 bg-card/90 backdrop-blur-xl p-4 pr-8 text-sm shadow-2xl"
+                >
+                  <button onClick={() => setTeaser(false)} className="absolute right-2 top-2 text-muted-foreground hover:text-foreground" aria-label="Dismiss">
+                    <X size={14} />
+                  </button>
+                  <button onClick={openChat} className="text-left">
+                    Buying rHDPE or selling scrap? <span className="text-primary">I can help in 30 seconds →</span>
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <button
+              onClick={openChat}
+              className="group flex items-center gap-3 rounded-full bg-primary pl-2 pr-5 py-2 text-primary-foreground shadow-[0_12px_40px_-8px_hsl(var(--primary)/0.6)] transition-transform hover:scale-[1.04]"
+            >
+              <span className="relative grid h-9 w-9 place-items-center rounded-full bg-primary-foreground">
+                <img src={mark} alt="" className="h-5 w-5 transition-transform duration-700 group-hover:rotate-[120deg]" />
+                <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border-2 border-primary bg-primary-foreground" />
+              </span>
+              <span className="text-sm font-semibold">Ask Gigi</span>
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Chat Window */}
+      {/* Panel */}
       <AnimatePresence>
-        {isOpen && (
+        {open && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 0, y: 24, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ type: "spring", damping: 25, stiffness: 350 }}
-            className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-3rem)] h-[500px] max-h-[70vh] bg-card border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+            exit={{ opacity: 0, y: 24, scale: 0.96 }}
+            transition={{ type: "spring", damping: 26, stiffness: 320 }}
+            style={{ transformOrigin: "bottom right" }}
+            className="fixed z-50 bottom-0 right-0 sm:bottom-5 sm:right-5 w-full sm:w-[400px] h-[100svh] sm:h-[620px] sm:max-h-[calc(100svh-2.5rem)] flex flex-col overflow-hidden sm:rounded-[28px] border border-foreground/10 bg-background/95 backdrop-blur-2xl shadow-[0_40px_120px_-20px_rgba(0,0,0,0.9)]"
           >
             {/* Header */}
-            <div className="bg-primary px-4 py-3 flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">🙋‍♀️</span>
+            <div className="relative flex items-center justify-between gap-3 border-b border-foreground/10 px-5 py-4">
+              <div className="flex items-center gap-3">
+                <span className="relative grid h-10 w-10 place-items-center rounded-full bg-primary">
+                  <img src={mark} alt="" className="h-5 w-5 brightness-0" />
+                  <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background bg-emerald-400" />
+                </span>
                 <div>
-                  <p className="text-primary-foreground font-semibold text-sm">Gigi</p>
-                  <p className="text-primary-foreground/70 text-xs">GreenCirkit AI Assistant</p>
+                  <p className="font-semibold leading-tight">Gigi</p>
+                  <p className="text-xs text-muted-foreground">GreenCirkit · replies instantly</p>
                 </div>
               </div>
-              <button onClick={() => setIsOpen(false)} className="text-primary-foreground/80 hover:text-primary-foreground">
-                <X size={18} />
-              </button>
+              <div className="flex items-center gap-1">
+                <a
+                  href={whatsappLink("Hi GreenCirkit")}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="grid h-9 w-9 place-items-center rounded-full text-muted-foreground hover:bg-foreground/[0.07] hover:text-foreground"
+                  aria-label="WhatsApp"
+                  title="WhatsApp us"
+                >
+                  <MessageCircle size={17} />
+                </a>
+                <button onClick={reset} className="grid h-9 w-9 place-items-center rounded-full text-muted-foreground hover:bg-foreground/[0.07] hover:text-foreground" aria-label="Restart" title="Start over">
+                  <RotateCcw size={16} />
+                </button>
+                <button onClick={() => setOpen(false)} className="grid h-9 w-9 place-items-center rounded-full text-muted-foreground hover:bg-foreground/[0.07] hover:text-foreground" aria-label="Close">
+                  <X size={18} />
+                </button>
+              </div>
             </div>
 
+            {/* Progress for guided flows */}
+            {flow && (
+              <div className="h-[2px] bg-foreground/10">
+                <motion.div className="h-full bg-primary" animate={{ width: `${((flow.i + 1) / (FLOWS[flow.id].steps.length + 1)) * 100}%` }} />
+              </div>
+            )}
+
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
-              {messages.map((msg) => (
-                <div key={msg.id} className={`flex ${msg.from === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className="max-w-[80%] space-y-2">
-                    {msg.isTyping ? (
-                      <div className="bg-muted text-foreground rounded-xl rounded-bl-sm px-4 py-3">
-                        <div className="flex gap-1.5 items-center">
+            <div className="flex-1 overflow-y-auto px-4 py-5 space-y-2.5 no-scrollbar">
+              {msgs.map((m) => (
+                <motion.div
+                  key={m.id}
+                  initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className={cn("flex", m.from === "user" ? "justify-end" : "justify-start")}
+                >
+                  <div
+                    className={cn(
+                      "max-w-[85%] px-4 py-2.5 text-[14.5px] leading-relaxed whitespace-pre-wrap",
+                      m.from === "user"
+                        ? "rounded-2xl rounded-br-md bg-primary text-primary-foreground"
+                        : "rounded-2xl rounded-bl-md bg-foreground/[0.06] border border-foreground/[0.06]",
+                    )}
+                  >
+                    {m.typing ? (
+                      <span className="flex gap-1 py-1.5">
+                        {[0, 1, 2].map((i) => (
                           <motion.span
-                            className="w-2 h-2 bg-foreground/40 rounded-full"
-                            animate={{ opacity: [0.3, 1, 0.3] }}
-                            transition={{ duration: 1, repeat: Infinity, delay: 0 }}
+                            key={i}
+                            className="h-1.5 w-1.5 rounded-full bg-foreground/50"
+                            animate={{ y: [0, -4, 0] }}
+                            transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.15 }}
                           />
-                          <motion.span
-                            className="w-2 h-2 bg-foreground/40 rounded-full"
-                            animate={{ opacity: [0.3, 1, 0.3] }}
-                            transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
-                          />
-                          <motion.span
-                            className="w-2 h-2 bg-foreground/40 rounded-full"
-                            animate={{ opacity: [0.3, 1, 0.3] }}
-                            transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
-                          />
-                        </div>
-                      </div>
+                        ))}
+                      </span>
                     ) : (
-                      <motion.div
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className={`px-3.5 py-2.5 rounded-xl text-sm leading-relaxed ${
-                          msg.from === "user"
-                            ? "bg-primary text-primary-foreground rounded-br-sm"
-                            : "bg-muted text-foreground rounded-bl-sm"
-                        }`}
-                      >
-                        {msg.text}
-                      </motion.div>
-                    )}
-                    {msg.options && (
-                      <div className="flex flex-col gap-1.5 w-full">
-                        {msg.options.map((opt, i) => (
-                          <motion.button
-                            key={opt}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: i * 0.08 }}
-                            onClick={() => handleOption(opt)}
-                            className="text-xs px-4 py-2.5 rounded-xl border border-primary/20 text-primary bg-primary/5 hover:bg-primary/15 hover:border-primary/40 transition-all text-left flex items-center gap-2 group"
-                          >
-                            <span className="w-5 h-5 rounded-full bg-primary/10 group-hover:bg-primary/20 flex items-center justify-center text-[10px] font-semibold shrink-0 transition-colors">
-                              {String.fromCharCode(65 + i)}
-                            </span>
-                            {opt}
-                          </motion.button>
-                        ))}
-                      </div>
-                    )}
-                    {msg.quickReplies && msg.quickReplies.length > 0 && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className="flex flex-wrap gap-1.5 pt-1"
-                      >
-                        {msg.quickReplies.map((chip) => (
-                          <button
-                            key={chip}
-                            onClick={() => handleQuickReply(chip)}
-                            className="text-[11px] px-3 py-1.5 rounded-full border border-primary/25 text-primary bg-primary/5 hover:bg-primary/15 hover:border-primary/40 transition-all whitespace-nowrap"
-                          >
-                            {chip}
-                          </button>
-                        ))}
-                      </motion.div>
+                      m.text
                     )}
                   </div>
-                </div>
+                </motion.div>
               ))}
-              <div ref={bottomRef} />
+
+              {chips.length > 0 && (
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {chips.map((c, i) => (
+                    <motion.button
+                      key={c}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      onClick={() => handle(c)}
+                      className="rounded-full border border-primary/30 bg-primary/[0.06] px-3.5 py-2 text-[13px] text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors"
+                    >
+                      {c}
+                    </motion.button>
+                  ))}
+                </div>
+              )}
+              <div ref={endRef} />
             </div>
 
             {/* Input */}
-            {isTextInputStep && (
-              <div className="p-3 border-t border-border shrink-0">
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleSend();
-                  }}
-                  className="flex gap-2"
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handle(input);
+              }}
+              className="p-3 border-t border-foreground/10"
+            >
+              <div className="flex items-center gap-2 rounded-full border border-foreground/10 bg-foreground/[0.04] pl-4 pr-1.5 py-1.5 focus-within:border-primary/60 transition-colors">
+                <input
+                  ref={inputRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder={busy ? "Gigi is thinking…" : placeholder}
+                  inputMode={step?.key === "phone" ? "tel" : "text"}
+                  disabled={busy}
+                  className="flex-1 bg-transparent text-[15px] outline-none placeholder:text-muted-foreground/70"
+                />
+                <button
+                  type="submit"
+                  disabled={busy || !input.trim()}
+                  className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground disabled:opacity-30 transition-opacity"
+                  aria-label="Send"
                 >
-                  <Input
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder={isAiThinking ? "Gigi is thinking..." : "Type a message..."}
-                    className="flex-1 text-sm h-9"
-                    disabled={isAiThinking}
-                  />
-                  <Button type="submit" size="icon" className="h-9 w-9 shrink-0" disabled={isAiThinking}>
-                    <Send size={16} />
-                  </Button>
-                </form>
+                  <ArrowUp size={17} strokeWidth={2.5} />
+                </button>
               </div>
-            )}
+              <p className="mt-2 text-center text-[10.5px] text-muted-foreground/70">Gigi is an AI assistant. The team confirms all quotes.</p>
+            </form>
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,38 +1,37 @@
-import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
-import HDPEGranules from "./pages/HDPEGranules";
-import EPRCredits from "./pages/EPRCredits";
-import About from "./pages/About";
+import Granules from "./pages/HDPEGranules";
+import SellScrap from "./pages/SellScrap";
 import NotFound from "./pages/NotFound";
-import PreOperationalNotice from "./components/PreOperationalNotice";
-import PreProductionBanner from "./components/PreProductionBanner";
 import GigiChatbot from "./components/GigiChatbot";
-
-
-const queryClient = new QueryClient();
+import { Cursor, Footer, Intro, Nav, ScrollManager } from "./components/site/Chrome";
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-   <BrowserRouter>
-  <PreProductionBanner />
-  <Routes>
-    <Route path="/" element={<Index />} />
-    <Route path="/granules/buy" element={<HDPEGranules />} />
-    <Route path="/epr" element={<EPRCredits />} />
-    <Route path="/about" element={<About />} />
-    <Route path="*" element={<NotFound />} />
-  </Routes>
-  <GigiChatbot />
-</BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <TooltipProvider>
+    <Sonner />
+    <BrowserRouter>
+      <div className="grain">
+        <Intro />
+        <Cursor />
+        <ScrollManager />
+        <Nav />
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/granules" element={<Granules />} />
+          <Route path="/sell-scrap" element={<SellScrap />} />
+          {/* old URLs */}
+          <Route path="/granules/buy" element={<Navigate to="/granules" replace />} />
+          <Route path="/epr" element={<Navigate to="/" replace />} />
+          <Route path="/about" element={<Navigate to="/#about" replace />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <Footer />
+        <GigiChatbot />
+      </div>
+    </BrowserRouter>
+  </TooltipProvider>
 );
 
 export default App;
