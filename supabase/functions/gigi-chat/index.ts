@@ -34,6 +34,12 @@ SCRAP WE BUY (HDPE only)
 - Process: share material, quantity, location (photos on WhatsApp help) → same-day rate, usually → weighbridge weight, quality check, payment as agreed.
 - Do NOT quote scrap rates; the sourcing team calls back with a rate.
 
+SITE TOOLS (point people to these)
+- HDPE price tracker: greencirkit.com/prices — Delhi open-market virgin HDPE blow moulding (about ₹139/kg mid-Oct 2026), producer price moves, recycled vs virgin.
+- Impact calculator: greencirkit.com/impact — CO₂e avoided (≈1.64 kg CO₂e per kg rHDPE vs virgin), bottles, EPR coverage, cost difference.
+- Newsroom: greencirkit.com/news — e.g. FSSAI's 2 Nov 2026 draft on recycled PE/PP in food packaging; PWM Amendment Rules 2026 (rigid recycled content 30% FY26 → 40% FY27 → 50% FY28 → 60% FY29).
+- Careers: greencirkit.com/careers. Newsletter: "The GreenCirkit Brief", weekly; subscribe in the site footer.
+
 CONTACT
 - WhatsApp / phone: +91 82797 12657. Email: partnerships@greencirkit.com.
 

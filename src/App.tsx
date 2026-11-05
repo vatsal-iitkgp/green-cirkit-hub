@@ -6,6 +6,10 @@ import Granules from "./pages/HDPEGranules";
 import SellScrap from "./pages/SellScrap";
 import NotFound from "./pages/NotFound";
 import TDS from "./pages/TDS";
+import Prices from "./pages/Prices";
+import Impact from "./pages/Impact";
+import Careers from "./pages/Careers";
+import { NewsList, NewsPost } from "./pages/News";
 import GigiChatbot from "./components/GigiChatbot";
 import { Cursor, Footer, Intro, Nav, ScrollManager } from "./components/site/Chrome";
 
@@ -27,6 +31,11 @@ const Site = () => {
         <Route path="/" element={<Index />} />
         <Route path="/granules" element={<Granules />} />
         <Route path="/sell-scrap" element={<SellScrap />} />
+        <Route path="/prices" element={<Prices />} />
+        <Route path="/impact" element={<Impact />} />
+        <Route path="/news" element={<NewsList />} />
+        <Route path="/news/:slug" element={<NewsPost />} />
+        <Route path="/careers" element={<Careers />} />
         {/* old URLs */}
         <Route path="/granules/buy" element={<Navigate to="/granules" replace />} />
         <Route path="/epr" element={<Navigate to="/" replace />} />

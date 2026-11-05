@@ -5,6 +5,7 @@ import { Menu, X, ArrowUpRight } from "lucide-react";
 import mark from "@/assets/gc-mark.png";
 import { SITE, whatsappLink } from "@/lib/site";
 import { Btn, EASE } from "./motion";
+import { SubscribeForm } from "./Subscribe";
 import { cn } from "@/lib/utils";
 
 export const Logo = ({ className }: { className?: string }) => (
@@ -17,6 +18,12 @@ export const Logo = ({ className }: { className?: string }) => (
 const LINKS = [
   { to: "/granules", label: "Buy Granules" },
   { to: "/sell-scrap", label: "Sell Scrap" },
+  { to: "/prices", label: "Prices" },
+  { to: "/impact", label: "Impact" },
+  { to: "/news", label: "News" },
+];
+const MOBILE_EXTRA = [
+  { to: "/careers", label: "Careers" },
   { to: "/#about", label: "About" },
 ];
 
@@ -53,14 +60,14 @@ export const Nav = () => {
           )}
         >
           <Logo />
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-0.5">
             {LINKS.map((l) => (
               <NavLink
                 key={l.to}
                 to={l.to}
                 className={({ isActive }) =>
                   cn(
-                    "relative px-4 py-2 text-sm rounded-full transition-colors",
+                    "relative px-3.5 py-2 text-sm rounded-full transition-colors",
                     isActive && !l.to.includes("#") ? "text-foreground bg-foreground/[0.07]" : "text-muted-foreground hover:text-foreground",
                   )
                 }
@@ -69,12 +76,12 @@ export const Nav = () => {
               </NavLink>
             ))}
           </div>
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <Btn to="/granules#sample">Request sample</Btn>
           </div>
           <button
             onClick={() => setOpen((o) => !o)}
-            className="md:hidden grid h-10 w-10 place-items-center rounded-full bg-foreground/[0.07]"
+            className="lg:hidden grid h-10 w-10 place-items-center rounded-full bg-foreground/[0.07]"
             aria-label="Menu"
           >
             {open ? <X size={18} /> : <Menu size={18} />}
@@ -89,16 +96,16 @@ export const Nav = () => {
             animate={{ clipPath: "inset(0 0 0% 0)" }}
             exit={{ clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.6, ease: EASE }}
-            className="fixed inset-0 z-40 bg-background md:hidden flex flex-col justify-end px-6 pb-10 pt-24"
+            className="fixed inset-0 z-40 bg-background lg:hidden flex flex-col justify-end px-6 pb-10 pt-24 overflow-y-auto"
           >
-            {[{ to: "/", label: "Home" }, ...LINKS].map((l, i) => (
+            {[{ to: "/", label: "Home" }, ...LINKS, ...MOBILE_EXTRA].map((l, i) => (
               <motion.div
                 key={l.to}
                 initial={{ y: 40, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.15 + i * 0.06, duration: 0.6, ease: EASE }}
               >
-                <Link to={l.to} className="flex items-center justify-between border-b border-foreground/10 py-5 text-4xl font-medium tracking-tight">
+                <Link to={l.to} className="flex items-center justify-between border-b border-foreground/10 py-3.5 text-3xl font-medium tracking-tight">
                   {l.label}
                   <ArrowUpRight className="h-6 w-6 text-primary" />
                 </Link>
@@ -125,6 +132,8 @@ export const Footer = () => (
             Premium, near-virgin recycled HDPE for brands that can't compromise. Built in India, for a circular one.
           </p>
           <p className="mt-6 serif italic text-2xl text-foreground/80">Go Green. Close the Circuit.</p>
+          <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-3">The GreenCirkit Brief · weekly</p>
+          <SubscribeForm source="Footer" compact />
         </div>
         <div className="md:col-span-3">
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">Explore</p>
@@ -132,6 +141,10 @@ export const Footer = () => (
             {[
               ["Buy Granules", "/granules"],
               ["Sell Scrap", "/sell-scrap"],
+              ["HDPE Prices", "/prices"],
+              ["Impact Calculator", "/impact"],
+              ["News", "/news"],
+              ["Careers", "/careers"],
               ["About", "/#about"],
             ].map(([l, to]) => (
               <li key={to}>

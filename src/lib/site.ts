@@ -13,7 +13,7 @@ export const whatsappLink = (text: string) =>
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xreeerdv";
 
-export type LeadType = "Buy Granules" | "Sell Scrap" | "General";
+export type LeadType = "Buy Granules" | "Sell Scrap" | "Subscribe" | "Job Application" | "Impact Report" | "General";
 
 /** Sends a lead to the team inbox (Formspree). Returns true on success. */
 export async function submitLead(type: LeadType, data: Record<string, string>, source: string) {

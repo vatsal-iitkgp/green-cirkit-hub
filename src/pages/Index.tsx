@@ -7,6 +7,8 @@ import Journey from "@/components/site/Journey";
 import { Btn, Eyebrow, Magnetic, Reveal, SplitHeadline, spotlightMove, EASE } from "@/components/site/motion";
 import { Counter, PelletCluster, StageArt } from "@/components/site/visuals";
 import { Page } from "@/components/site/Chrome";
+import { VIRGIN_HDPE_BM_DELHI } from "@/content/prices";
+import { POSTS, formatDate } from "@/lib/news";
 
 /* ---------------- Hero ---------------- */
 const Hero = () => {
@@ -320,6 +322,70 @@ const Numbers = () => (
   </section>
 );
 
+/* ---------------- Market pulse (tools teaser) ---------------- */
+const Pulse = () => {
+  const latest = VIRGIN_HDPE_BM_DELHI[VIRGIN_HDPE_BM_DELHI.length - 1];
+  const posts = POSTS.slice(0, 3);
+  return (
+    <section className="container max-w-6xl py-24 md:py-32">
+      <Reveal>
+        <Eyebrow>Market pulse</Eyebrow>
+      </Reveal>
+      <SplitHeadline text={"Come for the granules.\n*Stay for the intel.*"} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
+      <div className="mt-14 grid gap-5 md:grid-cols-6">
+        <Reveal className="md:col-span-3">
+          <Link to="/prices" onMouseMove={spotlightMove} className="spotlight group flex h-full min-h-[300px] flex-col justify-between rounded-[28px] border border-foreground/10 bg-card p-8">
+            <div className="flex items-start justify-between">
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Virgin HDPE BM · Delhi</p>
+              <ArrowUpRight className="h-5 w-5 text-muted-foreground transition-all group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </div>
+            <div>
+              <p className="text-7xl md:text-8xl font-medium tracking-[-0.06em]">
+                ₹<Counter to={latest.price} decimals={latest.price % 1 ? 1 : 0} />
+                <span className="text-xl text-muted-foreground font-normal tracking-normal">/kg</span>
+              </p>
+              <p className="mt-3 text-sm text-muted-foreground">Updated weekly · open the price tracker</p>
+            </div>
+          </Link>
+        </Reveal>
+        <Reveal delay={0.08} className="md:col-span-3">
+          <Link to="/impact" onMouseMove={spotlightMove} className="forest spotlight group flex h-full min-h-[300px] flex-col justify-between rounded-[28px] border border-primary/20 p-8">
+            <div className="flex items-start justify-between">
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-primary">Impact calculator</p>
+              <ArrowUpRight className="h-5 w-5 text-muted-foreground transition-all group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </div>
+            <div>
+              <p className="text-3xl md:text-4xl font-medium leading-tight max-w-md">
+                25 t of rHDPE a month avoids <span className="serif italic text-primary">~490 t CO₂e</span> a year.
+              </p>
+              <p className="mt-3 text-sm text-muted-foreground">What does yours do? Slide and see →</p>
+            </div>
+          </Link>
+        </Reveal>
+        <Reveal delay={0.12} className="md:col-span-6">
+          <div className="rounded-[28px] border border-foreground/10 bg-card p-8">
+            <div className="flex items-center justify-between">
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Latest from the newsroom</p>
+              <Link to="/news" className="text-sm text-primary hover:underline underline-offset-4">All news</Link>
+            </div>
+            <div className="mt-6 grid md:grid-cols-3 gap-6">
+              {posts.map((p) => (
+                <Link key={p.slug} to={`/news/${p.slug}`} className="group border-t border-foreground/10 pt-5">
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                    <span className="text-primary">{p.category}</span>
+                    <span>{formatDate(p.date)}</span>
+                  </div>
+                  <p className="mt-3 text-lg font-medium leading-snug group-hover:text-primary transition-colors">{p.title}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+};
+
 /* ---------------- About ---------------- */
 const About = () => (
   <section id="about" className="container max-w-6xl py-28 md:py-40 scroll-mt-24">
@@ -390,6 +456,7 @@ const Index = () => (
     <Product />
     <Why />
     <Numbers />
+    <Pulse />
     <About />
     <FinalCTA />
   </Page>

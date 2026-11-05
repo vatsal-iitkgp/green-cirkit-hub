@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import mark from "@/assets/gc-mark.png";
 import { isPhone, submitLead, whatsappLink, SITE } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { VIRGIN_HDPE_BM_DELHI } from "@/content/prices";
 
 /* ------------------------------------------------------------------ */
 /* Gigi — GreenCirkit's assistant.                                     */
@@ -47,11 +48,18 @@ const FLOWS: Record<"buy" | "sell", Flow> = {
 };
 
 const START_CHIPS = ["I want to buy granules", "I want to sell scrap", "I have a question"];
-const ASK_CHIPS = ["What grades do you have?", "What scrap do you buy?", "Pricing", "Talk to a human"];
+const ASK_CHIPS = ["What grades do you have?", "HDPE market price today", "What scrap do you buy?", "Talk to a human"];
 
 /** Used when the AI is unreachable, so Gigi never goes silent. */
 const fallbackAnswer = (q: string) => {
   const s = q.toLowerCase();
+  if (/(virgin|market|today|trend|delhi)/.test(s) && /(price|rate)/.test(s)) {
+    const l = VIRGIN_HDPE_BM_DELHI[VIRGIN_HDPE_BM_DELHI.length - 1];
+    return `Virgin HDPE blow moulding in Delhi was about ₹${l.price}/kg on ${l.date.split("-").reverse().join("/")} (${l.source}). The full weekly tracker is at greencirkit.com/prices.`;
+  }
+  if (/(carbon|co2|impact|emission)/.test(s))
+    return "Every kg of rHDPE used instead of virgin avoids roughly 1.6 kg CO₂e. Try our impact calculator at greencirkit.com/impact.";
+  if (/(job|career|hiring|vacancy|apply)/.test(s)) return "We're hiring! See open roles at greencirkit.com/careers.";
   if (/(price|rate|cost|₹|rs)/.test(s))
     return "Pricing depends on grade, colour and monthly volume. Share your requirement and the team will send a firm quote within one working day.";
   if (/(spec|mfi|melt|density|grade|tds|sample)/.test(s))
