@@ -20,7 +20,7 @@ const getAudio = () => {
     if (!AC) return null;
     actx = new AC();
     out = actx.createGain();
-    out.gain.value = 0.55;
+    out.gain.value = 1;
     const rev = actx.createConvolver();
     const len = Math.floor(actx.sampleRate * 1.2);
     const ir = actx.createBuffer(2, len, actx.sampleRate);
@@ -55,15 +55,26 @@ const blip = (c: AudioContext, t: number, f0: number, f1: number, vol: number, d
   o.stop(t + dur + 0.02);
 };
 
+// Put the audio engine to sleep shortly after each sound, so the browser tab's
+// "playing audio" speaker icon disappears.
+let sleepTimer: ReturnType<typeof setTimeout> | undefined;
+const sleepSoon = (ms: number) => {
+  clearTimeout(sleepTimer);
+  sleepTimer = setTimeout(() => {
+    if (actx && actx.state === "running") actx.suspend();
+  }, ms);
+};
+
 const playPress = () => {
   const c = getAudio();
   if (!c) return;
+  sleepSoon(1400);
   const t = c.currentTime + 0.005;
-  blip(c, t, 1400, 620, 0.12, 0.12); // the pop
-  blip(c, t, 2800, 2600, 0.025, 0.25); // glassy shimmer
+  blip(c, t, 1400, 620, 0.28, 0.13); // the pop
+  blip(c, t, 2800, 2600, 0.06, 0.25); // glassy shimmer
   for (let i = 0; i < 3; i++) {
     const tt = t + 0.07 + i * 0.045 + Math.random() * 0.02;
-    blip(c, tt, 3200 + Math.random() * 1600, 2800, 0.012, 0.06); // pellets landing
+    blip(c, tt, 3200 + Math.random() * 1600, 2800, 0.03, 0.06); // pellets landing
   }
 };
 
@@ -117,16 +128,46 @@ const ClickBurst = () => {
     const onDown = (e: PointerEvent) => {
       const target = (e.target as HTMLElement | null)?.closest("button, a, [role=button]");
       if (!target) return;
+      if (!reduce) burst(e.clientX, e.clientY);
+    };
+    // Sound plays on the completed tap/click: phones only allow audio to start on
+    // touch-end / click, not on touch-start.
+    const onClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement | null)?.closest("button, a, [role=button]");
+      if (!target) return;
       try {
         playPress();
       } catch {
         /* audio unavailable */
       }
-      if (!reduce) burst(e.clientX, e.clientY);
     };
+    // Unlock audio on the very first interaction anywhere (iOS needs a played buffer).
+    const unlock = () => {
+      const c = getAudio();
+      if (c) {
+        const b = c.createBuffer(1, 1, 22050);
+        const src = c.createBufferSource();
+        src.buffer = b;
+        src.connect(c.destination);
+        src.start(0);
+        sleepSoon(150);
+      }
+      window.removeEventListener("touchend", unlock);
+      window.removeEventListener("click", unlock);
+      window.removeEventListener("keydown", unlock);
+    };
+    window.addEventListener("touchend", unlock, { passive: true });
+    window.addEventListener("click", unlock);
+    window.addEventListener("keydown", unlock);
+
     document.addEventListener("pointerdown", onDown, { passive: true });
+    document.addEventListener("click", onClick, true);
     return () => {
       document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("click", onClick, true);
+      window.removeEventListener("touchend", unlock);
+      window.removeEventListener("click", unlock);
+      window.removeEventListener("keydown", unlock);
       layer.remove();
     };
   }, []);
