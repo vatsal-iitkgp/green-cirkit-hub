@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
 import mark from "@/assets/gc-mark.png";
 import { EASE, Eyebrow } from "./motion";
-import { sound } from "@/lib/sound";
 
 /**
  * "The Journey" — a scroll-scrubbed particle film.
@@ -390,17 +389,6 @@ const Journey = () => {
       window.removeEventListener("resize", onResize);
     };
   }, []);
-
-  // stage sounds (only if the visitor turned sound on)
-  const prevStage = useRef(stage);
-  useEffect(() => {
-    if (prevStage.current === stage) return;
-    prevStage.current = stage;
-    if (stage === 1) sound.clink();
-    else if (stage === 2) sound.whoosh();
-    else if (stage === 3) sound.snap();
-    else sound.clink();
-  }, [stage]);
 
   const s = STAGES[stage];
 
