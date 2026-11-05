@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform, useVelocity, useSpring, useMotionValue, useAnimationFrame, type MotionValue } from "framer-motion";
-import { ArrowDown, ArrowUpRight, ScanLine, Droplets, FlaskConical, Fingerprint } from "lucide-react";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
 import GranuleField from "@/components/site/GranuleField";
 import Journey from "@/components/site/Journey";
 import { Btn, Eyebrow, Magnetic, Reveal, SplitHeadline, spotlightMove, EASE } from "@/components/site/motion";
@@ -272,56 +272,6 @@ const Product = () => (
   </section>
 );
 
-/* ---------------- Why (bento) ---------------- */
-const WHY = [
-  { i: ScanLine, t: "Pure", d: "Sorted before it's melted. Fewer specks, fewer rejects.", span: "md:col-span-4" },
-  { i: Fingerprint, t: "Traceable", d: "Every bag maps back to its source lot.", span: "md:col-span-2" },
-  { i: Droplets, t: "Near-virgin", d: "Runs like virgin. No re-tuning your line.", span: "md:col-span-2" },
-  { i: FlaskConical, t: "Tested", d: "Every lot. The report ships with it.", span: "md:col-span-4" },
-];
-
-const Why = () => (
-  <section className="container max-w-6xl py-24 md:py-32">
-    <Reveal>
-      <Eyebrow>Why us</Eyebrow>
-    </Reveal>
-    <SplitHeadline text={"Built on *proof,*\nnot promises."} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
-    <div className="mt-14 grid gap-5 md:grid-cols-6">
-      {WHY.map((w, i) => (
-        <Reveal key={w.t} delay={i * 0.08} className={w.span}>
-          <div onMouseMove={spotlightMove} className="spotlight h-full rounded-[24px] border border-foreground/10 bg-card p-8 md:p-10 min-h-[260px] flex flex-col justify-between">
-            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-primary/10 text-primary">
-              <w.i className="h-5 w-5" />
-            </span>
-            <div className="mt-10">
-              <h3 className="text-2xl md:text-3xl font-medium">{w.t}</h3>
-              <p className="mt-3 text-muted-foreground leading-relaxed max-w-md">{w.d}</p>
-            </div>
-          </div>
-        </Reveal>
-      ))}
-    </div>
-  </section>
-);
-
-/* ---------------- Numbers ---------------- */
-const Numbers = () => (
-  <section className="forest border-y border-primary/15">
-    <div className="container max-w-6xl grid md:grid-cols-3">
-      {[
-        { n: <Counter to={60} suffix="%" />, l: "Recycled content required in rigid plastic packaging by FY29 under India's EPR rules." },
-        { n: <Counter to={10} suffix="Mt" prefix="~" />, l: "Plastic waste India generates every year. Most of it never comes back as quality material." },
-        { n: <Counter to={100} suffix="%" />, l: "Of our lots are lab-tested before dispatch. The report travels with the material." },
-      ].map((x, i) => (
-        <Reveal key={i} delay={i * 0.1} className={`py-14 md:py-20 ${i ? "md:border-l md:pl-10" : ""} ${i < 2 ? "border-b md:border-b-0" : ""} border-foreground/10 md:pr-10`}>
-          <p className="text-6xl md:text-7xl font-medium tracking-[-0.05em]">{x.n}</p>
-          <p className="mt-4 text-muted-foreground leading-relaxed max-w-xs">{x.l}</p>
-        </Reveal>
-      ))}
-    </div>
-  </section>
-);
-
 /* ---------------- Market pulse (tools teaser) ---------------- */
 const Pulse = () => {
   const latest = VIRGIN_HDPE_BM_DELHI[VIRGIN_HDPE_BM_DELHI.length - 1];
@@ -459,8 +409,6 @@ const Index = () => (
     <Manifesto />
     <Journey />
     <Product />
-    <Why />
-    <Numbers />
     <Pulse />
     <About />
     <FinalCTA />
