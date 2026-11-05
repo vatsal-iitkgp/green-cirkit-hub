@@ -247,10 +247,11 @@ export const Footer = () => (
   </footer>
 );
 
-/** Lime dot cursor with a lagging ring. Desktop / fine pointers only. */
+/** Green dot cursor with a lagging ring. Fades after 3s idle, while typing, and over text fields. */
 export const Cursor = () => {
   const [enabled, setEnabled] = useState(false);
   const [hover, setHover] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
   const rx = useSpring(x, { stiffness: 260, damping: 26, mass: 0.6 });
@@ -259,25 +260,48 @@ export const Cursor = () => {
   useEffect(() => {
     if (!window.matchMedia("(pointer: fine)").matches) return;
     setEnabled(true);
+    let idle: ReturnType<typeof setTimeout> | undefined;
+    const arm = () => {
+      clearTimeout(idle);
+      idle = setTimeout(() => setHidden(true), 3000);
+    };
     const move = (e: PointerEvent) => {
       x.set(e.clientX);
       y.set(e.clientY);
       const t = e.target as HTMLElement;
-      setHover(!!t.closest("a,button,[role=button],input,textarea,select,label"));
+      const overText = !!t.closest("input:not([type=range]):not([type=checkbox]):not([type=radio]), textarea, [contenteditable=true]");
+      setHover(!overText && !!t.closest("a,button,[role=button],label,select"));
+      setHidden(overText);
+      if (!overText) arm();
+    };
+    const type = () => {
+      clearTimeout(idle);
+      setHidden(true);
     };
     window.addEventListener("pointermove", move, { passive: true });
-    return () => window.removeEventListener("pointermove", move);
+    window.addEventListener("keydown", type);
+    arm();
+    return () => {
+      clearTimeout(idle);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("keydown", type);
+    };
   }, [x, y]);
 
   if (!enabled) return null;
   return (
     <>
-      <motion.div className="pointer-events-none fixed left-0 top-0 z-[70] h-1.5 w-1.5 -ml-[3px] -mt-[3px] rounded-full bg-primary" style={{ x, y }} />
+      <motion.div
+        className="pointer-events-none fixed left-0 top-0 z-[70] h-1.5 w-1.5 -ml-[3px] -mt-[3px] rounded-full bg-primary"
+        style={{ x, y }}
+        animate={{ opacity: hidden ? 0 : 1 }}
+        transition={{ duration: hidden ? 0.6 : 0.15 }}
+      />
       <motion.div
         className="pointer-events-none fixed left-0 top-0 z-[70] rounded-full border border-primary/60 mix-blend-difference"
         style={{ x: rx, y: ry, translateX: "-50%", translateY: "-50%" }}
-        animate={{ width: hover ? 56 : 30, height: hover ? 56 : 30, opacity: hover ? 1 : 0.6 }}
-        transition={{ duration: 0.25 }}
+        animate={{ width: hover ? 56 : 30, height: hover ? 56 : 30, opacity: hidden ? 0 : hover ? 1 : 0.6 }}
+        transition={{ duration: hidden ? 0.6 : 0.25 }}
       />
     </>
   );
