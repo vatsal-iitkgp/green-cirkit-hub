@@ -199,11 +199,11 @@ const Doors = () => (
 
 /* ---------------- Manifesto (scroll-lit words) ---------------- */
 const MANIFESTO =
-  "Recycled plastic has a trust problem. Quality swings. Origins vanish. Specs are guesswork. We exist to end that.";
+  "Brands must use more recycled plastic every year. But most recycled granules in India come with no test report, no proof of origin, and quality that changes every batch. So brands don't trust them. We're here to fix that.";
 
 const Word = ({ children, progress, range }: { children: string; progress: MotionValue<number>; range: [number, number] }) => {
   const opacity = useTransform(progress, range, [0.12, 1]);
-  const accent = ["end", "that."].includes(children);
+  const accent = ["fix", "that."].includes(children);
   return (
     <motion.span style={{ opacity }} className={accent ? "serif italic text-primary" : undefined}>
       {children}{" "}
@@ -218,7 +218,7 @@ const Manifesto = () => {
   return (
     <section className="container max-w-5xl py-24 md:py-40">
       <Eyebrow>The problem</Eyebrow>
-      <div ref={ref} className="mt-8 text-[clamp(2rem,5vw,4.2rem)] font-medium leading-[1.05] tracking-[-0.04em]">
+      <div ref={ref} className="mt-8 text-[clamp(1.8rem,4vw,3.4rem)] font-medium leading-[1.08] tracking-[-0.04em]">
         {words.map((w, i) => (
           <Word key={i} progress={scrollYProgress} range={[i / words.length, (i + 1) / words.length]}>
             {w}

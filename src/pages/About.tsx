@@ -6,9 +6,9 @@ import { Counter, PelletCluster } from "@/components/site/visuals";
 import { SITE } from "@/lib/site";
 
 const PROBLEMS = [
-  { k: "01", t: "Quality swings", d: "One lot runs. The next one jams the line. Most recycled resin is sold without a spec anyone stands behind." },
-  { k: "02", t: "Origins vanish", d: "Where did the plastic come from? In the informal chain, nobody can say, and auditors now ask." },
-  { k: "03", t: "Trust runs out", d: "So brands overpay for virgin, or buy recycled and hope. Neither builds a circular economy." },
+  { k: "01", t: "No test report", d: "Most recycled granules are sold on a sample and a promise. No datasheet. No lab numbers. Nothing to hold the seller to." },
+  { k: "02", t: "Every batch is different", d: "Melt flow, colour and purity change lot to lot. Machines need re-tuning, rejects go up, and production slows down." },
+  { k: "03", t: "No proof of origin", d: "Under EPR rules, brands must show where their recycled content came from. The informal supply chain can't answer." },
 ];
 
 const ANSWERS = [
@@ -82,7 +82,7 @@ const About = () => {
           </Reveal>
           <Reveal delay={0.08}>
             <p>
-              The rule is clear. The supply isn't. Brands need recycled resin they can run, certify and defend in an audit. What the market mostly offers is a bag of granules and a promise.
+              The rule is clear. The supply isn't. Brands need recycled granules that run on their machines, come with a test report, and can be traced back to source. Most of the market can't offer that.
             </p>
           </Reveal>
           <Reveal delay={0.16}>
@@ -98,7 +98,7 @@ const About = () => {
         <Reveal>
           <Eyebrow>The problem</Eyebrow>
         </Reveal>
-        <SplitHeadline text={"What's broken\nin *recycling* today."} className="mt-5 text-4xl md:text-6xl font-medium leading-[0.95]" />
+        <SplitHeadline text={"Why brands don't trust\n*recycled plastic* today."} className="mt-5 text-4xl md:text-6xl font-medium leading-[0.95]" />
         <div className="mt-12 grid md:grid-cols-3 border-t border-foreground/10">
           {PROBLEMS.map((p, i) => (
             <Reveal key={p.k} delay={i * 0.08} className={`py-10 md:pr-8 ${i ? "md:border-l md:pl-8" : ""} border-foreground/10`}>
@@ -108,6 +108,9 @@ const About = () => {
             </Reveal>
           ))}
         </div>
+        <Reveal className="mt-8 rounded-2xl border border-foreground/10 bg-card px-6 py-5 text-lg">
+          <span className="text-muted-foreground">The result: </span>brands either overpay for virgin plastic, or buy recycled and hope it works.
+        </Reveal>
       </section>
 
       {/* What we're solving */}

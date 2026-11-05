@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { ArrowUpRight, Minus, TrendingUp } from "lucide-react";
+import { motion } from "framer-motion";
 import { Page } from "@/components/site/Chrome";
 import { Eyebrow, Reveal, SplitHeadline } from "@/components/site/motion";
 import { Counter } from "@/components/site/visuals";
@@ -50,6 +51,75 @@ const ChartTooltip = ({ active, payload }: { active?: boolean; payload?: { paylo
         <span className="text-sm text-muted-foreground font-normal">/kg</span>
       </p>
       {p.n > 1 && <p className="text-[11px] text-muted-foreground">avg of {p.n} quotes</p>}
+    </div>
+  );
+};
+
+
+/** Horizontal gauge: 3-month low → high with today's price marked. */
+const RangeBar = ({ low, high, now, from, to }: { low: number; high: number; now: number; from: string; to: string }) => {
+  const lo = Math.floor(low - 2);
+  const hi = Math.ceil(high + 2);
+  const pos = (v: number) => ((v - lo) / (hi - lo)) * 100;
+  const ticks = Array.from({ length: Math.floor((hi - lo) / 2) + 1 }, (_, i) => lo + i * 2);
+  return (
+    <div className="rounded-[28px] border border-foreground/10 bg-card p-6 md:p-10">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-2">
+        <div>
+          <h2 className="text-2xl font-medium">3-month swing</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Virgin HDPE blow moulding, Delhi · {formatDate(from)} – {formatDate(to)}
+          </p>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Moved <span className="text-foreground font-medium">₹{(high - low).toFixed(1)}/kg</span> ({(((high - low) / low) * 100).toFixed(1)}%)
+        </p>
+      </div>
+      <div className="relative mt-16 mb-10 mx-2">
+        {/* track */}
+        <div className="h-3 rounded-full bg-foreground/[0.07]" />
+        {/* low→high band */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          style={{ left: `${pos(low)}%`, width: `${pos(high) - pos(low)}%`, transformOrigin: "left" }}
+          className="absolute top-0 h-3 rounded-full bg-gradient-to-r from-primary/30 to-primary"
+        />
+        {/* low / high labels */}
+        {[
+          { v: low, l: "Low" },
+          { v: high, l: "High" },
+        ].map((m) => (
+          <div key={m.l} className="absolute -top-12 -translate-x-1/2 text-center" style={{ left: `${pos(m.v)}%` }}>
+            <p className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-muted-foreground">{m.l}</p>
+            <p className="text-lg font-medium tabular-nums">₹{m.v}</p>
+          </div>
+        ))}
+        {/* now marker */}
+        <motion.div
+          initial={{ opacity: 0, y: 6 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 1, duration: 0.5 }}
+          className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2"
+          style={{ left: `${pos(now)}%` }}
+        >
+          <span className="block h-6 w-6 rounded-full border-4 border-card bg-foreground shadow-[0_0_0_6px_hsl(var(--primary)/0.25)]" />
+          <span className="absolute left-1/2 top-8 -translate-x-1/2 whitespace-nowrap rounded-full bg-foreground px-2.5 py-1 text-xs font-medium text-background">
+            Now ₹{now}
+          </span>
+        </motion.div>
+        {/* ticks */}
+        <div className="absolute inset-x-0 top-12">
+          {ticks.map((t) => (
+            <span key={t} className="absolute -translate-x-1/2 text-[11px] tabular-nums text-muted-foreground/70" style={{ left: `${pos(t)}%` }}>
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
@@ -120,13 +190,18 @@ const Prices = () => {
         </div>
       </section>
 
+      {/* Range */}
+      <section className="container max-w-6xl pt-14">
+        <RangeBar low={RANGE_NOTE.low} high={RANGE_NOTE.high} now={latest.price} from={RANGE_NOTE.from} to={latest.date} />
+      </section>
+
       {/* Chart */}
-      <section className="container max-w-6xl py-14">
+      <section className="container max-w-6xl py-5 pb-14">
         <div className="rounded-[28px] border border-foreground/10 bg-card p-6 md:p-10">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-medium">Virgin HDPE blow moulding · Delhi open market</h2>
-              <p className="mt-1 text-sm text-muted-foreground">INR/kg · midpoint where a range was quoted</p>
+              <h2 className="text-2xl font-medium">Weekly tracker</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Virgin HDPE blow moulding · Delhi · INR/kg</p>
             </div>
             <div className="flex items-center gap-2">
               <div className="flex rounded-full border border-foreground/15 p-1 text-sm">
@@ -181,7 +256,9 @@ const Prices = () => {
                   <CartesianGrid vertical={false} stroke="hsl(var(--foreground) / 0.08)" />
                   <XAxis dataKey="label" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} axisLine={false} tickLine={false} tickMargin={10} />
                   <YAxis
-                    domain={[Math.floor(Math.min(min, RANGE_NOTE.low) - 2), Math.ceil(Math.max(max, RANGE_NOTE.high) + 2)]}
+                    domain={[Math.floor(min - Math.max(1, (max - min) * 0.6)), Math.ceil(max + Math.max(1, (max - min) * 0.6))]}
+                    allowDecimals={false}
+                    tickCount={6}
                     tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
                     axisLine={false}
                     tickLine={false}
