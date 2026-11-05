@@ -12,7 +12,7 @@ const PELLETS = [
 const FILL: Record<string, string> = {
   n: "radial-gradient(circle at 32% 28%, #fff 0%, #f1f0e6 22%, #a9a89d 100%)",
   b: "radial-gradient(circle at 32% 28%, #fff 0%, #86aee6 22%, #23447a 100%)",
-  l: "radial-gradient(circle at 32% 28%, #fff 0%, #d9fb72 22%, #6f8f12 100%)",
+  l: "radial-gradient(circle at 32% 28%, #fff 0%, #7fdc98 22%, #23663a 100%)",
 };
 
 export const PelletCluster = ({ className }: { className?: string }) => (

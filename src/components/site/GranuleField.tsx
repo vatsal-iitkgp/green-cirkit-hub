@@ -12,7 +12,8 @@ const COLORS = [
   ["#f4f3ea", "#b9b8ad"],
   ["#dfe9f2", "#8fa6bb"], // pale blue
   ["#7fa3d6", "#2c4f86"], // HDPE blue
-  ["#d4f76a", "#7fa21a"], // signal lime
+  ["#8fe3a7", "#2f7a3e"], // brand green
+  ["#5fcf80", "#1d5c2b"], // deep green
 ];
 
 function makeSprite(light: string, dark: string) {

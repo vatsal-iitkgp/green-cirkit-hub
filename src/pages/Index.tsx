@@ -16,6 +16,7 @@ const Hero = () => {
 
   return (
     <section ref={ref} className="relative min-h-[100svh] overflow-hidden flex flex-col">
+      <div className="absolute inset-0 aurora opacity-70" />
       <GranuleField className="absolute inset-0 h-full w-full" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_45%,hsl(var(--background)/0.92)_0%,hsl(var(--background)/0.55)_55%,transparent_100%)]" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background to-transparent" />
@@ -368,7 +369,7 @@ const Why = () => (
 
 /* ---------------- Numbers ---------------- */
 const Numbers = () => (
-  <section className="border-y border-foreground/10">
+  <section className="forest border-y border-primary/15">
     <div className="container max-w-6xl grid md:grid-cols-3">
       {[
         { n: <Counter to={60} suffix="%" />, l: "Recycled content required in rigid plastic packaging by FY29 under India's EPR rules." },
@@ -424,9 +425,9 @@ const About = () => (
 
 /* ---------------- Final CTA ---------------- */
 const FinalCTA = () => (
-  <section className="relative overflow-hidden">
-    <div className="container max-w-6xl py-28 md:py-40 text-center relative">
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[420px] w-[720px] max-w-full rounded-full bg-primary/15 blur-[120px]" />
+  <section className="container max-w-6xl py-16 md:py-24">
+    <div className="forest relative overflow-hidden rounded-[36px] border border-primary/20 px-6 py-24 md:py-32 text-center">
+      <div className="absolute inset-0 grid-bg opacity-40 [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]" />
       <SplitHeadline text={"Let's close the\n*circuit* together."} className="relative text-[clamp(3rem,8vw,7rem)] font-medium leading-[0.92]" />
       <Reveal delay={0.3} className="relative mt-12 flex flex-col sm:flex-row gap-3 justify-center">
         <Magnetic>

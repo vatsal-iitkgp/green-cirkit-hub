@@ -10,48 +10,49 @@
 /* GreenCirkit design system — ink, bone, and one signal colour. All colours HSL. */
 @layer base {
   :root {
-    --background: 100 6% 4%;
-    --foreground: 60 14% 92%;
+    --background: 145 22% 4%;
+    --foreground: 100 14% 93%;
 
-    --card: 100 5% 7%;
-    --card-foreground: 60 14% 92%;
-    --popover: 100 5% 7%;
-    --popover-foreground: 60 14% 92%;
+    --card: 145 18% 7%;
+    --card-foreground: 100 14% 93%;
+    --popover: 145 18% 7%;
+    --popover-foreground: 100 14% 93%;
 
-    --primary: 78 88% 63%; /* signal lime */
-    --primary-foreground: 100 10% 6%;
+    --primary: 140 52% 56%; /* GreenCirkit green, lifted from the logo */
+    --brand-deep: 128 42% 34%; /* exact logo green */
+    --primary-foreground: 145 40% 6%;
 
-    --secondary: 100 4% 11%;
-    --secondary-foreground: 60 14% 92%;
+    --secondary: 145 14% 11%;
+    --secondary-foreground: 100 14% 93%;
 
-    --muted: 100 4% 11%;
-    --muted-foreground: 70 4% 56%;
+    --muted: 145 14% 11%;
+    --muted-foreground: 130 7% 58%;
 
-    --accent: 78 88% 63%;
-    --accent-foreground: 100 10% 6%;
+    --accent: 140 52% 56%;
+    --accent-foreground: 145 40% 6%;
 
     --destructive: 0 72% 58%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 60 10% 92% / 0.09;
     --input: 60 10% 92% / 0.14;
-    --ring: 78 88% 63%;
+    --ring: 140 52% 56%;
     --radius: 1rem;
 
     /* legacy tokens still referenced by shadcn bits */
-    --green-primary: 78 88% 63%;
-    --green-secondary: 78 60% 45%;
-    --green-light: 78 88% 75%;
-    --green-accent: 78 88% 63%;
+    --green-primary: 140 52% 56%;
+    --green-secondary: 128 42% 34%;
+    --green-light: 140 52% 56%;
+    --green-accent: 140 52% 56%;
 
-    --sidebar-background: 100 5% 7%;
-    --sidebar-foreground: 60 14% 92%;
-    --sidebar-primary: 78 88% 63%;
-    --sidebar-primary-foreground: 100 10% 6%;
-    --sidebar-accent: 100 4% 11%;
-    --sidebar-accent-foreground: 60 14% 92%;
+    --sidebar-background: 145 18% 7%;
+    --sidebar-foreground: 100 14% 93%;
+    --sidebar-primary: 140 52% 56%;
+    --sidebar-primary-foreground: 145 40% 6%;
+    --sidebar-accent: 145 14% 11%;
+    --sidebar-accent-foreground: 100 14% 93%;
     --sidebar-border: 60 10% 92% / 0.09;
-    --sidebar-ring: 78 88% 63%;
+    --sidebar-ring: 140 52% 56%;
   }
 
   * {
@@ -114,7 +115,7 @@
     background-size: 72px 72px;
   }
 
-  .glow-lime {
+  .glow-green {
     box-shadow: 0 0 0 1px hsl(var(--primary) / 0.4), 0 10px 40px -10px hsl(var(--primary) / 0.55);
   }
 
@@ -187,4 +188,20 @@
 @media (prefers-reduced-motion: reduce) {
   .marquee, .grain::after { animation: none; }
   html { scroll-behavior: auto; }
+}
+
+@layer utilities {
+  /* Deep brand-green panel, used for hero moments */
+  .forest {
+    background:
+      radial-gradient(120% 90% at 50% 0%, hsl(var(--primary) / 0.28), transparent 60%),
+      radial-gradient(80% 80% at 100% 100%, hsl(var(--brand-deep) / 0.55), transparent 60%),
+      linear-gradient(180deg, hsl(140 35% 9%), hsl(145 30% 5%));
+  }
+  .aurora {
+    background:
+      radial-gradient(40% 50% at 20% 30%, hsl(var(--brand-deep) / 0.45), transparent 70%),
+      radial-gradient(35% 45% at 80% 60%, hsl(var(--primary) / 0.18), transparent 70%);
+    filter: blur(20px);
+  }
 }
