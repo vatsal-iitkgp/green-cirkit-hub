@@ -12,6 +12,25 @@ export type Job = {
 
 export const JOBS: Job[] = [
   {
+    id: "head-sales-business-development",
+    title: "Head — Sales & Business Development",
+    team: "Leadership",
+    location: "Noida",
+    type: "Full-time",
+    summary: "Own revenue. Build GreenCirkit's customer base from the first brand to the hundredth.",
+    doing: [
+      "Win FMCG brands, packaging converters and blow moulders as long-term rHDPE customers",
+      "Build the sales engine: pipeline, pricing, contracts and a small team",
+      "Turn sample trials into steady monthly supply agreements",
+      "Be the voice of the customer in product and quality decisions",
+    ],
+    you: [
+      "8+ years in polymer, packaging or FMCG sales, with relationships to show for it",
+      "Fluent in MFI, density and TDS, and in how procurement teams buy",
+      "A builder: you've grown an account book from scratch before",
+    ],
+  },
+  {
     id: "sourcing-executive",
     title: "Sourcing Executive — HDPE Scrap",
     team: "Supply",
@@ -27,24 +46,6 @@ export const JOBS: Job[] = [
       "2+ years in scrap, recycling or polymer trading",
       "Comfortable on the ground, in Hindi and English",
       "Organised: you keep records clean without being asked",
-    ],
-  },
-  {
-    id: "sales-manager-polymers",
-    title: "Sales Manager — Recycled Polymers",
-    team: "Sales",
-    location: "Noida",
-    type: "Full-time",
-    summary: "Win and grow converters and brand owners who buy rHDPE.",
-    doing: [
-      "Build a pipeline of blow moulders, converters and FMCG packaging teams",
-      "Run sample trials with customers and turn them into monthly supply",
-      "Own pricing, contracts and customer relationships",
-    ],
-    you: [
-      "3+ years selling polymers or packaging in India",
-      "Understand MFI, density and what a TDS means for a customer's line",
-      "Hungry, honest, and good with numbers",
     ],
   },
   {

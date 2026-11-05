@@ -52,7 +52,7 @@ const Hero = () => {
           transition={{ delay: 1.3, duration: 0.9, ease: EASE }}
           className="mt-8 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed text-balance"
         >
-          Premium recycled HDPE granules. Tested. Traceable. Trusted.
+          Premium recycled HDPE granules.<br />Tested. Trusted. Traceable.<br /><span className="text-foreground/80">Built by IITians, designed around industry's needs.</span>
         </motion.p>
 
         <motion.div
@@ -96,7 +96,7 @@ const Marquee = () => {
   const { scrollY } = useScroll();
   const vel = useVelocity(scrollY);
   const smooth = useSpring(vel, { damping: 50, stiffness: 300 });
-  const factor = useTransform(smooth, [-2500, 0, 2500], [-6, 1, 6], { clamp: false });
+  const factor = useTransform(smooth, [-2500, 0, 2500], [-4, 1, 4], { clamp: false });
   const skew = useTransform(smooth, [-2500, 2500], [8, -8]);
   const base = useMotionValue(0);
   const dir = useRef(1);
@@ -104,7 +104,7 @@ const Marquee = () => {
     const f = factor.get();
     if (f < 0) dir.current = -1;
     else if (f > 1.2) dir.current = 1;
-    let next = base.get() - dir.current * Math.abs(f) * (delta / 1000) * 3.2;
+    let next = base.get() - dir.current * Math.abs(f) * (delta / 1000) * 1.4;
     if (next < -50) next += 50;
     if (next > 0) next -= 50;
     base.set(next);
@@ -406,6 +406,11 @@ const About = () => (
           <p>
             Premium material. Straight answers. Built in India by IIT alumni.
           </p>
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <span className="rounded-full border border-primary/40 bg-primary/10 px-3.5 py-1.5 text-xs font-medium text-primary">IIT Kharagpur</span>
+            <span className="rounded-full border border-primary/40 bg-primary/10 px-3.5 py-1.5 text-xs font-medium text-primary">IIT Roorkee</span>
+            <Link to="/about" className="ml-2 text-sm text-foreground underline underline-offset-4 hover:text-primary">Read our story →</Link>
+          </div>
         </Reveal>
         <Reveal delay={0.2} className="grid sm:grid-cols-2 gap-4 pt-6">
           {[

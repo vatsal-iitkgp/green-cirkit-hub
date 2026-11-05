@@ -2,7 +2,9 @@
 export const SITE = {
   name: "GreenCirkit",
   legal: "GreenCirkit Private Limited",
-  email: "partnerships@greencirkit.com",
+  email: "contact@greencirkit.com",
+  cin: "U38210UP2025PTC232359",
+  gstin: "09AAMCG3570G1ZD",
   phone: "+91 82797 12657",
   phoneRaw: "918279712657",
   office: "B-37, Block B, Sector 1, Noida, UP",

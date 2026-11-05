@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { Menu, X, ArrowUpRight, ChevronDown } from "lucide-react";
 import mark from "@/assets/gc-mark.png";
 import { SITE, whatsappLink } from "@/lib/site";
 import { Btn, EASE } from "./motion";
@@ -11,7 +11,9 @@ import { cn } from "@/lib/utils";
 export const Logo = ({ className }: { className?: string }) => (
   <Link to="/" className={cn("flex items-center gap-2.5 group", className)} aria-label="GreenCirkit home">
     <img src={mark} alt="" className="h-7 w-7 transition-transform duration-700 group-hover:rotate-[120deg]" />
-    <span className="text-[17px] font-semibold tracking-[-0.03em]">GreenCirkit</span>
+    <span className="text-[15px] sm:text-[17px] font-semibold tracking-[-0.03em] whitespace-nowrap">
+      GreenCirkit <span className="font-normal text-foreground/70">Private Limited</span>
+    </span>
   </Link>
 );
 
@@ -21,11 +23,72 @@ const LINKS = [
   { to: "/prices", label: "Prices" },
   { to: "/impact", label: "Impact" },
   { to: "/news", label: "News" },
-];
-const MOBILE_EXTRA = [
+  { to: "/about", label: "About" },
   { to: "/careers", label: "Careers" },
-  { to: "/#about", label: "About" },
 ];
+const INSIGHTS = [
+  { to: "/prices", label: "HDPE Prices", d: "Delhi market, weekly" },
+  { to: "/impact", label: "Impact Calculator", d: "CO₂, bottles, EPR, ₹" },
+  { to: "/news", label: "News", d: "Rules & market moves" },
+];
+
+const NavItem = ({ to, label }: { to: string; label: string }) => (
+  <NavLink
+    to={to}
+    className={({ isActive }) =>
+      cn(
+        "relative px-3 py-2 text-sm rounded-full transition-colors whitespace-nowrap",
+        isActive ? "text-foreground bg-foreground/[0.07]" : "text-muted-foreground hover:text-foreground",
+      )
+    }
+  >
+    {label}
+  </NavLink>
+);
+
+const InsightsMenu = () => {
+  const [open, setOpen] = useState(false);
+  const loc = useLocation();
+  const active = INSIGHTS.some((i) => loc.pathname.startsWith(i.to));
+  useEffect(() => setOpen(false), [loc.pathname]);
+  return (
+    <div className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className={cn(
+          "inline-flex items-center gap-1 px-3 py-2 text-sm rounded-full transition-colors",
+          active ? "text-foreground bg-foreground/[0.07]" : "text-muted-foreground hover:text-foreground",
+        )}
+        aria-expanded={open}
+      >
+        Insights <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", open && "rotate-180")} />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 6, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 6, scale: 0.98 }}
+            transition={{ duration: 0.18 }}
+            className="absolute left-1/2 top-full -translate-x-1/2 pt-3"
+          >
+            <div className="w-64 rounded-2xl border border-foreground/10 bg-background/95 p-2 backdrop-blur-xl shadow-2xl">
+              {INSIGHTS.map((i) => (
+                <Link key={i.to} to={i.to} className="group flex items-center justify-between rounded-xl px-3 py-2.5 hover:bg-foreground/[0.06]">
+                  <span>
+                    <span className="block text-sm text-foreground">{i.label}</span>
+                    <span className="block text-xs text-muted-foreground">{i.d}</span>
+                  </span>
+                  <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 export const Nav = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -60,28 +123,19 @@ export const Nav = () => {
           )}
         >
           <Logo />
-          <div className="hidden lg:flex items-center gap-0.5">
-            {LINKS.map((l) => (
-              <NavLink
-                key={l.to}
-                to={l.to}
-                className={({ isActive }) =>
-                  cn(
-                    "relative px-3.5 py-2 text-sm rounded-full transition-colors",
-                    isActive && !l.to.includes("#") ? "text-foreground bg-foreground/[0.07]" : "text-muted-foreground hover:text-foreground",
-                  )
-                }
-              >
-                {l.label}
-              </NavLink>
-            ))}
+          <div className="hidden xl:flex items-center gap-0.5">
+            <NavItem to="/granules" label="Buy Granules" />
+            <NavItem to="/sell-scrap" label="Sell Scrap" />
+            <InsightsMenu />
+            <NavItem to="/about" label="About" />
+            <NavItem to="/careers" label="Careers" />
           </div>
-          <div className="hidden lg:block">
+          <div className="hidden xl:block">
             <Btn to="/granules#sample">Request sample</Btn>
           </div>
           <button
             onClick={() => setOpen((o) => !o)}
-            className="lg:hidden grid h-10 w-10 place-items-center rounded-full bg-foreground/[0.07]"
+            className="xl:hidden grid h-10 w-10 shrink-0 place-items-center rounded-full bg-foreground/[0.07]"
             aria-label="Menu"
           >
             {open ? <X size={18} /> : <Menu size={18} />}
@@ -96,9 +150,9 @@ export const Nav = () => {
             animate={{ clipPath: "inset(0 0 0% 0)" }}
             exit={{ clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.6, ease: EASE }}
-            className="fixed inset-0 z-40 bg-background lg:hidden flex flex-col justify-end px-6 pb-10 pt-24 overflow-y-auto"
+            className="fixed inset-0 z-40 bg-background xl:hidden flex flex-col justify-end px-6 pb-10 pt-24 overflow-y-auto"
           >
-            {[{ to: "/", label: "Home" }, ...LINKS, ...MOBILE_EXTRA].map((l, i) => (
+            {[{ to: "/", label: "Home" }, ...LINKS].map((l, i) => (
               <motion.div
                 key={l.to}
                 initial={{ y: 40, opacity: 0 }}
@@ -145,7 +199,7 @@ export const Footer = () => (
               ["Impact Calculator", "/impact"],
               ["News", "/news"],
               ["Careers", "/careers"],
-              ["About", "/#about"],
+              ["About", "/about"],
             ].map(([l, to]) => (
               <li key={to}>
                 <Link to={to} className="hover:text-primary transition-colors">
@@ -185,7 +239,10 @@ export const Footer = () => (
     </div>
     <div className="container max-w-6xl flex flex-col md:flex-row justify-between gap-2 py-6 text-xs text-muted-foreground border-t border-foreground/10">
       <span>© {new Date().getFullYear()} {SITE.legal}</span>
-      <span>CIN U38210UP2025PTC232359</span>
+      <span className="flex flex-wrap gap-x-5 gap-y-1">
+        <span>CIN {SITE.cin}</span>
+        <span>GSTIN {SITE.gstin}</span>
+      </span>
     </div>
   </footer>
 );

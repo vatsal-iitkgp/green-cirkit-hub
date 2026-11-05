@@ -9,6 +9,7 @@ import TDS from "./pages/TDS";
 import Prices from "./pages/Prices";
 import Impact from "./pages/Impact";
 import Careers from "./pages/Careers";
+import About from "./pages/About";
 import { NewsList, NewsPost } from "./pages/News";
 import GigiChatbot from "./components/GigiChatbot";
 import { Cursor, Footer, Intro, Nav, ScrollManager } from "./components/site/Chrome";
@@ -39,7 +40,7 @@ const Site = () => {
         {/* old URLs */}
         <Route path="/granules/buy" element={<Navigate to="/granules" replace />} />
         <Route path="/epr" element={<Navigate to="/" replace />} />
-        <Route path="/about" element={<Navigate to="/#about" replace />} />
+        <Route path="/about" element={<About />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
