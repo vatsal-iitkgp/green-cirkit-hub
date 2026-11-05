@@ -78,9 +78,9 @@ export const SubscribeBand = ({ source }: { source: string }) => (
       <div className="min-w-0">
         <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-primary">The GreenCirkit Brief</p>
         <h2 className="mt-4 text-4xl md:text-5xl font-medium leading-[0.95]">
-          The recycled-plastics market, <span className="serif italic text-primary">in 3 minutes a week.</span>
+          One email. <span className="serif italic text-primary">Every week.</span>
         </h2>
-        <p className="mt-4 text-muted-foreground max-w-md">Delhi HDPE prices, producer moves, and the EPR and FSSAI changes that matter. Every week, straight to your inbox.</p>
+        <p className="mt-4 text-muted-foreground max-w-md">HDPE prices and rule changes that matter.</p>
       </div>
       <SubscribeForm source={source} className="min-w-0" />
     </div>

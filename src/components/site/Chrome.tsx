@@ -129,7 +129,7 @@ export const Footer = () => (
         <div className="md:col-span-5">
           <Logo />
           <p className="mt-5 max-w-sm text-muted-foreground leading-relaxed">
-            Premium, near-virgin recycled HDPE for brands that can't compromise. Built in India, for a circular one.
+            Premium recycled HDPE granules. Tested. Traceable. Trusted.
           </p>
           <p className="mt-6 serif italic text-2xl text-foreground/80">Go Green. Close the Circuit.</p>
           <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-3">The GreenCirkit Brief · weekly</p>

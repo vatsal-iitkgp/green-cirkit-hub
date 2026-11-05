@@ -72,12 +72,12 @@ const Prices = () => {
           as="h1"
           animateOnMount
           delay={0.2}
-          text={"Virgin HDPE prices,\n*tracked every week.*"}
+          text={"HDPE prices.\n*Every week.*"}
           className="mt-6 text-[clamp(2.8rem,7vw,6rem)] font-medium leading-[0.92]"
         />
         <Reveal delay={0.5}>
           <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-            Open-market virgin HDPE blow-moulding prices in Delhi, plus producer list-price moves and where recycled sits against virgin. INR/kg, before GST and freight.
+            Delhi open market. INR/kg, before GST and freight.
           </p>
         </Reveal>
       </section>

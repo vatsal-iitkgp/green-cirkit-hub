@@ -19,7 +19,7 @@ export const NewsList = () => {
     <Page>
       <section className="container max-w-6xl pt-36 md:pt-44 pb-10">
         <Eyebrow>Newsroom</Eyebrow>
-        <SplitHeadline as="h1" animateOnMount delay={0.2} text={"What's moving in\n*recycled plastics.*"} className="mt-6 text-[clamp(2.8rem,7vw,6rem)] font-medium leading-[0.92]" />
+        <SplitHeadline as="h1" animateOnMount delay={0.2} text={"What's *moving.*"} className="mt-6 text-[clamp(2.8rem,7vw,6rem)] font-medium leading-[0.92]" />
         <div className="mt-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div className="flex flex-wrap gap-2">
             {cats.map((c) => (

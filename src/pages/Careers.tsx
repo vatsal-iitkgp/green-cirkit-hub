@@ -8,9 +8,9 @@ import { JOBS } from "@/content/jobs";
 import { cn } from "@/lib/utils";
 
 const VALUES = [
-  { t: "Owners, not employees", d: "Small team, big surface area. You'll run things, not watch them." },
-  { t: "On the ground", d: "Recycling is won in scrap yards and on factory floors, not in slide decks." },
-  { t: "Numbers, honestly", d: "We measure what matters and say it straight, especially when it's bad news." },
+  { t: "Own it", d: "You run things here. You don't watch them." },
+  { t: "Get on the ground", d: "Won in scrap yards, not slide decks." },
+  { t: "Say it straight", d: "Especially when it's bad news." },
 ];
 
 const Careers = () => {
@@ -30,12 +30,12 @@ const Careers = () => {
           as="h1"
           animateOnMount
           delay={0.2}
-          text={"Build India's recycling\n*infrastructure* with us."}
+          text={"Build something\n*different.*"}
           className="mt-6 text-[clamp(2.8rem,7vw,6rem)] font-medium leading-[0.92]"
         />
         <Reveal delay={0.5}>
           <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-            We're an early team in Noida turning post-consumer plastic into near-virgin material. If you like hard, real-world problems, read on.
+            Small team. Hard problems. Real ownership.
           </p>
         </Reveal>
       </section>

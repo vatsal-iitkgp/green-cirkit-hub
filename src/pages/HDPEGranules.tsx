@@ -122,12 +122,12 @@ const Granules = () => {
               as="h1"
               animateOnMount
               delay={0.2}
-              text={"Recycled grades\nthat run *like virgin.*"}
+              text={"Recycled.\n*Near-virgin.*"}
               className="mt-6 text-[clamp(2.9rem,7.5vw,6.2rem)] font-medium leading-[0.92]"
             />
             <Reveal delay={0.6}>
               <p className="mt-8 max-w-lg text-lg text-muted-foreground leading-relaxed">
-                GC Prime™ is our family of near-virgin rHDPE grades. Every lot is tested, traceable, and backed by a TDS. Start with a sample.
+                GC Prime™ grades. Every lot tested, traced and backed by a TDS.
               </p>
             </Reveal>
             <Reveal delay={0.75} className="mt-10 flex flex-wrap gap-3">

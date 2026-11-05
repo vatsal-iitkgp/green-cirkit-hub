@@ -109,11 +109,11 @@ const Impact = () => {
           as="h1"
           animateOnMount
           delay={0.2}
-          text={"What switching to\nrHDPE *really* does."}
+          text={"Your impact,\n*in numbers.*"}
           className="mt-6 text-[clamp(2.8rem,7vw,6rem)] font-medium leading-[0.92]"
         />
         <Reveal delay={0.5}>
-          <p className="mt-6 max-w-xl text-lg text-muted-foreground">Slide in your volume. See the carbon, the bottles, your EPR coverage, and the money.</p>
+          <p className="mt-6 max-w-xl text-lg text-muted-foreground">Slide. See what switching to rHDPE does.</p>
         </Reveal>
       </section>
 

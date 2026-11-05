@@ -42,7 +42,7 @@ const Hero = () => {
           as="h1"
           animateOnMount
           delay={0.6}
-          text={"Recycled HDPE,\nthis close to\n*virgin.*"}
+          text={"Not your usual\n*recycler.*"}
           className="font-medium leading-[0.92] text-[clamp(2.9rem,9vw,7.6rem)] tracking-[-0.055em]"
         />
 
@@ -52,7 +52,7 @@ const Hero = () => {
           transition={{ delay: 1.3, duration: 0.9, ease: EASE }}
           className="mt-8 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed text-balance"
         >
-          Premium, near-virgin rHDPE granules. Sorted, cleaned and tested so they run on your line like fresh polymer. And a fair, fast buyer for your HDPE scrap.
+          Premium recycled HDPE granules. Tested. Traceable. Trusted.
         </motion.p>
 
         <motion.div
@@ -171,14 +171,14 @@ const Doors = () => (
     <Reveal>
       <Eyebrow>Two ways to work with us</Eyebrow>
     </Reveal>
-    <SplitHeadline text={"Pick your *side* of\nthe circuit."} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
+    <SplitHeadline text={"Buy. *Or sell.*"} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
     <div className="mt-14 grid gap-5 md:grid-cols-2">
       <Reveal>
         <Door
           to="/granules"
           tag="For brands & converters"
           title="Buy near-virgin granules"
-          body="Premium rHDPE grades that perform like virgin. Tested every lot, traceable to source, sample before you commit."
+          body="Near-virgin rHDPE. Tested every lot. Sample first."
           cta="See grades & request a sample"
           art={<PelletCluster />}
         />
@@ -188,7 +188,7 @@ const Doors = () => (
           to="/sell-scrap"
           tag="For scrap dealers & aggregators"
           title="Sell your HDPE scrap"
-          body="Detergent bottles, drums, caps. Loose, baled or grinded. Fair rates, quick decisions, honest weighing."
+          body="Fair rates. Fast decisions. Honest weighing."
           cta="Get a price for your scrap"
           art={<StageArt stage={0} className="w-full" />}
         />
@@ -199,11 +199,11 @@ const Doors = () => (
 
 /* ---------------- Manifesto (scroll-lit words) ---------------- */
 const MANIFESTO =
-  "Every FMCG brand now has a recycled-content target. Far fewer have a supply they can certify, trace and defend in an audit. We exist to close that gap.";
+  "Recycled plastic has a trust problem. Quality swings. Origins vanish. Specs are guesswork. We exist to end that.";
 
 const Word = ({ children, progress, range }: { children: string; progress: MotionValue<number>; range: [number, number] }) => {
   const opacity = useTransform(progress, range, [0.12, 1]);
-  const accent = ["close", "gap."].includes(children);
+  const accent = ["end", "that."].includes(children);
   return (
     <motion.span style={{ opacity }} className={accent ? "serif italic text-primary" : undefined}>
       {children}{" "}
@@ -217,7 +217,7 @@ const Manifesto = () => {
   const words = MANIFESTO.split(" ");
   return (
     <section className="container max-w-5xl py-24 md:py-40">
-      <Eyebrow>Why we exist</Eyebrow>
+      <Eyebrow>The problem</Eyebrow>
       <div ref={ref} className="mt-8 text-[clamp(2rem,5vw,4.2rem)] font-medium leading-[1.05] tracking-[-0.04em]">
         {words.map((w, i) => (
           <Word key={i} progress={scrollYProgress} range={[i / words.length, (i + 1) / words.length]}>
@@ -274,18 +274,18 @@ const Product = () => (
 
 /* ---------------- Why (bento) ---------------- */
 const WHY = [
-  { i: ScanLine, t: "Purity you can see", d: "Sorted by polymer and colour before anything is melted. Fewer specks, fewer rejects on your line.", span: "md:col-span-4" },
-  { i: Fingerprint, t: "Traceable to the batch", d: "Every bag maps back to its source lot. Audit questions answered in minutes, not weeks.", span: "md:col-span-2" },
-  { i: Droplets, t: "Runs like virgin", d: "Same processing window as virgin HDPE (190–230°C). No re-tuning your machines.", span: "md:col-span-2" },
-  { i: FlaskConical, t: "Lab-tested, every lot", d: "MFI, density, ash and moisture checked before dispatch. Results go with the shipment.", span: "md:col-span-4" },
+  { i: ScanLine, t: "Pure", d: "Sorted before it's melted. Fewer specks, fewer rejects.", span: "md:col-span-4" },
+  { i: Fingerprint, t: "Traceable", d: "Every bag maps back to its source lot.", span: "md:col-span-2" },
+  { i: Droplets, t: "Near-virgin", d: "Runs like virgin. No re-tuning your line.", span: "md:col-span-2" },
+  { i: FlaskConical, t: "Tested", d: "Every lot. The report ships with it.", span: "md:col-span-4" },
 ];
 
 const Why = () => (
   <section className="container max-w-6xl py-24 md:py-32">
     <Reveal>
-      <Eyebrow>Why GreenCirkit</Eyebrow>
+      <Eyebrow>Why us</Eyebrow>
     </Reveal>
-    <SplitHeadline text={"Premium isn't a word.\nIt's a *spec sheet.*"} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
+    <SplitHeadline text={"Built on *proof,*\nnot promises."} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
     <div className="mt-14 grid gap-5 md:grid-cols-6">
       {WHY.map((w, i) => (
         <Reveal key={w.t} delay={i * 0.08} className={w.span}>
@@ -331,7 +331,7 @@ const Pulse = () => {
       <Reveal>
         <Eyebrow>Market pulse</Eyebrow>
       </Reveal>
-      <SplitHeadline text={"Come for the granules.\n*Stay for the intel.*"} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
+      <SplitHeadline text={"Market *pulse.*"} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
       <div className="mt-14 grid gap-5 md:grid-cols-6">
         <Reveal className="md:col-span-3">
           <Link to="/prices" onMouseMove={spotlightMove} className="spotlight group flex h-full min-h-[300px] flex-col justify-between rounded-[28px] border border-foreground/10 bg-card p-8">
@@ -394,17 +394,17 @@ const About = () => (
         <Reveal>
           <Eyebrow>About</Eyebrow>
         </Reveal>
-        <SplitHeadline text={"Building recycling\n*infrastructure,* not\njust a recycler."} className="mt-5 text-4xl md:text-6xl font-medium leading-[0.98]" />
+        <SplitHeadline text={"Built to be\n*trusted.*"} className="mt-5 text-4xl md:text-6xl font-medium leading-[0.98]" />
       </div>
       <div className="md:col-span-6 md:col-start-7 space-y-6 text-lg text-muted-foreground leading-relaxed">
         <Reveal>
           <p>
-            India's recycling is still mostly informal. Quality swings lot to lot, and nobody can prove where the plastic came from. Brands with real recycled-content targets can't build on that.
+            Most recycled plastic in India is sold on trust alone. We'd rather earn it, one tested, traceable lot at a time.
           </p>
         </Reveal>
         <Reveal delay={0.1}>
           <p>
-            GreenCirkit is the organised alternative: a vetted sourcing network, disciplined processing, and batch-level traceability, built for the brands that need it.
+            Premium material. Straight answers. Built in India by IIT alumni.
           </p>
         </Reveal>
         <Reveal delay={0.2} className="grid sm:grid-cols-2 gap-4 pt-6">
@@ -429,7 +429,7 @@ const FinalCTA = () => (
   <section className="container max-w-6xl py-16 md:py-24">
     <div className="forest relative overflow-hidden rounded-[36px] border border-primary/20 px-6 py-24 md:py-32 text-center">
       <div className="absolute inset-0 grid-bg opacity-40 [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]" />
-      <SplitHeadline text={"Let's close the\n*circuit* together."} className="relative text-[clamp(3rem,8vw,7rem)] font-medium leading-[0.92]" />
+      <SplitHeadline text={"Trust,\n*by the granule.*"} className="relative text-[clamp(3rem,8vw,7rem)] font-medium leading-[0.92]" />
       <Reveal delay={0.3} className="relative mt-12 flex flex-col sm:flex-row gap-3 justify-center">
         <Magnetic>
           <Btn to="/granules#sample" size="lg">
