@@ -1,18 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { motion, animate, useMotionValue, useTransform } from "framer-motion";
-import { Check, Link2, Info } from "lucide-react";
+import { Check, Link2, Info, Minus, Plus, TreePine, Truck, Car, MapPin } from "lucide-react";
 import { Page } from "@/components/site/Chrome";
 import { Btn, Eyebrow, Reveal, SplitHeadline } from "@/components/site/motion";
 import { isEmail, submitLead } from "@/lib/site";
 import { VIRGIN_HDPE_BM_DELHI, RECYCLED_REF } from "@/content/prices";
 import { cn } from "@/lib/utils";
 
-// Factors (kept conservative and cited on the page)
-const VIRGIN_CO2 = 1.92; // kg CO2e per kg virgin HDPE (c7-consult LCA for ALPLA)
-const RECYCLED_CO2 = 0.28; // kg CO2e per kg rHDPE (upper of the two plants in the same LCA)
-const CO2_SAVED_PER_KG = VIRGIN_CO2 - RECYCLED_CO2; // 1.64
-const BOTTLE_G = 50; // assumed weight of a 1 L HDPE bottle, grams
+/* ---------------- factors (stated on the page) ---------------- */
+const CO2_SAVED_PER_KG = 1.92 - 0.28; // virgin vs recycled HDPE, kg CO2e per kg (c7-consult LCA for ALPLA)
+const BOTTLE_G = 50; // a 1 L HDPE detergent bottle, grams
+const BOTTLE_H_M = 0.25; // its height, metres
+const TREE_KG_YR = 22; // CO2 a mature tree absorbs in a year, kg (commonly used estimate)
+const CAR_T_YR = 4.6; // CO2 from a typical passenger car in a year, tonnes (US EPA)
+const TRUCK_T = 10; // a 10-tonne truckload
+const DELHI_MUMBAI_KM = 1400;
 const TARGETS = [
   { y: "FY26", p: 30 },
   { y: "FY27", p: 40 },
@@ -20,11 +23,23 @@ const TARGETS = [
   { y: "FY29", p: 60 },
 ];
 
+const MODES = {
+  month: { step: 25, min: 25, max: 1000, presets: [25, 50, 100, 250, 500], def: 50 },
+  year: { step: 100, min: 100, max: 12000, presets: [300, 600, 1200, 3000, 6000], def: 600 },
+} as const;
+type Mode = keyof typeof MODES;
+
 const fmt = (n: number, d = 0) => n.toLocaleString("en-IN", { maximumFractionDigits: d, minimumFractionDigits: d });
-const inr = (n: number) => {
-  if (n >= 1e7) return `₹${fmt(n / 1e7, 2)} crore`;
-  if (n >= 1e5) return `₹${fmt(n / 1e5, 1)} lakh`;
-  return `₹${fmt(n)}`;
+const trim = (n: number, d: number) => n.toLocaleString("en-IN", { maximumFractionDigits: d });
+const big = (n: number) => {
+  if (n >= 1e7) return `${trim(n / 1e7, n >= 1e8 ? 1 : 2)} crore`;
+  if (n >= 1e5) return `${trim(n / 1e5, 1)} lakh`;
+  return fmt(n);
+};
+const inr = (n: number) => `₹${big(n)}`;
+const snap = (v: number, m: Mode) => {
+  const { step, min, max } = MODES[m];
+  return Math.min(max, Math.max(min, Math.round(v / step) * step));
 };
 
 /** Smoothly tweens to the latest value. */
@@ -38,38 +53,80 @@ const Live = ({ value, format }: { value: number; format: (n: number) => string 
   return <motion.span className="tabular-nums">{text}</motion.span>;
 };
 
+/** Grid of icons where each icon stands for a fixed amount. */
+const IconWall = ({ count, Icon, per, unit }: { count: number; Icon: typeof TreePine; per: number; unit: string }) => {
+  const n = Math.min(60, Math.max(1, Math.round(count / per)));
+  return (
+    <div>
+      <div className="flex flex-wrap gap-1.5" aria-hidden>
+        {Array.from({ length: n }).map((_, i) => (
+          <motion.span key={i} initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: i * 0.008 }}>
+            <Icon className="h-4 w-4 text-primary" />
+          </motion.span>
+        ))}
+        {count / per > 60 && <span className="text-xs text-muted-foreground self-center">+ more</span>}
+      </div>
+      <p className="mt-2 text-[11px] text-muted-foreground">
+        1 icon = {fmt(per)} {per === 1 ? unit.replace(/s$/, "") : unit}
+      </p>
+    </div>
+  );
+};
+
+const niceUnit = (x: number) => {
+  const pow = Math.pow(10, Math.floor(Math.log10(Math.max(1, x / 40))));
+  return [1, 2, 5, 10].map((m) => m * pow).find((u) => x / u <= 60) ?? pow * 10;
+};
+
 const Impact = () => {
   const [params, setParams] = useSearchParams();
-  const [tonnes, setTonnes] = useState(() => Number(params.get("t")) || 25);
-  const [period, setPeriod] = useState<"month" | "year">(() => (params.get("p") === "year" ? "year" : "month"));
+  const [mode, setMode] = useState<Mode>(() => (params.get("p") === "year" ? "year" : "month"));
+  const [tonnes, setTonnes] = useState(() => snap(Number(params.get("t")) || MODES[mode].def, mode));
+  const [draft, setDraft] = useState<string | null>(null);
   const [target, setTarget] = useState(1);
-  const [virgin, setVirgin] = useState(VIRGIN_HDPE_BM_DELHI[VIRGIN_HDPE_BM_DELHI.length - 1].price);
-  const [recycled, setRecycled] = useState((RECYCLED_REF[0].low + RECYCLED_REF[0].high) / 2);
+  const [virgin, setVirgin] = useState(String(VIRGIN_HDPE_BM_DELHI[VIRGIN_HDPE_BM_DELHI.length - 1].price));
+  const [recycled, setRecycled] = useState(String((RECYCLED_REF[0].low + RECYCLED_REF[0].high) / 2));
   const [copied, setCopied] = useState(false);
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState<"idle" | "sending" | "done" | "error">("idle");
 
-  const yearly = period === "month" ? tonnes * 12 : tonnes;
-  const r = useMemo(() => {
-    const kg = yearly * 1000;
-    return {
-      co2: (kg * CO2_SAVED_PER_KG) / 1000, // tonnes
-      bottles: (kg * 1000) / BOTTLE_G,
-      packaging: yearly / (TARGETS[target].p / 100),
-      savings: kg * Math.max(0, virgin - recycled),
-      cars: (kg * CO2_SAVED_PER_KG) / 1000 / 4.6, // passenger cars driven for a year (US EPA avg 4.6 t)
-    };
-  }, [yearly, target, virgin, recycled]);
+  const cfg = MODES[mode];
+  const yearly = mode === "month" ? tonnes * 12 : tonnes;
+  const v = Number(virgin) || 0;
+  const r = Number(recycled) || 0;
 
-  const max = period === "month" ? 500 : 6000;
-  const pct = Math.min(100, (tonnes / max) * 100);
+  const x = useMemo(() => {
+    const kg = yearly * 1000;
+    const bottles = (kg * 1000) / BOTTLE_G;
+    const km = (bottles * BOTTLE_H_M) / 1000;
+    const co2 = (kg * CO2_SAVED_PER_KG) / 1000;
+    return {
+      bottles,
+      km,
+      trips: km / DELHI_MUMBAI_KM,
+      co2,
+      trees: (co2 * 1000) / TREE_KG_YR,
+      cars: co2 / CAR_T_YR,
+      trucks: yearly / TRUCK_T,
+      packaging: yearly / (TARGETS[target].p / 100),
+      packBottles: (yearly / (TARGETS[target].p / 100)) * 1e6 / BOTTLE_G,
+      savings: kg * Math.max(0, v - r),
+    };
+  }, [yearly, target, v, r]);
+
+  const switchMode = (m: Mode) => {
+    if (m === mode) return;
+    setTonnes(snap(m === "year" ? tonnes * 12 : tonnes / 12, m));
+    setMode(m);
+  };
+  const stepBy = (d: number) => setTonnes((t) => snap(t + d * cfg.step, mode));
+  const pct = ((tonnes - cfg.min) / (cfg.max - cfg.min)) * 100;
 
   const share = async () => {
-    const p = new URLSearchParams({ t: String(tonnes), p: period });
+    const p = new URLSearchParams({ t: String(tonnes), p: mode });
     setParams(p, { replace: true });
-    const url = `${window.location.origin}/impact?${p.toString()}`;
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(`${window.location.origin}/impact?${p.toString()}`);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -86,106 +143,127 @@ const Impact = () => {
       {
         email,
         name: email,
-        volume: `${tonnes} t/${period}`,
-        co2_avoided_t_per_year: fmt(r.co2, 1),
-        bottles_per_year: fmt(r.bottles),
-        packaging_covered_t: `${fmt(r.packaging)} at ${TARGETS[target].p}% (${TARGETS[target].y})`,
-        savings_per_year: inr(r.savings),
+        volume: `${fmt(tonnes)} t/${mode}`,
+        bottles_per_year: big(x.bottles),
+        co2_avoided_t: fmt(x.co2),
+        trees_equivalent: fmt(x.trees),
+        truckloads: fmt(x.trucks),
+        savings_per_year: inr(x.savings),
       },
       "Impact calculator",
     );
     setSent(ok ? "done" : "error");
   };
 
-  // bottle wall: 1 icon = N bottles
-  const perIcon = r.bottles > 2e7 ? 1e6 : r.bottles > 2e6 ? 1e5 : 1e4;
-  const icons = Math.min(120, Math.max(1, Math.round(r.bottles / perIcon)));
-
   return (
     <Page>
       <section className="container max-w-6xl pt-36 md:pt-44 pb-12">
         <Eyebrow>Impact calculator</Eyebrow>
-        <SplitHeadline
-          as="h1"
-          animateOnMount
-          delay={0.2}
-          text={"Your impact,\n*in numbers.*"}
-          className="mt-6 text-[clamp(2.8rem,7vw,6rem)] font-medium leading-[0.92]"
-        />
+        <SplitHeadline as="h1" animateOnMount delay={0.2} text={"Your impact,\n*in numbers.*"} className="mt-6 text-[clamp(2.8rem,7vw,6rem)] font-medium leading-[0.92]" />
         <Reveal delay={0.5}>
-          <p className="mt-6 max-w-xl text-lg text-muted-foreground">Slide. See what switching to rHDPE does.</p>
+          <p className="mt-6 max-w-xl text-lg text-muted-foreground">Pick how much recycled HDPE you'd use. See what it means in bottles, trees, trucks and rupees.</p>
         </Reveal>
       </section>
 
       <section className="container max-w-6xl pb-16">
-        <div className="grid gap-5 lg:grid-cols-12">
-          {/* Controls */}
-          <div className="lg:col-span-5 rounded-[28px] border border-foreground/10 bg-card p-7 md:p-10 lg:sticky lg:top-24 self-start">
-            <div className="flex items-center justify-between">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-5 lg:grid-cols-12">
+          {/* ---------------- Controls ---------------- */}
+          <div className="min-w-0 lg:col-span-5 rounded-[28px] border border-foreground/10 bg-card p-7 md:p-9 lg:sticky lg:top-24 self-start">
+            <div className="flex items-center justify-between gap-4">
               <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Your rHDPE volume</p>
               <div className="flex rounded-full border border-foreground/15 p-1 text-xs">
-                {(["month", "year"] as const).map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => {
-                      setPeriod(p);
-                      setTonnes((t) => (p === "year" && period === "month" ? t * 12 : p === "month" && period === "year" ? Math.max(1, Math.round(t / 12)) : t));
-                    }}
-                    className={cn("rounded-full px-3 py-1 transition-colors", p === period ? "bg-primary text-primary-foreground" : "text-muted-foreground")}
-                  >
-                    per {p}
+                {(["month", "year"] as const).map((m) => (
+                  <button key={m} onClick={() => switchMode(m)} className={cn("rounded-full px-3 py-1 transition-colors", m === mode ? "bg-primary text-primary-foreground" : "text-muted-foreground")}>
+                    per {m}
                   </button>
                 ))}
               </div>
             </div>
-            <div className="mt-6 flex items-baseline gap-3">
-              <input
-                type="number"
-                min={1}
-                value={tonnes}
-                onChange={(e) => setTonnes(Math.max(0, Number(e.target.value)))}
-                style={{ width: `${Math.max(2, String(tonnes).length) + 0.4}ch` }}
-                className="bg-transparent text-7xl font-medium tracking-[-0.05em] outline-none tabular-nums"
-                aria-label="Tonnes"
-              />
-              <span className="text-xl text-muted-foreground">tonnes</span>
+
+            {/* stepper */}
+            <div className="mt-7 flex items-center gap-3">
+              <button
+                onClick={() => stepBy(-1)}
+                aria-label={`Decrease by ${cfg.step} tonnes`}
+                className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-foreground/15 hover:border-primary hover:text-primary transition-colors"
+              >
+                <Minus className="h-5 w-5" />
+              </button>
+              <div className="min-w-0 flex-1 text-center">
+                <input
+                  value={draft ?? fmt(tonnes)}
+                  onChange={(e) => setDraft(e.target.value.replace(/[^\d]/g, ""))}
+                  onFocus={(e) => {
+                    setDraft(String(tonnes));
+                    e.target.select();
+                  }}
+                  onBlur={() => {
+                    if (draft !== null) setTonnes(snap(Number(draft) || cfg.min, mode));
+                    setDraft(null);
+                  }}
+                  onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
+                  inputMode="numeric"
+                  size={1}
+                  aria-label="Tonnes"
+                  className="w-full bg-transparent text-center font-medium tracking-[-0.05em] tabular-nums outline-none text-[clamp(2.6rem,5.5vw,4.25rem)] leading-none"
+                />
+                <p className="mt-2 text-sm text-muted-foreground">tonnes per {mode}</p>
+              </div>
+              <button
+                onClick={() => stepBy(1)}
+                aria-label={`Increase by ${cfg.step} tonnes`}
+                className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-foreground/15 hover:border-primary hover:text-primary transition-colors"
+              >
+                <Plus className="h-5 w-5" />
+              </button>
             </div>
-            <div className="relative mt-6">
+
+            {/* slider */}
+            <div className="relative mt-7">
               <div className="h-2 rounded-full bg-foreground/10" />
               <div className="absolute inset-y-0 left-0 h-2 rounded-full bg-primary" style={{ width: `${pct}%` }} />
               <input
                 type="range"
-                min={1}
-                max={max}
-                value={Math.min(tonnes, max)}
+                min={cfg.min}
+                max={cfg.max}
+                step={cfg.step}
+                value={tonnes}
                 onChange={(e) => setTonnes(Number(e.target.value))}
                 className="absolute inset-0 -top-2 h-6 w-full cursor-pointer opacity-0"
                 aria-label="Volume slider"
               />
-              <div
-                className="pointer-events-none absolute -top-[7px] h-5 w-5 -ml-2.5 rounded-full border-4 border-background bg-primary shadow-[0_0_0_6px_hsl(var(--primary)/0.2)]"
-                style={{ left: `${pct}%` }}
-              />
+              <div className="pointer-events-none absolute -top-[7px] h-5 w-5 -ml-2.5 rounded-full border-4 border-background bg-primary shadow-[0_0_0_6px_hsl(var(--primary)/0.2)]" style={{ left: `${pct}%` }} />
+              <div className="mt-3 flex justify-between text-[11px] text-muted-foreground tabular-nums">
+                <span>{fmt(cfg.min)} t</span>
+                <span>steps of {cfg.step} t</span>
+                <span>{fmt(cfg.max)} t</span>
+              </div>
             </div>
 
-            <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">EPR recycled-content target</p>
+            {/* presets */}
+            <div className="mt-5 flex flex-wrap gap-2">
+              {cfg.presets.map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setTonnes(p)}
+                  className={cn("rounded-full border px-3.5 py-1.5 text-sm tabular-nums transition-colors", p === tonnes ? "border-primary bg-primary text-primary-foreground" : "border-foreground/15 hover:border-foreground/40")}
+                >
+                  {fmt(p)} t
+                </button>
+              ))}
+            </div>
+
+            <p className="mt-9 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">EPR recycled-content target</p>
             <div className="mt-3 grid grid-cols-4 gap-2">
               {TARGETS.map((t, i) => (
-                <button
-                  key={t.y}
-                  onClick={() => setTarget(i)}
-                  className={cn(
-                    "rounded-2xl border py-3 text-center transition-colors",
-                    i === target ? "border-primary bg-primary/10" : "border-foreground/10 hover:border-foreground/30",
-                  )}
-                >
-                  <span className="block text-lg font-medium">{t.p}%</span>
+                <button key={t.y} onClick={() => setTarget(i)} className={cn("rounded-2xl border py-2.5 text-center transition-colors", i === target ? "border-primary bg-primary/10" : "border-foreground/10 hover:border-foreground/30")}>
+                  <span className="block text-base font-medium">{t.p}%</span>
                   <span className="block text-[11px] text-muted-foreground">{t.y}</span>
                 </button>
               ))}
             </div>
 
-            <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Prices (₹/kg, editable)</p>
+            <p className="mt-9 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Prices, ₹/kg (edit if yours differ)</p>
             <div className="mt-3 grid grid-cols-2 gap-3">
               {[
                 { l: "Virgin HDPE", v: virgin, set: setVirgin },
@@ -193,77 +271,134 @@ const Impact = () => {
               ].map((f) => (
                 <label key={f.l} className="rounded-2xl border border-foreground/10 px-4 py-3 focus-within:border-primary/60">
                   <span className="block text-[11px] text-muted-foreground">{f.l}</span>
-                  <span className="flex items-baseline gap-1">
+                  <span className="flex items-baseline gap-1 text-xl font-medium">
                     ₹
                     <input
-                      type="number"
                       value={f.v}
-                      onChange={(e) => f.set(Number(e.target.value))}
-                      className="w-full bg-transparent text-xl font-medium outline-none tabular-nums"
+                      onChange={(e) => f.set(e.target.value.replace(/[^\d.]/g, ""))}
+                      inputMode="decimal"
+                      size={1}
+                      className="w-full bg-transparent outline-none tabular-nums"
                     />
                   </span>
                 </label>
               ))}
             </div>
-            <p className="mt-2 text-[11px] text-muted-foreground">Defaults: Delhi market levels from our price tracker.</p>
           </div>
 
-          {/* Results */}
-          <div className="lg:col-span-7 grid gap-5 sm:grid-cols-2 content-start">
-            <div className="forest sm:col-span-2 rounded-[28px] border border-primary/20 p-7 md:p-10">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-primary">CO₂e avoided per year</p>
-              <p className="mt-3 text-6xl md:text-8xl font-medium tracking-[-0.05em]">
-                <Live value={r.co2} format={(v) => fmt(v, v < 100 ? 1 : 0)} />
-                <span className="ml-3 text-2xl md:text-3xl text-muted-foreground font-normal tracking-normal">tonnes</span>
+          {/* ---------------- Results ---------------- */}
+          <div className="min-w-0 lg:col-span-7 grid grid-cols-[minmax(0,1fr)] gap-5 content-start">
+            {/* Bottles + Delhi → Mumbai */}
+            <div className="forest rounded-[28px] border border-primary/20 p-7 md:p-9">
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-primary">Every year, you put back in the loop</p>
+              <p className="mt-3 text-5xl md:text-7xl font-medium tracking-[-0.05em]">
+                <Live value={x.bottles} format={big} />
               </p>
-              <p className="mt-4 text-muted-foreground">
-                About the yearly emissions of <span className="text-foreground"><Live value={r.cars} format={(v) => fmt(v)} /> cars</span>.
-              </p>
-            </div>
+              <p className="mt-1 text-lg text-foreground/80">detergent bottles</p>
 
-            <div className="rounded-[28px] border border-foreground/10 bg-card p-7">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Bottles back in the loop</p>
-              <p className="mt-3 text-4xl md:text-5xl font-medium tracking-tight">
-                <Live value={r.bottles} format={(v) => (v >= 1e7 ? `${fmt(v / 1e7, 2)} crore` : v >= 1e5 ? `${fmt(v / 1e5, 1)} lakh` : fmt(v))} />
-              </p>
-              <div className="mt-5 flex flex-wrap gap-[3px]" aria-hidden>
-                {Array.from({ length: icons }).map((_, i) => (
-                  <motion.span
-                    key={i}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: i * 0.004 }}
-                    className="h-3.5 w-2 rounded-[2px] rounded-t-[4px] bg-primary/80"
-                  />
-                ))}
-              </div>
-              <p className="mt-2 text-[11px] text-muted-foreground">1 mark ≈ {fmt(perIcon)} bottles · per year</p>
-            </div>
-
-            <div className="rounded-[28px] border border-foreground/10 bg-card p-7">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Rigid packaging covered</p>
-              <p className="mt-3 text-4xl md:text-5xl font-medium tracking-tight">
-                <Live value={r.packaging} format={(v) => fmt(v)} />
-                <span className="ml-2 text-lg text-muted-foreground font-normal tracking-normal">t/yr</span>
-              </p>
-              <p className="mt-4 text-sm text-muted-foreground">
-                of Category I packaging can meet the {TARGETS[target].y} {TARGETS[target].p}% recycled-content rule with this volume.
-              </p>
-            </div>
-
-            <div className="sm:col-span-2 rounded-[28px] border border-foreground/10 bg-card p-7 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-              <div>
-                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Resin cost difference per year</p>
-                <p className="mt-3 text-4xl md:text-5xl font-medium tracking-tight">
-                  <Live value={r.savings} format={(v) => inr(v)} />
+              <div className="mt-8">
+                <p className="text-sm text-muted-foreground">
+                  Laid end to end, that's <span className="text-foreground font-medium"><Live value={x.km} format={(n) => `${fmt(n)} km`} /></span>
                 </p>
-                <p className="mt-2 text-sm text-muted-foreground">at ₹{fmt(virgin - recycled, 1)}/kg below virgin</p>
+                <div className="mt-5 flex items-center gap-3">
+                  <span className="flex items-center gap-1.5 text-sm"><MapPin className="h-4 w-4 text-primary" />Delhi</span>
+                  <div className="relative h-2 flex-1 rounded-full bg-foreground/10 overflow-hidden">
+                    <motion.div
+                      className="absolute inset-y-0 left-0 rounded-full bg-primary"
+                      animate={{ width: `${Math.min(100, x.trips * 100)}%` }}
+                      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                    />
+                  </div>
+                  <span className="flex items-center gap-1.5 text-sm">Mumbai<MapPin className="h-4 w-4 text-primary" /></span>
+                </div>
+                <p className="mt-4 text-2xl md:text-3xl font-medium">
+                  {x.trips >= 1 ? (
+                    <>
+                      Delhi to Mumbai, <span className="serif italic text-primary"><Live value={x.trips} format={(n) => `${fmt(n, 1)}×`} /></span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="serif italic text-primary"><Live value={x.trips * 100} format={(n) => `${fmt(n)}%`} /></span> of the way from Delhi to Mumbai
+                    </>
+                  )}
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              {/* Trees */}
+              <div className="rounded-[28px] border border-foreground/10 bg-card p-7">
+                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Carbon you avoid</p>
+                <p className="mt-3 text-4xl md:text-5xl font-medium tracking-tight">
+                  <Live value={x.co2} format={(n) => fmt(n)} />
+                  <span className="ml-2 text-lg text-muted-foreground font-normal tracking-normal">t CO₂</span>
+                </p>
+                <p className="mt-3 text-foreground/80">
+                  = what <span className="text-foreground font-medium"><Live value={x.trees} format={big} /> trees</span> absorb in a year
+                </p>
+                <div className="mt-5">
+                  <IconWall count={x.trees} Icon={TreePine} per={niceUnit(x.trees)} unit="trees" />
+                </div>
+              </div>
+
+              {/* Trucks */}
+              <div className="rounded-[28px] border border-foreground/10 bg-card p-7">
+                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Plastic kept out of landfill</p>
+                <p className="mt-3 text-4xl md:text-5xl font-medium tracking-tight">
+                  <Live value={yearly} format={(n) => fmt(n)} />
+                  <span className="ml-2 text-lg text-muted-foreground font-normal tracking-normal">tonnes</span>
+                </p>
+                <p className="mt-3 text-foreground/80">
+                  = <span className="text-foreground font-medium"><Live value={x.trucks} format={(n) => fmt(n)} /> full trucks</span> of waste, every year
+                </p>
+                <div className="mt-5">
+                  <IconWall count={x.trucks} Icon={Truck} per={niceUnit(x.trucks)} unit="trucks" />
+                </div>
+              </div>
+
+              {/* Cars */}
+              <div className="rounded-[28px] border border-foreground/10 bg-card p-7">
+                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Same as taking off the road</p>
+                <p className="mt-3 text-4xl md:text-5xl font-medium tracking-tight">
+                  <Live value={x.cars} format={(n) => fmt(n)} />
+                  <span className="ml-2 text-lg text-muted-foreground font-normal tracking-normal">cars</span>
+                </p>
+                <p className="mt-3 text-foreground/80">for a whole year</p>
+                <div className="mt-5">
+                  <IconWall count={x.cars} Icon={Car} per={niceUnit(x.cars)} unit="cars" />
+                </div>
+              </div>
+
+              {/* EPR */}
+              <div className="rounded-[28px] border border-foreground/10 bg-card p-7">
+                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">EPR · {TARGETS[target].y} {TARGETS[target].p}% rule</p>
+                <p className="mt-3 text-4xl font-medium tracking-tight">
+                  <Live value={x.packBottles} format={big} />
+                  <span className="ml-2 text-lg text-muted-foreground font-normal tracking-normal">bottles</span>
+                </p>
+                <p className="mt-3 text-foreground/80">
+                  can meet the recycled-content rule with this volume ({fmt(x.packaging)} t of packaging)
+                </p>
+              </div>
+            </div>
+
+            {/* Money */}
+            <div className="rounded-[28px] border border-foreground/10 bg-card p-7 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+              <div>
+                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">You save on resin</p>
+                <p className="mt-3 text-4xl md:text-5xl font-medium tracking-tight">
+                  <Live value={x.savings} format={inr} />
+                  <span className="ml-2 text-lg text-muted-foreground font-normal tracking-normal">a year</span>
+                </p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  ≈ <Live value={x.savings / 12} format={inr} /> a month, at ₹{fmt(Math.max(0, v - r), 1)}/kg below virgin
+                </p>
               </div>
               <Btn to="/granules#sample">Request a sample</Btn>
             </div>
 
             {/* Share / email */}
-            <div className="sm:col-span-2 rounded-[28px] border border-foreground/10 bg-card p-7">
+            <div className="rounded-[28px] border border-foreground/10 bg-card p-7">
               {sent === "done" ? (
                 <p className="flex items-center gap-3">
                   <span className="grid h-8 w-8 place-items-center rounded-full bg-primary text-primary-foreground">
@@ -275,25 +410,25 @@ const Impact = () => {
                 <form onSubmit={sendReport} noValidate className="flex flex-col xl:flex-row xl:items-center gap-3">
                   <p className="text-sm shrink-0">Email me this report</p>
                   <div className="flex flex-1 gap-3 min-w-0">
-                  <div className={cn("flex flex-1 min-w-0 items-center gap-2 rounded-full border bg-foreground/[0.04] pl-5 pr-1.5 py-1.5", sent === "error" ? "border-destructive/60" : "border-foreground/15")}>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        setSent("idle");
-                      }}
-                      placeholder="you@company.com"
-                      className="flex-1 min-w-0 bg-transparent text-sm outline-none"
-                    />
-                    <button type="submit" className="h-9 rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground">
-                      {sent === "sending" ? "…" : "Send"}
+                    <div className={cn("flex flex-1 min-w-0 items-center gap-2 rounded-full border bg-foreground/[0.04] pl-5 pr-1.5 py-1.5", sent === "error" ? "border-destructive/60" : "border-foreground/15")}>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          setSent("idle");
+                        }}
+                        placeholder="you@company.com"
+                        className="flex-1 min-w-0 bg-transparent text-sm outline-none"
+                      />
+                      <button type="submit" className="h-9 rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground">
+                        {sent === "sending" ? "…" : "Send"}
+                      </button>
+                    </div>
+                    <button type="button" onClick={share} className="inline-flex shrink-0 whitespace-nowrap items-center justify-center gap-2 rounded-full border border-foreground/15 px-4 h-11 text-sm hover:border-primary">
+                      {copied ? <Check className="h-4 w-4 text-primary" /> : <Link2 className="h-4 w-4" />}
+                      {copied ? "Copied" : "Copy link"}
                     </button>
-                  </div>
-                  <button type="button" onClick={share} className="inline-flex shrink-0 whitespace-nowrap items-center justify-center gap-2 rounded-full border border-foreground/15 px-4 h-11 text-sm hover:border-primary">
-                    {copied ? <Check className="h-4 w-4 text-primary" /> : <Link2 className="h-4 w-4" />}
-                    {copied ? "Copied" : "Copy link"}
-                  </button>
                   </div>
                 </form>
               )}
@@ -304,11 +439,11 @@ const Impact = () => {
         <div className="mt-10 rounded-2xl border border-foreground/10 p-6 text-xs text-muted-foreground leading-relaxed flex gap-3">
           <Info className="h-4 w-4 shrink-0 mt-0.5" />
           <p>
-            <span className="text-foreground">How we calculate.</span> CO₂e: virgin HDPE 1.92 kg CO₂e/kg vs recycled 0.28 kg CO₂e/kg, from an independent life-cycle
-            assessment by c7-consult for ALPLA (European plants), so the saving here is 1.64 kg per kg. Indian grid and logistics will differ; treat this as indicative. Car
-            equivalent: 4.6 t CO₂ per passenger car per year (US EPA). Bottles: assumes a 1 L HDPE bottle weighs about 50 g. EPR coverage: your annual rHDPE volume divided
-            by the minimum recycled-content share for Category I rigid packaging under the Plastic Waste Management (Amendment) Rules, 2026. Prices are indicative and
-            editable.
+            <span className="text-foreground">How we calculate.</span> Bottles: a 1 L HDPE detergent bottle weighs about {BOTTLE_G} g and stands about {BOTTLE_H_M * 100} cm tall;
+            Delhi to Mumbai taken as {fmt(DELHI_MUMBAI_KM)} km by road. Carbon: virgin HDPE 1.92 kg CO₂e/kg vs recycled 0.28 kg CO₂e/kg (c7-consult life-cycle assessment for
+            ALPLA, European plants), so 1.64 kg saved per kg; Indian figures will differ, so treat this as indicative. Trees: a mature tree absorbs roughly {TREE_KG_YR} kg CO₂ a
+            year (common estimate). Cars: {CAR_T_YR} t CO₂ per passenger car per year (US EPA). Trucks: {TRUCK_T} t per load. EPR: annual rHDPE ÷ minimum recycled-content share
+            for Category I rigid packaging (PWM Amendment Rules 2026). Prices are indicative and editable.
           </p>
         </div>
       </section>
