@@ -3,6 +3,7 @@ import { useRef, type ReactNode, type MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { sound } from "@/lib/sound";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -153,7 +154,7 @@ export const Btn = ({ to, href, onClick, children, variant = "primary", size = "
       </span>
     </>
   );
-  if (to) return <Link to={to} className={cls}>{inner}</Link>;
+  if (to) return <Link to={to} className={cls} onClick={() => sound.tick()}>{inner}</Link>;
   if (href)
     return (
       <a href={href} {...(href.startsWith("#") ? {} : { target: "_blank", rel: "noreferrer" })} className={cls}>
@@ -161,7 +162,7 @@ export const Btn = ({ to, href, onClick, children, variant = "primary", size = "
       </a>
     );
   return (
-    <button type={type} onClick={onClick} className={cls} disabled={disabled}>
+    <button type={type} onClick={() => { sound.tick(); onClick?.(); }} className={cls} disabled={disabled}>
       {inner}
     </button>
   );
