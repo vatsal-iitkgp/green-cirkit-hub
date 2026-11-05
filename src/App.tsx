@@ -12,6 +12,7 @@ import Careers from "./pages/Careers";
 import About from "./pages/About";
 import { NewsList, NewsPost } from "./pages/News";
 import GigiChatbot from "./components/GigiChatbot";
+import ClickBurst from "./components/site/ClickBurst";
 import { Cursor, Footer, Intro, Nav, ScrollManager } from "./components/site/Chrome";
 
 const Site = () => {
@@ -45,6 +46,7 @@ const Site = () => {
       </Routes>
       <Footer />
       <GigiChatbot />
+      <ClickBurst />
     </div>
   );
 };

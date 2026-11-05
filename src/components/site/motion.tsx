@@ -130,7 +130,7 @@ type BtnProps = {
 /** Pill button with sliding arrow. Renders Link / a / button. */
 export const Btn = ({ to, href, onClick, children, variant = "primary", size = "md", className, type = "button", disabled }: BtnProps) => {
   const cls = cn(
-    "group relative inline-flex items-center gap-3 rounded-full font-medium transition-all duration-300 select-none overflow-hidden",
+    "group relative inline-flex items-center gap-3 rounded-full font-medium transition-all duration-300 select-none overflow-hidden active:scale-[0.96] active:duration-100",
     size === "lg" ? "h-14 pl-7 pr-2 text-base" : "h-11 pl-5 pr-1.5 text-sm",
     variant === "primary"
       ? "bg-primary text-primary-foreground hover:shadow-[0_10px_40px_-8px_hsl(var(--primary)/0.7)]"
