@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform, useVelocity, useSpring, useMotionValue, useAnimationFrame, type MotionValue } from "framer-motion";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import GranuleField from "@/components/site/GranuleField";
 import Journey from "@/components/site/Journey";
 import { Btn, Eyebrow, Magnetic, Reveal, SplitHeadline, spotlightMove, EASE } from "@/components/site/motion";
@@ -74,24 +74,13 @@ const Hero = () => {
         </motion.div>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="relative z-10 container max-w-6xl pb-8 flex items-end justify-between text-xs text-muted-foreground font-mono uppercase tracking-[0.16em]"
-      >
-        <span className="hidden sm:block">Noida · India</span>
-        <span className="flex items-center gap-2 mx-auto sm:mx-0">
-          <ArrowDown className="h-3.5 w-3.5 animate-bounce" /> Scroll
-        </span>
-        <span className="hidden sm:block">Move your cursor ↗</span>
-      </motion.div>
+
     </section>
   );
 };
 
 /* ---------------- Marquee ---------------- */
-const WORDS = ["Near-virgin rHDPE", "Colour-consistent", "Batch traceable", "Lab-tested lots", "Consistent MFI", "Made in India"];
+const WORDS = ["Near-virgin rHDPE", "Colour-consistent", "Batch traceable", "Lab-tested lots", "Consistent MFI", "PAN India"];
 const Marquee = () => {
   const { scrollY } = useScroll();
   const vel = useVelocity(scrollY);
