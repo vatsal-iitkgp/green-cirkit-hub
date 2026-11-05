@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 /**
  * Pressing any button or link pops a small burst of rHDPE pellets from the
- * press point, with a soft ring. Pure DOM + Web Animations API; no audio.
+ * press point, with a soft ring, plus a quiet glassy "pop". DOM + Web Animations + Web Audio.
  */
 const COLORS = [
   "radial-gradient(circle at 32% 28%, #fff 0%, #8fe3a7 30%, #2f7a3e 100%)",
@@ -10,9 +10,66 @@ const COLORS = [
   "radial-gradient(circle at 32% 28%, #fff 0%, #86aee6 30%, #23447a 100%)",
 ];
 
+
+/* ---------- press sound: soft glass "pop" + tiny pellet ticks (always on, very quiet) ---------- */
+let actx: AudioContext | null = null;
+let out: GainNode | null = null;
+const getAudio = () => {
+  if (!actx) {
+    const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (!AC) return null;
+    actx = new AC();
+    out = actx.createGain();
+    out.gain.value = 0.55;
+    const rev = actx.createConvolver();
+    const len = Math.floor(actx.sampleRate * 1.2);
+    const ir = actx.createBuffer(2, len, actx.sampleRate);
+    for (let c = 0; c < 2; c++) {
+      const d = ir.getChannelData(c);
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+    }
+    rev.buffer = ir;
+    const wet = actx.createGain();
+    wet.gain.value = 0.25;
+    out.connect(actx.destination);
+    out.connect(rev);
+    rev.connect(wet);
+    wet.connect(actx.destination);
+  }
+  if (actx.state === "suspended") actx.resume();
+  return actx;
+};
+
+const blip = (c: AudioContext, t: number, f0: number, f1: number, vol: number, dur: number) => {
+  const o = c.createOscillator();
+  const g = c.createGain();
+  o.type = "sine";
+  o.frequency.setValueAtTime(f0, t);
+  o.frequency.exponentialRampToValueAtTime(f1, t + dur * 0.6);
+  o.connect(g);
+  g.connect(out!);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(vol, t + 0.004);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.start(t);
+  o.stop(t + dur + 0.02);
+};
+
+const playPress = () => {
+  const c = getAudio();
+  if (!c) return;
+  const t = c.currentTime + 0.005;
+  blip(c, t, 1400, 620, 0.12, 0.12); // the pop
+  blip(c, t, 2800, 2600, 0.025, 0.25); // glassy shimmer
+  for (let i = 0; i < 3; i++) {
+    const tt = t + 0.07 + i * 0.045 + Math.random() * 0.02;
+    blip(c, tt, 3200 + Math.random() * 1600, 2800, 0.012, 0.06); // pellets landing
+  }
+};
+
 const ClickBurst = () => {
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const layer = document.createElement("div");
     layer.setAttribute("aria-hidden", "true");
@@ -60,7 +117,12 @@ const ClickBurst = () => {
     const onDown = (e: PointerEvent) => {
       const target = (e.target as HTMLElement | null)?.closest("button, a, [role=button]");
       if (!target) return;
-      burst(e.clientX, e.clientY);
+      try {
+        playPress();
+      } catch {
+        /* audio unavailable */
+      }
+      if (!reduce) burst(e.clientX, e.clientY);
     };
     document.addEventListener("pointerdown", onDown, { passive: true });
     return () => {
