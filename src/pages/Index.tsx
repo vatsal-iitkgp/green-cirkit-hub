@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { motion, useScroll, useTransform, useVelocity, useSpring, useMotionValue, useAnimationFrame, type MotionValue } from "framer-motion";
 import { ArrowDown, ArrowUpRight, ScanLine, Droplets, FlaskConical, Fingerprint } from "lucide-react";
 import GranuleField from "@/components/site/GranuleField";
+import Journey from "@/components/site/Journey";
 import { Btn, Eyebrow, Magnetic, Reveal, SplitHeadline, spotlightMove, EASE } from "@/components/site/motion";
 import { Counter, PelletCluster, StageArt } from "@/components/site/visuals";
 import { Page } from "@/components/site/Chrome";
@@ -89,18 +90,38 @@ const Hero = () => {
 
 /* ---------------- Marquee ---------------- */
 const WORDS = ["Near-virgin rHDPE", "Colour-consistent", "Batch traceable", "Lab-tested lots", "Consistent MFI", "Made in India"];
-const Marquee = () => (
-  <div className="relative border-y border-foreground/10 py-6 overflow-hidden">
-    <div className="marquee flex w-max gap-12 whitespace-nowrap">
-      {[...WORDS, ...WORDS, ...WORDS, ...WORDS].map((w, i) => (
-        <span key={i} className="flex items-center gap-12 text-2xl md:text-4xl font-medium tracking-tight text-foreground/80">
-          {i % 2 ? <span className="serif italic text-foreground/60">{w}</span> : w}
-          <span className="text-primary text-xl">✦</span>
-        </span>
-      ))}
+const Marquee = () => {
+  const { scrollY } = useScroll();
+  const vel = useVelocity(scrollY);
+  const smooth = useSpring(vel, { damping: 50, stiffness: 300 });
+  const factor = useTransform(smooth, [-2500, 0, 2500], [-6, 1, 6], { clamp: false });
+  const skew = useTransform(smooth, [-2500, 2500], [8, -8]);
+  const base = useMotionValue(0);
+  const dir = useRef(1);
+  useAnimationFrame((_, delta) => {
+    const f = factor.get();
+    if (f < 0) dir.current = -1;
+    else if (f > 1.2) dir.current = 1;
+    let next = base.get() - dir.current * Math.abs(f) * (delta / 1000) * 3.2;
+    if (next < -50) next += 50;
+    if (next > 0) next -= 50;
+    base.set(next);
+  });
+  const x = useTransform(base, (v) => `${v}%`);
+  const items = [...WORDS, ...WORDS, ...WORDS, ...WORDS];
+  return (
+    <div className="relative border-y border-foreground/10 py-6 overflow-hidden">
+      <motion.div style={{ x, skewX: skew }} className="flex w-max gap-12 whitespace-nowrap">
+        {items.map((w, i) => (
+          <span key={i} className="flex items-center gap-12 text-2xl md:text-4xl font-medium tracking-tight text-foreground/80">
+            {i % 2 ? <span className="serif italic text-foreground/60">{w}</span> : w}
+            <span className="text-primary text-xl">✦</span>
+          </span>
+        ))}
+      </motion.div>
     </div>
-  </div>
-);
+  );
+};
 
 /* ---------------- Two doors ---------------- */
 const Door = ({
@@ -205,92 +226,6 @@ const Manifesto = () => {
     </section>
   );
 };
-
-/* ---------------- The Circuit: horizontal scroll ---------------- */
-const STAGES = [
-  { k: "01", t: "Source", d: "Post-consumer HDPE from a vetted dealer network, with origin on record for every lot." },
-  { k: "02", t: "Sort", d: "Other polymers and off-colours come out first. Purity is decided here, so we don't compromise here." },
-  { k: "03", t: "Clean", d: "Labels, glue and residue are removed. Clean flakes in, nothing hidden downstream." },
-  { k: "04", t: "Re-granulate", d: "Filtered and turned into uniform granules. Every lot is tested before it ships with its TDS." },
-];
-
-const Circuit = () => {
-  const ref = useRef<HTMLElement>(null);
-  const track = useRef<HTMLDivElement>(null);
-  const [dist, setDist] = useState(0);
-  useEffect(() => {
-    const m = () => track.current && setDist(Math.max(0, track.current.scrollWidth - window.innerWidth));
-    m();
-    window.addEventListener("resize", m);
-    return () => window.removeEventListener("resize", m);
-  }, []);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const x = useTransform(scrollYProgress, [0.05, 0.95], [0, -dist]);
-  const bar = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-
-  return (
-    <section ref={ref} className="relative h-[320vh] hidden md:block">
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
-        <div className="container max-w-6xl flex items-end justify-between mb-12">
-          <div>
-            <Eyebrow>The process</Eyebrow>
-            <h2 className="mt-5 text-6xl font-medium leading-[0.95]">
-              Waste to near-virgin, <span className="serif italic text-primary">in four moves.</span>
-            </h2>
-          </div>
-          <div className="w-48 h-px bg-foreground/15 relative mb-4">
-            <motion.div style={{ width: bar }} className="absolute inset-y-0 left-0 bg-primary" />
-          </div>
-        </div>
-        <motion.div ref={track} style={{ x }} className="flex w-max gap-6 pl-[max(1.25rem,calc((100vw-72rem)/2+1.25rem))]">
-          {STAGES.map((s, i) => (
-            <div
-              key={s.k}
-              onMouseMove={spotlightMove}
-              className="spotlight shrink-0 w-[44vw] max-w-[620px] h-[58vh] rounded-[28px] border border-foreground/10 bg-card p-10 flex flex-col justify-between"
-            >
-              <div className="flex items-start justify-between">
-                <span className="text-8xl font-medium tracking-tighter text-foreground/10">{s.k}</span>
-                <StageArt stage={i} className="w-40 h-40" />
-              </div>
-              <div>
-                <h3 className="text-5xl font-medium">{s.t}</h3>
-                <p className="mt-4 max-w-md text-muted-foreground text-lg leading-relaxed">{s.d}</p>
-              </div>
-            </div>
-          ))}
-          <div className="shrink-0 w-[30vw] h-[58vh] flex flex-col justify-center pr-20">
-            <p className="serif italic text-5xl leading-tight">…and the circuit closes.</p>
-            <div className="mt-8">
-              <Btn to="/granules">See the grades</Btn>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
-
-const CircuitMobile = () => (
-  <section className="md:hidden container py-20">
-    <Eyebrow>The process</Eyebrow>
-    <h2 className="mt-5 text-5xl font-medium leading-[0.95]">
-      Waste to near-virgin, <span className="serif italic text-primary">in four moves.</span>
-    </h2>
-    <div className="mt-10 flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar -mx-5 px-5">
-      {STAGES.map((s, i) => (
-        <div key={s.k} className="snap-center shrink-0 w-[82vw] rounded-3xl border border-foreground/10 bg-card p-7">
-          <div className="flex justify-between items-start">
-            <span className="text-6xl font-medium text-foreground/10">{s.k}</span>
-            <StageArt stage={i} className="w-24 h-24" />
-          </div>
-          <h3 className="mt-6 text-3xl font-medium">{s.t}</h3>
-          <p className="mt-3 text-muted-foreground leading-relaxed">{s.d}</p>
-        </div>
-      ))}
-    </div>
-  </section>
-);
 
 /* ---------------- Product spotlight ---------------- */
 const SPEC_PREVIEW = [
@@ -451,8 +386,7 @@ const Index = () => (
     <Marquee />
     <Doors />
     <Manifesto />
-    <Circuit />
-    <CircuitMobile />
+    <Journey />
     <Product />
     <Why />
     <Numbers />
