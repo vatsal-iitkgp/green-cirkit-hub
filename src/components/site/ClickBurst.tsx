@@ -36,7 +36,6 @@ const getAudio = () => {
     rev.connect(wet);
     wet.connect(actx.destination);
   }
-  if (actx.state === "suspended") actx.resume();
   return actx;
 };
 
@@ -65,16 +64,25 @@ const sleepSoon = (ms: number) => {
   }, ms);
 };
 
-const playPress = () => {
-  const c = getAudio();
-  if (!c) return;
-  sleepSoon(1400);
-  const t = c.currentTime + 0.005;
+const schedule = (c: AudioContext, lead: number) => {
+  const t = c.currentTime + lead;
   blip(c, t, 1400, 620, 0.28, 0.13); // the pop
   blip(c, t, 2800, 2600, 0.06, 0.25); // glassy shimmer
   for (let i = 0; i < 3; i++) {
     const tt = t + 0.07 + i * 0.045 + Math.random() * 0.02;
     blip(c, tt, 3200 + Math.random() * 1600, 2800, 0.03, 0.06); // pellets landing
+  }
+};
+
+const playPress = () => {
+  const c = getAudio();
+  if (!c) return;
+  sleepSoon(8000); // stay awake while the visitor is clicking around
+  if (c.state === "running") {
+    schedule(c, 0.005);
+  } else {
+    // Output devices (esp. Mac / Bluetooth) need a moment to wake; play after that.
+    c.resume().then(() => schedule(c, 0.12));
   }
 };
 
@@ -150,7 +158,7 @@ const ClickBurst = () => {
         src.buffer = b;
         src.connect(c.destination);
         src.start(0);
-        sleepSoon(150);
+        sleepSoon(8000);
       }
       window.removeEventListener("touchend", unlock);
       window.removeEventListener("click", unlock);
