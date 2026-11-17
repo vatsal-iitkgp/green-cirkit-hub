@@ -11,10 +11,10 @@ import { EASE, Eyebrow } from "./motion";
  */
 
 const STAGES = [
-  { k: "01", t: "Collect", d: "Used HDPE bottles, by the thousand. Bought from a vetted dealer network, origin on record." },
-  { k: "02", t: "Sort", d: "Anything that isn't HDPE leaves the line. Purity is decided here, so we don't compromise here." },
-  { k: "03", t: "Clean", d: "Labels, glue, residue. Gone. Only clean flakes move forward." },
-  { k: "04", t: "Re-born", d: "Uniform granules. Near-virgin, tested, ready to run on your line." },
+  { k: "01", t: "Sourced", d: "Post-consumer HDPE, recycled by partner manufacturers we've vetted across India." },
+  { k: "02", t: "Sorted", d: "Only clean, single-polymer HDPE makes it through. That's the first thing we check." },
+  { k: "03", t: "Tested", d: "Every lot goes through our lab before we accept it. No report, no dispatch." },
+  { k: "04", t: "Delivered", d: "Matched to your spec, packed under GreenCirkit, shipped with its test report." },
 ];
 
 type Pt = {
@@ -412,9 +412,9 @@ const Journey = () => {
         {/* copy */}
         <div className="relative z-10 container max-w-6xl h-full flex flex-col justify-between pt-28 pb-10 pointer-events-none">
           <div>
-            <Eyebrow>The process · scroll to run it</Eyebrow>
+            <Eyebrow>How we work · scroll to run it</Eyebrow>
             <h2 className="mt-5 text-4xl md:text-6xl font-medium leading-[0.95] max-w-[14ch]">
-              Waste to <span className="serif italic text-primary">near-virgin.</span>
+              Every granule, <span className="serif italic text-primary">verified.</span>
             </h2>
           </div>
 

@@ -12,9 +12,9 @@ const PROBLEMS = [
 ];
 
 const ANSWERS = [
-  { t: "Near-virgin grades", d: "Recycled HDPE engineered to run like fresh polymer, with a TDS behind every grade." },
-  { t: "Proof, lot by lot", d: "Every lot tested. Every bag traceable to its source. The report ships with the material." },
-  { t: "An organised supply chain", d: "Vetted scrap partners, fair prices, clean records, from the dealer to the brand." },
+  { t: "A vetted partner network", d: "We work with a small group of recycled-granule manufacturers we've audited, not whoever is cheapest this week." },
+  { t: "Our lab, your proof", d: "Every lot is tested by us before it's accepted. The report ships with the material." },
+  { t: "Matched to your spec", d: "Blended to your requirement, with masterbatch or virgin if needed. Packed and supplied under GreenCirkit." },
 ];
 
 const FOUNDERS = [
@@ -29,7 +29,7 @@ const FOUNDERS = [
     n: "Anuj Gupta",
     r: "Co-founder & Director",
     iit: "IIT Roorkee",
-    b: "B.Arch, IIT Roorkee. 30+ years building and running ventures in real estate and industrial development. Leads plant development and finance.",
+    b: "B.Arch, IIT Roorkee. 30+ years building and running ventures in real estate and industrial development. Leads operations and finance.",
     q: "",
   },
 ];
@@ -54,7 +54,7 @@ const About = () => {
         />
         <Reveal delay={0.6}>
           <p className="mt-8 max-w-2xl text-xl md:text-2xl text-muted-foreground leading-snug">
-            GreenCirkit is building India's most trusted source of premium recycled HDPE. Built by IITians. Designed around what the industry actually needs.
+            GreenCirkit supplies premium recycled HDPE from a vetted network of partner manufacturers, tested and backed by us. Built by IITians. Designed around what the industry actually needs.
           </p>
         </Reveal>
       </section>
@@ -87,7 +87,7 @@ const About = () => {
           </Reveal>
           <Reveal delay={0.16}>
             <p>
-              We started GreenCirkit to close that gap. Not as another recycler, but as <span className="serif italic text-primary text-[1.15em]">the one you can trust.</span>
+              We started GreenCirkit to close that gap. Not as another trader, but as <span className="serif italic text-primary text-[1.15em]">the supplier you can trust.</span>
             </p>
           </Reveal>
         </div>
@@ -156,7 +156,7 @@ const About = () => {
         <Reveal>
           <Eyebrow>The founders</Eyebrow>
         </Reveal>
-        <SplitHeadline text={"Engineers first.\n*Recyclers by choice.*"} className="mt-5 text-4xl md:text-6xl font-medium leading-[0.95]" />
+        <SplitHeadline text={"Engineers first.\n*Obsessed with quality.*"} className="mt-5 text-4xl md:text-6xl font-medium leading-[0.95]" />
         <div className="mt-12 grid gap-5 md:grid-cols-2">
           {FOUNDERS.map((f, i) => (
             <Reveal key={f.n} delay={i * 0.1}>
@@ -180,7 +180,7 @@ const About = () => {
       <section className="container max-w-6xl py-16">
         <div className="grid md:grid-cols-2 gap-5">
           {[
-            { l: "Vision", t: "To be India's most trusted name in recycled plastic: infrastructure, not just a recycler." },
+            { l: "Vision", t: "To be India's most trusted name in recycled HDPE." },
             { l: "Mission", t: "Make recycled HDPE something brands choose with confidence, not compromise." },
           ].map((v, i) => (
             <Reveal key={v.l} delay={i * 0.08}>

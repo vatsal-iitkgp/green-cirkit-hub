@@ -42,7 +42,7 @@ const Hero = () => {
           as="h1"
           animateOnMount
           delay={0.6}
-          text={"Not your usual\n*recycler.*"}
+          text={"Not your usual\n*supplier.*"}
           className="font-medium leading-[0.92] text-[clamp(2.9rem,9vw,7.6rem)] tracking-[-0.055em]"
         />
 
@@ -343,7 +343,7 @@ const About = () => (
         </Reveal>
         <Reveal delay={0.1}>
           <p>
-            Premium material. Straight answers. Built in India by IIT alumni.
+            Sourced from vetted partner manufacturers. Tested in our lab. Built by IIT alumni.
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <span className="rounded-full border border-primary/40 bg-primary/10 px-3.5 py-1.5 text-xs font-medium text-primary">IIT Kharagpur</span>
