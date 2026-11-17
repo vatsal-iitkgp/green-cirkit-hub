@@ -19,7 +19,7 @@ export const Logo = ({ className }: { className?: string }) => (
 
 const LINKS = [
   { to: "/granules", label: "Buy Granules" },
-  { to: "/sell-scrap", label: "Sell Scrap" },
+  { to: "/sell-granules", label: "Sell Granules" },
   { to: "/prices", label: "Prices" },
   { to: "/impact", label: "Impact" },
   { to: "/news", label: "News" },
@@ -125,7 +125,7 @@ export const Nav = () => {
           <Logo />
           <div className="hidden xl:flex items-center gap-0.5">
             <NavItem to="/granules" label="Buy Granules" />
-            <NavItem to="/sell-scrap" label="Sell Scrap" />
+            <NavItem to="/sell-granules" label="Sell Granules" />
             <InsightsMenu />
             <NavItem to="/about" label="About" />
             <NavItem to="/careers" label="Careers" />
@@ -194,7 +194,7 @@ export const Footer = () => (
           <ul className="space-y-2.5">
             {[
               ["Buy Granules", "/granules"],
-              ["Sell Scrap", "/sell-scrap"],
+              ["Sell Granules", "/sell-granules"],
               ["HDPE Prices", "/prices"],
               ["Impact Calculator", "/impact"],
               ["News", "/news"],

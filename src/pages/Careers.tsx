@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 
 const VALUES = [
   { t: "Own it", d: "You run things here. You don't watch them." },
-  { t: "Get on the ground", d: "Won in scrap yards, not slide decks." },
+  { t: "Get on the ground", d: "Won on factory floors, not slide decks." },
   { t: "Say it straight", d: "Especially when it's bad news." },
 ];
 

@@ -5,7 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import GranuleField from "@/components/site/GranuleField";
 import Journey from "@/components/site/Journey";
 import { Btn, Eyebrow, Magnetic, Reveal, SplitHeadline, spotlightMove, EASE } from "@/components/site/motion";
-import { Counter, PelletCluster, StageArt } from "@/components/site/visuals";
+import { Counter, PelletCluster } from "@/components/site/visuals";
 import { Page } from "@/components/site/Chrome";
 import { VIRGIN_HDPE_BM_DELHI } from "@/content/prices";
 import { POSTS, formatDate } from "@/lib/news";
@@ -35,7 +35,7 @@ const Hero = () => {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
           </span>
-          Now onboarding buyers & scrap partners
+          Now onboarding buyers & supply partners
         </motion.div>
 
         <SplitHeadline
@@ -67,8 +67,8 @@ const Hero = () => {
             </Btn>
           </Magnetic>
           <Magnetic>
-            <Btn to="/sell-scrap" size="lg" variant="ghost">
-              Sell Scrap
+            <Btn to="/sell-granules" size="lg" variant="ghost">
+              Sell Granules
             </Btn>
           </Magnetic>
         </motion.div>
@@ -174,12 +174,12 @@ const Doors = () => (
       </Reveal>
       <Reveal delay={0.1}>
         <Door
-          to="/sell-scrap"
-          tag="For scrap dealers & aggregators"
-          title="Sell your HDPE scrap"
-          body="Fair rates. Fast decisions. Honest weighing."
-          cta="Get a price for your scrap"
-          art={<StageArt stage={0} className="w-full" />}
+          to="/sell-granules"
+          tag="For recyclers & granule makers"
+          title="Sell us your granules"
+          body="Steady offtake. Fair, market-linked price. On-time payment."
+          cta="Become a supply partner"
+          art={<PelletCluster tone="blue" />}
         />
       </Reveal>
     </div>
@@ -381,8 +381,8 @@ const FinalCTA = () => (
           </Btn>
         </Magnetic>
         <Magnetic>
-          <Btn to="/sell-scrap#sell" size="lg" variant="ghost">
-            Sell us scrap
+          <Btn to="/sell-granules#sell" size="lg" variant="ghost">
+            Sell us granules
           </Btn>
         </Magnetic>
       </Reveal>

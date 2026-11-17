@@ -43,4 +43,4 @@ Edit `src/content/jobs.ts`. Delete a block to close a role; copy one to add a ro
 Edit `src/lib/grades.ts`. A new grade automatically gets its own card, TDS page and form option.
 
 ## Where leads go
-All forms (quotes, samples, scrap, job applications, newsletter sign-ups, impact reports) go to the Formspree inbox linked to this site. Each email's subject shows its type, e.g. `[Subscribe]`.
+All forms (quotes, samples, supply partners, job applications, newsletter sign-ups, impact reports) go to the Formspree inbox linked to this site. Each email's subject shows its type, e.g. `[Subscribe]`.

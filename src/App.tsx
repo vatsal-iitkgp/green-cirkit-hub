@@ -3,7 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Index from "./pages/Index";
 import Granules from "./pages/HDPEGranules";
-import SellScrap from "./pages/SellScrap";
+import SellGranules from "./pages/SellGranules";
 import NotFound from "./pages/NotFound";
 import TDS from "./pages/TDS";
 import Prices from "./pages/Prices";
@@ -32,7 +32,8 @@ const Site = () => {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/granules" element={<Granules />} />
-        <Route path="/sell-scrap" element={<SellScrap />} />
+        <Route path="/sell-granules" element={<SellGranules />} />
+        <Route path="/sell-scrap" element={<Navigate to="/sell-granules" replace />} />
         <Route path="/prices" element={<Prices />} />
         <Route path="/impact" element={<Impact />} />
         <Route path="/news" element={<NewsList />} />

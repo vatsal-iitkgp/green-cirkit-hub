@@ -32,18 +32,18 @@ export const JOBS: Job[] = [
   },
   {
     id: "sourcing-executive",
-    title: "Sourcing Executive — HDPE Scrap",
+    title: "Sourcing Executive — rHDPE Granules",
     team: "Supply",
     location: "Delhi NCR (field)",
     type: "Full-time",
-    summary: "Build and run our network of scrap dealers and aggregators across North India.",
+    summary: "Build and run our network of partner recyclers and granule makers across India.",
     doing: [
-      "Find, visit and onboard HDPE scrap dealers and aggregators",
-      "Negotiate rates, check material quality, and track every lot",
+      "Find, visit and onboard recyclers making quality rHDPE granules",
+      "Negotiate prices, check lot quality and test reports, and track every lot",
       "Keep a steady weekly supply of the right material moving",
     ],
     you: [
-      "2+ years in scrap, recycling or polymer trading",
+      "2+ years in polymer trading, recycling or plastics procurement",
       "Comfortable on the ground, in Hindi and English",
       "Organised: you keep records clean without being asked",
     ],

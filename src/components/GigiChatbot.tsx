@@ -9,13 +9,13 @@ import { VIRGIN_HDPE_BM_DELHI } from "@/content/prices";
 
 /* ------------------------------------------------------------------ */
 /* Gigi — GreenCirkit's assistant.                                     */
-/* Two guided flows (buy granules / sell scrap) that capture a lead in */
+/* Two guided flows (buy granules / sell granules) that capture a lead in */
 /* ~30 seconds, plus free-form AI chat with an offline fallback.        */
 /* ------------------------------------------------------------------ */
 
 type Msg = { id: number; from: "gigi" | "user"; text: string; typing?: boolean };
 type Step = { key: string; ask: string; chips?: string[]; multi?: boolean; validate?: (v: string) => string | null; optional?: boolean };
-type Flow = { type: "Buy Granules" | "Sell Scrap"; steps: Step[]; done: (d: Record<string, string>) => string };
+type Flow = { type: "Buy Granules" | "Sell Granules"; steps: Step[]; done: (d: Record<string, string>) => string };
 
 const phoneCheck = (v: string) => (isPhone(v) ? null : "That number looks short. Mind re-entering with 10 digits?");
 
@@ -34,21 +34,23 @@ const FLOWS: Record<"buy" | "sell", Flow> = {
       `Thanks ${d.name?.split(" ")[0] || ""}! I've passed this to our team. Expect a call within one working day${d.request?.startsWith("Yes") ? " to plan your sample" : " with pricing"}.`,
   },
   sell: {
-    type: "Sell Scrap",
+    type: "Sell Granules",
     steps: [
-      { key: "material", ask: "Nice. What material do you have?", chips: ["Detergent bottles", "Other HDPE bottles", "Blue drums", "Caps", "Mixed HDPE"] },
-      { key: "volume", ask: "How much per month, roughly?", chips: ["< 5 t", "5–20 t", "20–50 t", "50 t +"] },
-      { key: "city", ask: "Which city is the material in?" },
+      { key: "grade", ask: "Nice. Which rHDPE grade do you make?", chips: ["Blow moulding", "Injection moulding", "Pipe / film", "Other"] },
+      { key: "colour", ask: "Colour?", chips: ["Blue", "Natural", "White", "Black", "Mixed / other"] },
+      { key: "volume", ask: "How much can you supply per month?", chips: ["< 10 t", "10–25 t", "25–50 t", "50 t +"] },
+      { key: "city", ask: "Where is your plant?" },
       { key: "name", ask: "Your name?" },
-      { key: "phone", ask: "Phone / WhatsApp number? Our sourcing team will call with a rate.", validate: phoneCheck },
+      { key: "company", ask: "And your company?" },
+      { key: "phone", ask: "Phone / WhatsApp number? Our sourcing team will call to plan a sample.", validate: phoneCheck },
     ],
     done: (d) =>
-      `Done, ${d.name?.split(" ")[0] || ""}! Our sourcing team will call you with a rate, usually the same day. Sending a few photos on WhatsApp speeds it up.`,
+      `Done, ${d.name?.split(" ")[0] || ""}! Our sourcing team will call within one working day to plan a sample. Sharing your latest test report on WhatsApp speeds it up.`,
   },
 };
 
-const START_CHIPS = ["I want to buy granules", "I want to sell scrap", "I have a question"];
-const ASK_CHIPS = ["What grades do you have?", "HDPE market price today", "What scrap do you buy?", "Talk to a human"];
+const START_CHIPS = ["I want to buy granules", "I want to sell granules", "I have a question"];
+const ASK_CHIPS = ["What grades do you have?", "HDPE market price today", "Can I sell you granules?", "Talk to a human"];
 
 /** Used when the AI is unreachable, so Gigi never goes silent. */
 const fallbackAnswer = (q: string) => {
@@ -64,8 +66,10 @@ const fallbackAnswer = (q: string) => {
     return "Pricing depends on grade, colour and monthly volume. Share your requirement and the team will send a firm quote within one working day.";
   if (/(spec|mfi|melt|density|grade|tds|sample)/.test(s))
     return "Our live grade is GC Prime™ BM 115, blue rHDPE for blow moulding: MFI 1.15 g/10 min (190°C/5 kg), density 0.958 g/cm³, tensile at yield 24 MPa, flexural modulus 975 MPa. Full TDS is on the Buy Granules page. Want a sample?";
-  if (/(scrap|sell|buy.*(bottle|drum)|material)/.test(s))
-    return "We buy HDPE only: detergent and cleaner bottles (top priority), other HDPE bottles, blue drums and caps. Loose, baled or grinded. We don't buy PET, PVC, films or multilayer.";
+  if (/(scrap|kabadi|waste)/.test(s))
+    return "We don't buy scrap. We buy finished rHDPE granules from recyclers. If you make granules, tap 'I want to sell granules'.";
+  if (/(sell|supply|supplier|partner|recycler)/.test(s))
+    return "We buy consistent rHDPE granules (blow moulding first, also injection and pipe/film grades) in steady monthly volumes. Share your grade, MFI and quantity and we'll plan a sample.";
   if (/(where|location|address|office|plant)/.test(s)) return `Our office is at ${SITE.office}.`;
   if (/(food|fda|contact)/.test(s)) return "Our granules are for non-food-contact packaging: jerry cans, bottles up to 15 L, personal-care packaging and general blow-moulded containers.";
   if (/(machine|plant|capacity|technology|equipment)/.test(s)) return "We'd rather let the material speak. Request a sample and test it on your own line. The team can share more on a call.";
@@ -118,7 +122,7 @@ const GigiChatbot = () => {
 
   const greet = async () => {
     await say("Hi, I'm Gigi 👋");
-    await say("Looking for near-virgin rHDPE, or selling HDPE scrap? I can get you sorted in about 30 seconds.", START_CHIPS);
+    await say("Looking for near-virgin rHDPE, or making granules you want to sell? I can get you sorted in about 30 seconds.", START_CHIPS);
   };
 
   const openChat = () => {
@@ -189,7 +193,7 @@ const GigiChatbot = () => {
     if (!reply) reply = fallbackAnswer(q);
     setMsgs((m) => m.map((x) => (x.id === id ? { ...x, text: reply, typing: false } : x)));
     setHistory((p) => [...p, { role: "assistant", content: reply }]);
-    setChips(["I want to buy granules", "I want to sell scrap", "Talk to a human"]);
+    setChips(["I want to buy granules", "I want to sell granules", "Talk to a human"]);
     setBusy(false);
   };
 
@@ -205,8 +209,8 @@ const GigiChatbot = () => {
     const low = text.toLowerCase();
     if (text === "Start over") return reset();
     if (text === START_CHIPS[0] || /^buy\b|buy granule|need granule/.test(low)) return startFlow("buy");
-    if (text === START_CHIPS[1] || /sell (my )?scrap|^sell\b/.test(low)) return startFlow("sell");
-    if (text === START_CHIPS[2]) return say("Ask away. Specs, scrap, pricing, anything.", ASK_CHIPS);
+    if (text === START_CHIPS[1] || /sell (my )?(granules|scrap)|^sell\b/.test(low)) return startFlow("sell");
+    if (text === START_CHIPS[2]) return say("Ask away. Specs, supply, pricing, anything.", ASK_CHIPS);
     if (text === "Talk to a human")
       return say(`Sure. WhatsApp us at ${SITE.phone} or email ${SITE.email}. Or leave your details and we'll call you:`, START_CHIPS.slice(0, 2));
     return askAi(text);
@@ -239,7 +243,7 @@ const GigiChatbot = () => {
                     <X size={14} />
                   </button>
                   <button onClick={openChat} className="text-left">
-                    Buying rHDPE or selling scrap? <span className="text-primary">I can help in 30 seconds →</span>
+                    Buying or selling rHDPE? <span className="text-primary">I can help in 30 seconds →</span>
                   </button>
                 </motion.div>
               )}
