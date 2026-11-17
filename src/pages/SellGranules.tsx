@@ -14,8 +14,8 @@ const BUY = [
   { t: "Custom & blended grades", d: "Have something specific? Share the spec and a sample." },
 ];
 
-const NEED = ["Single-polymer HDPE", "Consistent colour and MFI lot to lot", "A test report per lot (or we test it)", "GST invoice and e-way bill"];
-const NOT = ["Mixed or unknown polymer", "Agglomerate or regrind", "Odour or contamination issues", "Material without a GST invoice"];
+const NEED = ["100% HDPE, single polymer", "Same colour and MFI, lot after lot", "A test report with every lot", "GST invoice and e-way bill"];
+const NOT = ["Mixed or unknown polymers", "Agglomerate, flakes or regrind", "Material with odour or contamination", "Anything without a GST invoice"];
 
 const WHY = [
   { t: "Steady offtake", d: "Monthly volumes you can plan production around." },
@@ -106,23 +106,38 @@ const SellGranules = () => (
           </Reveal>
         ))}
       </div>
-      <div className="mt-10 grid gap-6 md:grid-cols-2">
-        <Reveal className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-          <span className="mr-2 text-foreground/80">What we need:</span>
-          {NEED.map((n) => (
-            <span key={n} className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 px-3 py-1.5">
-              <Check className="h-3.5 w-3.5 text-primary" /> {n}
-            </span>
-          ))}
-        </Reveal>
-        <Reveal className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-          <span className="mr-2 text-foreground/80">We don't buy:</span>
-          {NOT.map((n) => (
-            <span key={n} className="inline-flex items-center gap-1.5 rounded-full border border-foreground/10 px-3 py-1.5">
-              <X className="h-3.5 w-3.5" /> {n}
-            </span>
-          ))}
-        </Reveal>
+      <div className="mt-5 grid gap-5 md:grid-cols-2">
+        {[
+          { title: "What we need", sub: "Tick these and we're talking.", items: NEED, ok: true },
+          { title: "What we don't buy", sub: "Saves us both a trip.", items: NOT, ok: false },
+        ].map((c, ci) => (
+          <Reveal key={c.title} delay={ci * 0.08}>
+            <div
+              className={`h-full rounded-[24px] border p-8 ${
+                c.ok ? "border-primary/25 bg-primary/[0.04]" : "border-foreground/10 bg-card"
+              }`}
+            >
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+                <h3 className="text-2xl font-medium">{c.title}</h3>
+                <span className="text-xs text-muted-foreground">{c.sub}</span>
+              </div>
+              <ul className="mt-6 divide-y divide-foreground/10 border-t border-foreground/10">
+                {c.items.map((n) => (
+                  <li key={n} className="flex items-center gap-4 py-4">
+                    <span
+                      className={`grid h-7 w-7 shrink-0 place-items-center rounded-full ${
+                        c.ok ? "bg-primary/15 text-primary" : "bg-foreground/[0.06] text-muted-foreground"
+                      }`}
+                    >
+                      {c.ok ? <Check className="h-3.5 w-3.5" /> : <X className="h-3.5 w-3.5" />}
+                    </span>
+                    <span className={c.ok ? "text-foreground/90" : "text-muted-foreground"}>{n}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
+        ))}
       </div>
     </section>
 
