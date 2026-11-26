@@ -126,9 +126,9 @@ export const Roadmap = ({ title = "Where we're *going.*" }: { title?: string }) 
 /* ------------------------------------------------------------------ */
 const FUNNEL = [
   { v: "10 Mn t", l: "Plastic waste India generates a year", d: "The starting pool. Most of it is collected and recycled informally, with no quality control or traceability.", w: 100 },
-  { v: "₹4,000 Cr", l: "TAM · HDPE rigid packaging", d: "~400,000 tonnes of HDPE used in rigid packaging that falls under recycled-content targets.", w: 78 },
-  { v: "₹2,000 Cr", l: "SAM · demand the 60% rule creates", d: "~200,000 tonnes of recycled HDPE brands will need as targets reach 60% by FY 2028–29.", w: 56 },
-  { v: "₹500 Cr", l: "SOM · non-food rHDPE, North India", d: "~50,000 tonnes: North India's share of non-food rigid packaging, our first market.", w: 36 },
+  { v: "₹4,000 Cr", l: "HDPE in rigid packaging", d: "~400,000 tonnes of HDPE used in rigid packaging that falls under recycled-content targets.", w: 78 },
+  { v: "₹2,000 Cr", l: "Recycled HDPE the 60% rule will demand", d: "~200,000 tonnes of recycled HDPE brands will need as targets reach 60% by FY 2028–29.", w: 56 },
+  { v: "₹500 Cr", l: "Our first market: North India, non-food", d: "~50,000 tonnes: North India's share of non-food rigid packaging, our first market.", w: 36 },
 ];
 
 export const MarketFunnel = () => {

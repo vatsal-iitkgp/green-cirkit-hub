@@ -18,9 +18,9 @@ export const Logo = ({ className }: { className?: string }) => (
 );
 
 const LINKS = [
+  { to: "/granules", label: "Buy Granules" },
+  { to: "/sell-granules", label: "Sell Granules" },
   { to: "/about", label: "About" },
-  { to: "/granules", label: "Products" },
-  { to: "/investors", label: "Investors" },
   { to: "/news", label: "News" },
   { to: "/impact", label: "Impact" },
   { to: "/prices", label: "Prices" },
@@ -124,14 +124,14 @@ export const Nav = () => {
         >
           <Logo />
           <div className="hidden xl:flex items-center gap-0.5">
-            <NavItem to="/about" label="About" />
-            <NavItem to="/granules" label="Products" />
-            <NavItem to="/investors" label="Investors" />
+            <NavItem to="/granules" label="Buy Granules" />
+            <NavItem to="/sell-granules" label="Sell Granules" />
             <InsightsMenu />
+            <NavItem to="/about" label="About" />
             <NavItem to="/careers" label="Careers" />
           </div>
           <div className="hidden xl:block">
-            <Btn to="/investors#deck">Investor deck</Btn>
+            <Btn to="/granules#sample">Request sample</Btn>
           </div>
           <button
             onClick={() => setOpen((o) => !o)}
@@ -183,7 +183,7 @@ export const Footer = () => (
         <div className="md:col-span-5">
           <Logo />
           <p className="mt-5 max-w-sm text-muted-foreground leading-relaxed">
-            Building India's trusted supply of recycled plastic. Tested. Traceable. Starting with HDPE.
+            Premium recycled HDPE granules. Tested. Trusted. Traceable.
           </p>
           <p className="mt-6 serif italic text-2xl text-foreground/80">Go Green. Close the Circuit.</p>
           <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-3">The GreenCirkit Brief · weekly</p>
@@ -193,14 +193,13 @@ export const Footer = () => (
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">Explore</p>
           <ul className="space-y-2.5">
             {[
+              ["Buy Granules", "/granules"],
+              ["Sell Granules", "/sell-granules"],
               ["About", "/about"],
-              ["Investors", "/investors"],
-              ["Products", "/granules"],
               ["Newsroom", "/news"],
               ["Impact Calculator", "/impact"],
               ["HDPE Prices", "/prices"],
               ["Careers", "/careers"],
-              ["Partner with us", "/sell-granules"],
             ].map(([l, to]) => (
               <li key={to}>
                 <Link to={to} className="hover:text-primary transition-colors">
@@ -241,6 +240,7 @@ export const Footer = () => (
     <div className="container max-w-6xl flex flex-col md:flex-row justify-between gap-2 py-6 text-xs text-muted-foreground border-t border-foreground/10">
       <span>© {new Date().getFullYear()} {SITE.legal}</span>
       <span className="flex flex-wrap gap-x-5 gap-y-1">
+        <Link to="/investors" className="hover:text-primary transition-colors">Investor relations</Link>
         <span>CIN {SITE.cin}</span>
         <span>GSTIN {SITE.gstin}</span>
       </span>

@@ -63,8 +63,8 @@ const FLOWS: Record<"buy" | "sell" | "invest", Flow> = {
   },
 };
 
-const START_CHIPS = ["I'm an investor", "Tell me about GreenCirkit", "I want to buy granules"];
-const ASK_CHIPS = ["What's the roadmap?", "Who are the founders?", "HDPE market price today", "Talk to a human"];
+const START_CHIPS = ["I want to buy granules", "I want to sell granules", "I have a question"];
+const ASK_CHIPS = ["What grades do you have?", "HDPE market price today", "Who are the founders?", "Talk to a human"];
 
 /** Used when the AI is unreachable, so Gigi never goes silent. */
 const fallbackAnswer = (q: string) => {
@@ -78,7 +78,7 @@ const fallbackAnswer = (q: string) => {
   if (/(founder|team|who are you|iit|advisor)/.test(s))
     return "GreenCirkit is led by Vatsal Gupta (IIT Kharagpur, ex-Houlihan Lokey) and Anuj Gupta (IIT Roorkee, 30+ years building ventures), with advisors Ranjit Singh (ex-MD Kalpataru, ex-COO Polyplex) and Abhinav Ramaria (IIT Kanpur, IIM Lucknow).";
   if (/(invest|funding|raise|deck|loan|valuation)/.test(s))
-    return "We're at pre-seed. Tap 'I'm an investor' and I'll get the founders to send you the deck, or visit greencirkit.com/investors.";
+    return "Happy to connect you with the founders. Just type 'investor' and I'll take your details, or visit greencirkit.com/investors.";
   if (/(carbon|co2|impact|emission)/.test(s))
     return "Every kg of rHDPE used instead of virgin avoids roughly 1.6 kg CO₂e. Try our impact calculator at greencirkit.com/impact.";
   if (/(job|career|hiring|vacancy|apply)/.test(s)) return "We're hiring! See open roles at greencirkit.com/careers.";
@@ -142,7 +142,7 @@ const GigiChatbot = () => {
 
   const greet = async () => {
     await say("Hi, I'm Gigi 👋");
-    await say("I can tell you what GreenCirkit does, where we're headed, or connect you with the founders.", START_CHIPS);
+    await say("Looking for near-virgin rHDPE, or making granules you want to sell? I can get you sorted in about 30 seconds.", START_CHIPS);
   };
 
   const openChat = () => {
@@ -213,7 +213,7 @@ const GigiChatbot = () => {
     if (!reply) reply = fallbackAnswer(q);
     setMsgs((m) => m.map((x) => (x.id === id ? { ...x, text: reply, typing: false } : x)));
     setHistory((p) => [...p, { role: "assistant", content: reply }]);
-    setChips(["I'm an investor", "I want to buy granules", "Talk to a human"]);
+    setChips(["I want to buy granules", "I want to sell granules", "Talk to a human"]);
     setBusy(false);
   };
 
@@ -228,16 +228,12 @@ const GigiChatbot = () => {
 
     const low = text.toLowerCase();
     if (text === "Start over") return reset();
-    if (text === START_CHIPS[0] || /investor|invest\b|\bdeck\b|funding|\bloan\b/.test(low)) return startFlow("invest");
-    if (text === START_CHIPS[2] || /^buy\b|buy granule|need granule/.test(low)) return startFlow("buy");
-    if (/sell (my )?(granules|scrap)|^sell\b/.test(low)) return startFlow("sell");
-    if (text === START_CHIPS[1])
-      return say(
-        "GreenCirkit is building India's trusted supply of recycled plastic, starting with recycled HDPE. Today we source from vetted partner manufacturers, test every lot in our own lab and supply ready-to-run grades. Next: our own plant in North India. Ask me anything.",
-        ASK_CHIPS,
-      );
+    if (/investor|invest\b|\bdeck\b|funding/.test(low)) return startFlow("invest");
+    if (text === START_CHIPS[0] || /^buy\b|buy granule|need granule/.test(low)) return startFlow("buy");
+    if (text === START_CHIPS[1] || /sell (my )?(granules|scrap)|^sell\b/.test(low)) return startFlow("sell");
+    if (text === START_CHIPS[2]) return say("Ask away. Specs, supply, pricing, our plans, anything.", ASK_CHIPS);
     if (text === "Talk to a human")
-      return say(`Sure. WhatsApp us at ${SITE.phone} or email ${SITE.email}. Or leave your details and we'll call you:`, [START_CHIPS[0], START_CHIPS[2]]);
+      return say(`Sure. WhatsApp us at ${SITE.phone} or email ${SITE.email}. Or leave your details and we'll call you:`, START_CHIPS.slice(0, 2));
     return askAi(text);
   };
 
@@ -268,7 +264,7 @@ const GigiChatbot = () => {
                     <X size={14} />
                   </button>
                   <button onClick={openChat} className="text-left">
-                    Investor, partner or customer? <span className="text-primary">Ask me about GreenCirkit →</span>
+                    Buying or selling rHDPE? <span className="text-primary">I can help in 30 seconds →</span>
                   </button>
                 </motion.div>
               )}

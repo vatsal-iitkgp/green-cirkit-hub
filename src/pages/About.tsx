@@ -170,11 +170,11 @@ const About = () => {
 
       {/* CTA */}
       <section className="container max-w-6xl py-20 md:py-28 text-center">
-        <SplitHeadline text={"Build with *us.*"} className="text-[clamp(3rem,8vw,6.5rem)] font-medium leading-[0.92]" />
+        <SplitHeadline text={"Work with *us.*"} className="text-[clamp(3rem,8vw,6.5rem)] font-medium leading-[0.92]" />
         <Reveal delay={0.2} className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
           <Magnetic>
-            <Btn to="/investors" size="lg">
-              Investor relations
+            <Btn to="/granules#sample" size="lg">
+              Request a sample
             </Btn>
           </Magnetic>
           <Magnetic>

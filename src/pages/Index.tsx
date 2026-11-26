@@ -36,7 +36,7 @@ const Hero = () => {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
           </span>
-          Pre-seed · Building in North India
+          Now onboarding buyers & supply partners
         </motion.div>
 
         <SplitHeadline
@@ -53,7 +53,7 @@ const Hero = () => {
           transition={{ delay: 1.3, duration: 0.9, ease: EASE }}
           className="mt-8 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed text-balance"
         >
-          India now requires brands to use recycled plastic. We're building the tested, traceable supply they can rely on, starting with recycled HDPE.<br /><span className="text-foreground/80">Built by IITians.</span>
+          Premium recycled HDPE granules.<br />Tested. Trusted. Traceable.<br /><span className="text-foreground/80">Built by IITians, designed around industry's needs.</span>
         </motion.p>
 
         <motion.div
@@ -63,13 +63,13 @@ const Hero = () => {
           className="mt-10 flex flex-col sm:flex-row gap-3"
         >
           <Magnetic>
-            <Btn to="/investors" size="lg">
-              Investor relations
+            <Btn to="/granules" size="lg">
+              Buy Granules
             </Btn>
           </Magnetic>
           <Magnetic>
-            <Btn to="/about" size="lg" variant="ghost">
-              Our story
+            <Btn to="/sell-granules" size="lg" variant="ghost">
+              Sell Granules
             </Btn>
           </Magnetic>
         </motion.div>
@@ -81,7 +81,7 @@ const Hero = () => {
 };
 
 /* ---------------- Marquee ---------------- */
-const WORDS = ["Regulation-backed demand", "Lab-tested lots", "Batch traceable", "North India first", "Built by IITians", "PAN India"];
+const WORDS = ["Near-virgin rHDPE", "Colour-consistent", "Batch traceable", "Lab-tested lots", "Consistent MFI", "PAN India"];
 const Marquee = () => {
   const { scrollY } = useScroll();
   const vel = useVelocity(scrollY);
@@ -114,6 +114,78 @@ const Marquee = () => {
     </div>
   );
 };
+
+/* ---------------- Two doors ---------------- */
+const Door = ({
+  to,
+  tag,
+  title,
+  body,
+  cta,
+  art,
+}: {
+  to: string;
+  tag: string;
+  title: string;
+  body: string;
+  cta: string;
+  art: React.ReactNode;
+}) => (
+  <Link
+    to={to}
+    onMouseMove={spotlightMove}
+    className="spotlight group relative flex min-h-[560px] flex-col justify-between overflow-hidden rounded-[28px] border border-foreground/10 bg-card p-8 md:p-10 transition-transform duration-700 hover:-translate-y-1"
+  >
+    <div className="flex items-start justify-between">
+      <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{tag}</span>
+      <span className="grid h-12 w-12 place-items-center rounded-full border border-foreground/15 transition-all duration-500 group-hover:bg-primary group-hover:text-primary-foreground group-hover:rotate-45 group-hover:border-primary">
+        <ArrowUpRight className="h-5 w-5" />
+      </span>
+    </div>
+    <div className="pointer-events-none mx-auto my-6 h-52 w-52 md:h-60 md:w-60 opacity-90 transition-transform duration-1000 group-hover:scale-110 group-hover:-rotate-6">
+      {art}
+    </div>
+    <div className="relative">
+      <h3 className="text-4xl md:text-5xl font-medium leading-[0.95] max-w-[12ch]">{title}</h3>
+      <p className="mt-4 max-w-sm text-muted-foreground leading-relaxed">{body}</p>
+      <span className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-primary">
+        {cta}
+        <span className="h-px w-8 bg-primary transition-all duration-500 group-hover:w-16" />
+      </span>
+    </div>
+  </Link>
+);
+
+const Doors = () => (
+  <section className="container max-w-6xl py-28 md:py-36">
+    <Reveal>
+      <Eyebrow>Buy · Sell</Eyebrow>
+    </Reveal>
+    <SplitHeadline text={"Pick your *side*\nof the circuit."} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
+    <div className="mt-14 grid gap-5 md:grid-cols-2">
+      <Reveal>
+        <Door
+          to="/granules"
+          tag="For brands & converters"
+          title="Buy near-virgin granules"
+          body="Near-virgin rHDPE. Tested every lot. Sample first."
+          cta="See grades & request a sample"
+          art={<PelletCluster />}
+        />
+      </Reveal>
+      <Reveal delay={0.1}>
+        <Door
+          to="/sell-granules"
+          tag="For recyclers & granule makers"
+          title="Sell us your granules"
+          body="Steady offtake. Fair, market-linked price. On-time payment."
+          cta="Become a supply partner"
+          art={<PelletCluster tone="blue" />}
+        />
+      </Reveal>
+    </div>
+  </section>
+);
 
 /* ---------------- Why now ---------------- */
 const STATS = [
@@ -288,13 +360,13 @@ const FinalCTA = () => (
       <SplitHeadline text={"Build the circuit\n*with us.*"} className="relative text-[clamp(3rem,8vw,7rem)] font-medium leading-[0.92]" />
       <Reveal delay={0.3} className="relative mt-12 flex flex-col sm:flex-row gap-3 justify-center">
         <Magnetic>
-          <Btn to="/investors#deck" size="lg">
-            Request the investor deck
+          <Btn to="/granules#sample" size="lg">
+            Request a sample
           </Btn>
         </Magnetic>
         <Magnetic>
-          <Btn href="mailto:contact@greencirkit.com" size="lg" variant="ghost">
-            Get in touch
+          <Btn to="/sell-granules#sell" size="lg" variant="ghost">
+            Sell us granules
           </Btn>
         </Magnetic>
       </Reveal>
@@ -306,6 +378,7 @@ const Index = () => (
   <Page>
     <Hero />
     <Marquee />
+    <Doors />
     <WhyNow />
     <Manifesto />
     <WhatWeDo />
