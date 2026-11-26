@@ -131,7 +131,7 @@ export const Nav = () => {
             <NavItem to="/careers" label="Careers" />
           </div>
           <div className="hidden xl:block">
-            <Btn to="/granules#sample">Request sample</Btn>
+            <Btn href="#contact">Connect with us</Btn>
           </div>
           <button
             onClick={() => setOpen((o) => !o)}
@@ -210,7 +210,7 @@ export const Footer = () => (
           </ul>
         </div>
         <div className="md:col-span-4">
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">Talk to us</p>
+          <p id="contact" className="scroll-mt-28 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">Talk to us</p>
           <ul className="space-y-2.5">
             <li>
               <a href={`mailto:${SITE.email}`} className="hover:text-primary transition-colors">

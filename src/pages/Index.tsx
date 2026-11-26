@@ -352,28 +352,6 @@ const Pulse = () => {
   );
 };
 
-/* ---------------- Final CTA ---------------- */
-const FinalCTA = () => (
-  <section className="container max-w-6xl py-16 md:py-24">
-    <div className="forest relative overflow-hidden rounded-[36px] border border-primary/20 px-6 py-24 md:py-32 text-center">
-      <div className="absolute inset-0 grid-bg opacity-40 [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]" />
-      <SplitHeadline text={"Build the circuit\n*with us.*"} className="relative text-[clamp(3rem,8vw,7rem)] font-medium leading-[0.92]" />
-      <Reveal delay={0.3} className="relative mt-12 flex flex-col sm:flex-row gap-3 justify-center">
-        <Magnetic>
-          <Btn to="/granules#sample" size="lg">
-            Request a sample
-          </Btn>
-        </Magnetic>
-        <Magnetic>
-          <Btn to="/sell-granules#sell" size="lg" variant="ghost">
-            Sell us granules
-          </Btn>
-        </Magnetic>
-      </Reveal>
-    </div>
-  </section>
-);
-
 const Index = () => (
   <Page>
     <Hero />
@@ -385,9 +363,8 @@ const Index = () => (
     <Journey />
     <Roadmap />
     <ImpactPlay />
-    <Team />
+    <Team foundersOnly />
     <Pulse />
-    <FinalCTA />
   </Page>
 );
 

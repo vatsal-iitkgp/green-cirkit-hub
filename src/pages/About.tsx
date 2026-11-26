@@ -138,38 +138,12 @@ const About = () => {
       {/* Team */}
       <Team eyebrow="Founders & advisors" />
 
-      {/* Founder note */}
-      <section className="container max-w-4xl py-10 md:py-16">
-        <Reveal>
-          <p className="serif italic text-[clamp(1.8rem,4vw,3rem)] leading-snug text-foreground/90">
-            "An engineer by education, a strategy guy by profession, and a recycler by choice."
-          </p>
-          <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Vatsal Gupta · Co-founder</p>
-        </Reveal>
-      </section>
-
-      <section className="container max-w-6xl pb-6">
+      <section className="container max-w-6xl pb-24">
         <Reveal className="text-sm text-muted-foreground">
           {SITE.legal} · {SITE.office} · CIN {SITE.cin} · GSTIN {SITE.gstin}
         </Reveal>
       </section>
 
-      {/* CTA */}
-      <section className="container max-w-6xl py-20 md:py-28 text-center">
-        <SplitHeadline text={"Work with *us.*"} className="text-[clamp(3rem,8vw,6.5rem)] font-medium leading-[0.92]" />
-        <Reveal delay={0.2} className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
-          <Magnetic>
-            <Btn to="/granules#sample" size="lg">
-              Request a sample
-            </Btn>
-          </Magnetic>
-          <Magnetic>
-            <Btn to="/careers" size="lg" variant="ghost">
-              Join the team
-            </Btn>
-          </Magnetic>
-        </Reveal>
-      </section>
     </Page>
   );
 };

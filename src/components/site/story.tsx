@@ -325,14 +325,17 @@ const Initials = ({ n }: { n: string }) => (
   </span>
 );
 
-export const Team = ({ eyebrow = "The team" }: { eyebrow?: string }) => (
+export const Team = ({ eyebrow = "The team", foundersOnly = false }: { eyebrow?: string; foundersOnly?: boolean }) => (
   <section className="container max-w-6xl py-24 md:py-32">
     <Reveal>
       <Eyebrow>{eyebrow}</Eyebrow>
     </Reveal>
-    <SplitHeadline text={"IIT founders.\n*50+ years of industry behind them.*"} className="mt-5 text-4xl md:text-6xl font-medium leading-[0.98]" />
+    <SplitHeadline
+      text={foundersOnly ? "Led by\n*IIT engineers.*" : "IIT founders.\n*50+ years of industry behind them.*"}
+      className="mt-5 text-4xl md:text-6xl font-medium leading-[0.98]"
+    />
     <div className="mt-12 grid gap-5 md:grid-cols-2">
-      {[...FOUNDERS, ...ADVISORS].map((p, i) => (
+      {(foundersOnly ? FOUNDERS : [...FOUNDERS, ...ADVISORS]).map((p, i) => (
         <Reveal key={p.n} delay={(i % 2) * 0.08}>
           <div onMouseMove={spotlightMove} className="spotlight h-full rounded-[24px] border border-foreground/10 bg-card p-7 md:p-8 flex gap-5">
             <Initials n={p.n} />

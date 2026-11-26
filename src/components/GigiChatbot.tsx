@@ -63,8 +63,8 @@ const FLOWS: Record<"buy" | "sell" | "invest", Flow> = {
   },
 };
 
-const START_CHIPS = ["I want to buy granules", "I want to sell granules", "I have a question"];
-const ASK_CHIPS = ["What grades do you have?", "HDPE market price today", "Who are the founders?", "Talk to a human"];
+const START_CHIPS = ["What does GreenCirkit do?", "Who are the founders?", "Talk to the team"];
+const ASK_CHIPS = ["What's the plan ahead?", "What grades do you have?", "HDPE market price today", "Talk to the team"];
 
 /** Used when the AI is unreachable, so Gigi never goes silent. */
 const fallbackAnswer = (q: string) => {
@@ -93,7 +93,7 @@ const fallbackAnswer = (q: string) => {
   if (/(where|location|address|office|plant)/.test(s)) return `We're based in ${SITE.office}. For a visit, message us on WhatsApp at ${SITE.phone}.`;
   if (/(food|fda|contact)/.test(s)) return "Our granules are for non-food-contact packaging: jerry cans, bottles up to 15 L, personal-care packaging and general blow-moulded containers.";
   if (/(machine|plant|capacity|technology|equipment)/.test(s)) return "We'd rather let the material speak. Request a sample and test it on your own line. The team can share more on a call.";
-  return "Good question. Let me get a human on it. Tap 'Talk to a human' or message us on WhatsApp.";
+  return "Good question. Let me get a human on it. Tap 'Talk to the team' or message us on WhatsApp.";
 };
 
 const GigiChatbot = () => {
@@ -142,7 +142,7 @@ const GigiChatbot = () => {
 
   const greet = async () => {
     await say("Hi, I'm Gigi 👋");
-    await say("Looking for near-virgin rHDPE, or making granules you want to sell? I can get you sorted in about 30 seconds.", START_CHIPS);
+    await say("Ask me anything about GreenCirkit: what we do, who we are, or where we're headed.", START_CHIPS);
   };
 
   const openChat = () => {
@@ -213,7 +213,7 @@ const GigiChatbot = () => {
     if (!reply) reply = fallbackAnswer(q);
     setMsgs((m) => m.map((x) => (x.id === id ? { ...x, text: reply, typing: false } : x)));
     setHistory((p) => [...p, { role: "assistant", content: reply }]);
-    setChips(["I want to buy granules", "I want to sell granules", "Talk to a human"]);
+    setChips(["What does GreenCirkit do?", "Who are the founders?", "Talk to the team"]);
     setBusy(false);
   };
 
@@ -229,11 +229,15 @@ const GigiChatbot = () => {
     const low = text.toLowerCase();
     if (text === "Start over") return reset();
     if (/investor|invest\b|\bdeck\b|funding/.test(low)) return startFlow("invest");
-    if (text === START_CHIPS[0] || /^buy\b|buy granule|need granule/.test(low)) return startFlow("buy");
-    if (text === START_CHIPS[1] || /sell (my )?(granules|scrap)|^sell\b/.test(low)) return startFlow("sell");
-    if (text === START_CHIPS[2]) return say("Ask away. Specs, supply, pricing, our plans, anything.", ASK_CHIPS);
-    if (text === "Talk to a human")
-      return say(`Sure. WhatsApp us at ${SITE.phone} or email ${SITE.email}. Or leave your details and we'll call you:`, START_CHIPS.slice(0, 2));
+    if (/^buy\b|buy granule|need granule|want to buy/.test(low)) return startFlow("buy");
+    if (/sell (my )?(granules|scrap)|^sell\b|want to sell/.test(low)) return startFlow("sell");
+    if (text === START_CHIPS[0])
+      return say(
+        "GreenCirkit supplies premium recycled HDPE granules: sourced from vetted partner manufacturers, tested in our own lab and blended to each customer's spec. We're building toward our own recycling plant in North India.",
+        ASK_CHIPS,
+      );
+    if (text === "Talk to the team" || /talk to (a human|the team|someone)|contact/.test(low))
+      return say(`Sure. WhatsApp us at ${SITE.phone} or email ${SITE.email}. Or leave your details and we'll call you:`, ["I want to buy granules", "I want to sell granules"]);
     return askAi(text);
   };
 
@@ -264,7 +268,7 @@ const GigiChatbot = () => {
                     <X size={14} />
                   </button>
                   <button onClick={openChat} className="text-left">
-                    Buying or selling rHDPE? <span className="text-primary">I can help in 30 seconds →</span>
+                    Questions about GreenCirkit? <span className="text-primary">Ask me anything →</span>
                   </button>
                 </motion.div>
               )}
