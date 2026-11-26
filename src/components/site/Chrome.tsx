@@ -20,7 +20,6 @@ export const Logo = ({ className }: { className?: string }) => (
 const LINKS = [
   { to: "/granules", label: "Buy Granules" },
   { to: "/sell-granules", label: "Sell Granules" },
-  { to: "/vision", label: "Vision" },
   { to: "/about", label: "About" },
   { to: "/news", label: "News" },
   { to: "/impact", label: "Impact" },
@@ -128,7 +127,6 @@ export const Nav = () => {
             <NavItem to="/granules" label="Buy Granules" />
             <NavItem to="/sell-granules" label="Sell Granules" />
             <InsightsMenu />
-            <NavItem to="/vision" label="Vision" />
             <NavItem to="/about" label="About" />
             <NavItem to="/careers" label="Careers" />
           </div>
@@ -197,7 +195,6 @@ export const Footer = () => (
             {[
               ["Buy Granules", "/granules"],
               ["Sell Granules", "/sell-granules"],
-              ["Vision", "/vision"],
               ["About", "/about"],
               ["Newsroom", "/news"],
               ["Impact Calculator", "/impact"],

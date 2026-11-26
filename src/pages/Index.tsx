@@ -365,8 +365,8 @@ const FinalCTA = () => (
           </Btn>
         </Magnetic>
         <Magnetic>
-          <Btn to="/vision" size="lg" variant="ghost">
-            See where we're headed
+          <Btn to="/sell-granules#sell" size="lg" variant="ghost">
+            Sell us granules
           </Btn>
         </Magnetic>
       </Reveal>

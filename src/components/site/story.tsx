@@ -116,9 +116,6 @@ export const Roadmap = ({ title = "Where we're *going.*" }: { title?: string }) 
           <button onClick={() => setI((n) => Math.min(PHASES.length - 1, n + 1))} disabled={i === PHASES.length - 1} className="rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground disabled:opacity-30">
             Next phase →
           </button>
-          <Link to="/vision" className="w-full sm:w-auto sm:ml-auto pt-2 sm:pt-0 text-sm text-primary hover:underline underline-offset-4">
-            The full plan →
-          </Link>
         </div>
       </div>
     </section>
