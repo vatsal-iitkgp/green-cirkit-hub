@@ -70,7 +70,7 @@ const Audience = () => {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
         <div>
           <Reveal>
-            <Eyebrow>Why back us</Eyebrow>
+            <Eyebrow>Why it works</Eyebrow>
           </Reveal>
           <SplitHeadline text={"Two ways to\n*build with us.*"} className="mt-5 text-4xl md:text-6xl font-medium leading-[0.95]" />
         </div>
@@ -110,7 +110,7 @@ const Investors = () => (
     <section className="relative overflow-hidden pt-36 md:pt-44 pb-16">
       <div className="absolute inset-0 aurora opacity-50" />
       <div className="relative container max-w-6xl">
-        <Eyebrow>Investor relations</Eyebrow>
+        <Eyebrow>Our vision</Eyebrow>
         <SplitHeadline
           as="h1"
           animateOnMount
@@ -126,11 +126,11 @@ const Investors = () => (
         <Reveal delay={0.75} className="mt-10 flex flex-wrap gap-3">
           <Magnetic>
             <Btn href="#deck" size="lg">
-              Request the deck
+              Talk to the founders
             </Btn>
           </Magnetic>
-          <Btn href={`mailto:${SITE.email}?subject=Investor enquiry`} size="lg" variant="ghost">
-            Email the founders
+          <Btn to="/about" size="lg" variant="ghost">
+            Meet the team
           </Btn>
         </Reveal>
         <Reveal delay={0.9} className="mt-16 grid grid-cols-2 md:grid-cols-4 border-t border-foreground/10">
@@ -203,12 +203,12 @@ const Investors = () => (
     <section id="deck" className="container max-w-6xl py-24 md:py-32 scroll-mt-20">
       <div className="grid md:grid-cols-12 gap-12 rounded-[32px] border border-foreground/10 bg-card p-8 md:p-14">
         <div className="md:col-span-4">
-          <Eyebrow>Request the deck</Eyebrow>
+          <Eyebrow>Invest or partner</Eyebrow>
           <h2 className="mt-5 text-4xl md:text-5xl font-medium leading-[0.95]">
             Let's <span className="serif italic text-primary">talk.</span>
           </h2>
           <p className="mt-5 text-muted-foreground leading-relaxed">
-            Tell us who you are. The founders will send the deck and set up a call, usually within one working day.
+            Investors, lenders and strategic partners: tell us who you are. The founders will share our deck and set up a call, usually within one working day.
           </p>
           <div className="mt-10 space-y-1 text-sm text-muted-foreground">
             <p className="text-foreground">{SITE.legal}</p>

@@ -35,6 +35,7 @@ const Site = () => {
         <Route path="/granules" element={<Granules />} />
         <Route path="/sell-granules" element={<SellGranules />} />
         <Route path="/investors" element={<Investors />} />
+        <Route path="/vision" element={<Investors />} />
         <Route path="/sell-scrap" element={<Navigate to="/sell-granules" replace />} />
         <Route path="/prices" element={<Prices />} />
         <Route path="/impact" element={<Impact />} />

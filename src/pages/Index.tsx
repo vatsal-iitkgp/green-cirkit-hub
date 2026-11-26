@@ -36,7 +36,7 @@ const Hero = () => {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
           </span>
-          Now onboarding buyers & supply partners
+          Building India's recycled-plastic infrastructure
         </motion.div>
 
         <SplitHeadline
@@ -159,7 +159,7 @@ const Door = ({
 const Doors = () => (
   <section className="container max-w-6xl py-28 md:py-36">
     <Reveal>
-      <Eyebrow>Buy · Sell</Eyebrow>
+      <Eyebrow>Work with us</Eyebrow>
     </Reveal>
     <SplitHeadline text={"Pick your *side*\nof the circuit."} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
     <div className="mt-14 grid gap-5 md:grid-cols-2">
@@ -365,8 +365,8 @@ const FinalCTA = () => (
           </Btn>
         </Magnetic>
         <Magnetic>
-          <Btn to="/sell-granules#sell" size="lg" variant="ghost">
-            Sell us granules
+          <Btn to="/vision" size="lg" variant="ghost">
+            See where we're headed
           </Btn>
         </Magnetic>
       </Reveal>
@@ -378,10 +378,10 @@ const Index = () => (
   <Page>
     <Hero />
     <Marquee />
-    <Doors />
     <WhyNow />
     <Manifesto />
     <WhatWeDo />
+    <Doors />
     <Journey />
     <Roadmap />
     <MarketFunnel />

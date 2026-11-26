@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Eyebrow, Reveal, SplitHeadline, spotlightMove, EASE } from "./motion";
 import { Counter } from "./visuals";
@@ -115,6 +116,9 @@ export const Roadmap = ({ title = "Where we're *going.*" }: { title?: string }) 
           <button onClick={() => setI((n) => Math.min(PHASES.length - 1, n + 1))} disabled={i === PHASES.length - 1} className="rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground disabled:opacity-30">
             Next phase →
           </button>
+          <Link to="/vision" className="ml-auto self-center text-sm text-primary hover:underline underline-offset-4">
+            The full plan →
+          </Link>
         </div>
       </div>
     </section>
