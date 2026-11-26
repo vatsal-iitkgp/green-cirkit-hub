@@ -18,18 +18,18 @@ export const Logo = ({ className }: { className?: string }) => (
 );
 
 const LINKS = [
-  { to: "/granules", label: "Buy Granules" },
-  { to: "/sell-granules", label: "Sell Granules" },
-  { to: "/prices", label: "Prices" },
-  { to: "/impact", label: "Impact" },
-  { to: "/news", label: "News" },
   { to: "/about", label: "About" },
+  { to: "/granules", label: "Products" },
+  { to: "/investors", label: "Investors" },
+  { to: "/news", label: "News" },
+  { to: "/impact", label: "Impact" },
+  { to: "/prices", label: "Prices" },
   { to: "/careers", label: "Careers" },
 ];
 const INSIGHTS = [
+  { to: "/news", label: "Newsroom", d: "Rules & market moves" },
+  { to: "/impact", label: "Impact Calculator", d: "CO₂, bottles, trees" },
   { to: "/prices", label: "HDPE Prices", d: "Delhi market, weekly" },
-  { to: "/impact", label: "Impact Calculator", d: "CO₂, bottles, EPR, ₹" },
-  { to: "/news", label: "News", d: "Rules & market moves" },
 ];
 
 const NavItem = ({ to, label }: { to: string; label: string }) => (
@@ -124,14 +124,14 @@ export const Nav = () => {
         >
           <Logo />
           <div className="hidden xl:flex items-center gap-0.5">
-            <NavItem to="/granules" label="Buy Granules" />
-            <NavItem to="/sell-granules" label="Sell Granules" />
-            <InsightsMenu />
             <NavItem to="/about" label="About" />
+            <NavItem to="/granules" label="Products" />
+            <NavItem to="/investors" label="Investors" />
+            <InsightsMenu />
             <NavItem to="/careers" label="Careers" />
           </div>
           <div className="hidden xl:block">
-            <Btn to="/granules#sample">Request sample</Btn>
+            <Btn to="/investors#deck">Investor deck</Btn>
           </div>
           <button
             onClick={() => setOpen((o) => !o)}
@@ -183,7 +183,7 @@ export const Footer = () => (
         <div className="md:col-span-5">
           <Logo />
           <p className="mt-5 max-w-sm text-muted-foreground leading-relaxed">
-            Premium recycled HDPE granules. Tested. Traceable. Trusted.
+            Building India's trusted supply of recycled plastic. Tested. Traceable. Starting with HDPE.
           </p>
           <p className="mt-6 serif italic text-2xl text-foreground/80">Go Green. Close the Circuit.</p>
           <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-3">The GreenCirkit Brief · weekly</p>
@@ -193,13 +193,14 @@ export const Footer = () => (
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">Explore</p>
           <ul className="space-y-2.5">
             {[
-              ["Buy Granules", "/granules"],
-              ["Sell Granules", "/sell-granules"],
-              ["HDPE Prices", "/prices"],
-              ["Impact Calculator", "/impact"],
-              ["News", "/news"],
-              ["Careers", "/careers"],
               ["About", "/about"],
+              ["Investors", "/investors"],
+              ["Products", "/granules"],
+              ["Newsroom", "/news"],
+              ["Impact Calculator", "/impact"],
+              ["HDPE Prices", "/prices"],
+              ["Careers", "/careers"],
+              ["Partner with us", "/sell-granules"],
             ].map(([l, to]) => (
               <li key={to}>
                 <Link to={to} className="hover:text-primary transition-colors">

@@ -44,3 +44,8 @@ Edit `src/lib/grades.ts`. A new grade automatically gets its own card, TDS page 
 
 ## Where leads go
 All forms (quotes, samples, supply partners, job applications, newsletter sign-ups, impact reports) go to the Formspree inbox linked to this site. Each email's subject shows its type, e.g. `[Subscribe]`.
+
+## Investor content
+- Roadmap phases, market funnel, impact goals and team/advisors live in `src/components/site/story.tsx` (used on Home, Investors and About).
+- Investor page copy (thesis, business model, VC vs lender points) lives in `src/pages/Investors.tsx`.
+- Deck requests arrive in the Formspree inbox tagged `[Investor]`.

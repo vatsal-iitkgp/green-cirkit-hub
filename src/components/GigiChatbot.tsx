@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUp, X, MessageCircle, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import mark from "@/assets/gc-mark.png";
-import { isPhone, submitLead, whatsappLink, SITE } from "@/lib/site";
+import { isEmail, isPhone, submitLead, whatsappLink, SITE } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { VIRGIN_HDPE_BM_DELHI } from "@/content/prices";
 
@@ -15,11 +15,25 @@ import { VIRGIN_HDPE_BM_DELHI } from "@/content/prices";
 
 type Msg = { id: number; from: "gigi" | "user"; text: string; typing?: boolean };
 type Step = { key: string; ask: string; chips?: string[]; multi?: boolean; validate?: (v: string) => string | null; optional?: boolean };
-type Flow = { type: "Buy Granules" | "Sell Granules"; steps: Step[]; done: (d: Record<string, string>) => string };
+type Flow = { type: "Buy Granules" | "Sell Granules" | "Investor"; steps: Step[]; done: (d: Record<string, string>) => string };
 
 const phoneCheck = (v: string) => (isPhone(v) ? null : "That number looks short. Mind re-entering with 10 digits?");
 
-const FLOWS: Record<"buy" | "sell", Flow> = {
+const emailCheck = (v: string) => (isEmail(v) ? null : "That email doesn't look right. Mind checking it?");
+
+const FLOWS: Record<"buy" | "sell" | "invest", Flow> = {
+  invest: {
+    type: "Investor",
+    steps: [
+      { key: "investor", ask: "Great to meet you. Which best describes you?", chips: ["VC", "Angel", "Family office", "Bank", "NBFC", "Other"] },
+      { key: "interest", ask: "What are you exploring?", chips: ["Equity", "Project / term loan", "Working capital", "Just exploring"] },
+      { key: "name", ask: "Your name?" },
+      { key: "company", ask: "And your fund, bank or firm?" },
+      { key: "email", ask: "Best email for the deck?", validate: emailCheck },
+    ],
+    done: (d) =>
+      `Thank you, ${d.name?.split(" ")[0] || ""}. The founders will email you the deck and a few times to talk, usually within one working day.`,
+  },
   buy: {
     type: "Buy Granules",
     steps: [
@@ -49,8 +63,8 @@ const FLOWS: Record<"buy" | "sell", Flow> = {
   },
 };
 
-const START_CHIPS = ["I want to buy granules", "I want to sell granules", "I have a question"];
-const ASK_CHIPS = ["What grades do you have?", "HDPE market price today", "Can I sell you granules?", "Talk to a human"];
+const START_CHIPS = ["I'm an investor", "Tell me about GreenCirkit", "I want to buy granules"];
+const ASK_CHIPS = ["What's the roadmap?", "Who are the founders?", "HDPE market price today", "Talk to a human"];
 
 /** Used when the AI is unreachable, so Gigi never goes silent. */
 const fallbackAnswer = (q: string) => {
@@ -59,6 +73,12 @@ const fallbackAnswer = (q: string) => {
     const l = VIRGIN_HDPE_BM_DELHI[VIRGIN_HDPE_BM_DELHI.length - 1];
     return `Virgin HDPE blow moulding in Delhi was about ₹${l.price}/kg on ${l.date.split("-").reverse().join("/")} (${l.source}). The full weekly tracker is at greencirkit.com/prices.`;
   }
+  if (/(roadmap|plan|future|phase|plant)/.test(s))
+    return "Phase 1 (today): partner supply, our own QC lab and ready-to-run grades. Phase 2: our own sorting, washing and extrusion plant in North India (~2,500 t a year). Phase 3: ~7,500 t a year, brand contracts and exports. Then an asset-light partner network across more materials. More at greencirkit.com/investors.";
+  if (/(founder|team|who are you|iit|advisor)/.test(s))
+    return "GreenCirkit is led by Vatsal Gupta (IIT Kharagpur, ex-Houlihan Lokey) and Anuj Gupta (IIT Roorkee, 30+ years building ventures), with advisors Ranjit Singh (ex-MD Kalpataru, ex-COO Polyplex) and Abhinav Ramaria (IIT Kanpur, IIM Lucknow).";
+  if (/(invest|funding|raise|deck|loan|valuation)/.test(s))
+    return "We're at pre-seed. Tap 'I'm an investor' and I'll get the founders to send you the deck, or visit greencirkit.com/investors.";
   if (/(carbon|co2|impact|emission)/.test(s))
     return "Every kg of rHDPE used instead of virgin avoids roughly 1.6 kg CO₂e. Try our impact calculator at greencirkit.com/impact.";
   if (/(job|career|hiring|vacancy|apply)/.test(s)) return "We're hiring! See open roles at greencirkit.com/careers.";
@@ -67,7 +87,7 @@ const fallbackAnswer = (q: string) => {
   if (/(spec|mfi|melt|density|grade|tds|sample)/.test(s))
     return "Our live grade is GC Prime™ BM 115, blue rHDPE for blow moulding: MFI 1.15 g/10 min (190°C/5 kg), density 0.958 g/cm³, tensile at yield 24 MPa, flexural modulus 975 MPa. Full TDS is on the Buy Granules page. Want a sample?";
   if (/(scrap|kabadi|waste)/.test(s))
-    return "We don't buy scrap. We buy finished rHDPE granules from recyclers. If you make granules, tap 'I want to sell granules'.";
+    return "We don't buy scrap. We buy finished rHDPE granules from recyclers. If you make granules, just type 'sell granules'.";
   if (/(sell|supply|supplier|partner|recycler)/.test(s))
     return "We buy consistent rHDPE granules (blow moulding first, also injection and pipe/film grades) in steady monthly volumes. Share your grade, MFI and quantity and we'll plan a sample.";
   if (/(where|location|address|office|plant)/.test(s)) return `Our office is at ${SITE.office}.`;
@@ -83,7 +103,7 @@ const GigiChatbot = () => {
   const [chips, setChips] = useState<string[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
-  const [flow, setFlow] = useState<{ id: "buy" | "sell"; i: number; data: Record<string, string> } | null>(null);
+  const [flow, setFlow] = useState<{ id: "buy" | "sell" | "invest"; i: number; data: Record<string, string> } | null>(null);
   const [history, setHistory] = useState<{ role: string; content: string }[]>([]);
   const idRef = useRef(0);
   const endRef = useRef<HTMLDivElement>(null);
@@ -122,7 +142,7 @@ const GigiChatbot = () => {
 
   const greet = async () => {
     await say("Hi, I'm Gigi 👋");
-    await say("Looking for near-virgin rHDPE, or making granules you want to sell? I can get you sorted in about 30 seconds.", START_CHIPS);
+    await say("I can tell you what GreenCirkit does, where we're headed, or connect you with the founders.", START_CHIPS);
   };
 
   const openChat = () => {
@@ -145,7 +165,7 @@ const GigiChatbot = () => {
     greet();
   };
 
-  const startFlow = async (id: "buy" | "sell") => {
+  const startFlow = async (id: "buy" | "sell" | "invest") => {
     setFlow({ id, i: 0, data: {} });
     const s = FLOWS[id].steps[0];
     await say(s.ask, s.chips);
@@ -193,7 +213,7 @@ const GigiChatbot = () => {
     if (!reply) reply = fallbackAnswer(q);
     setMsgs((m) => m.map((x) => (x.id === id ? { ...x, text: reply, typing: false } : x)));
     setHistory((p) => [...p, { role: "assistant", content: reply }]);
-    setChips(["I want to buy granules", "I want to sell granules", "Talk to a human"]);
+    setChips(["I'm an investor", "I want to buy granules", "Talk to a human"]);
     setBusy(false);
   };
 
@@ -208,11 +228,16 @@ const GigiChatbot = () => {
 
     const low = text.toLowerCase();
     if (text === "Start over") return reset();
-    if (text === START_CHIPS[0] || /^buy\b|buy granule|need granule/.test(low)) return startFlow("buy");
-    if (text === START_CHIPS[1] || /sell (my )?(granules|scrap)|^sell\b/.test(low)) return startFlow("sell");
-    if (text === START_CHIPS[2]) return say("Ask away. Specs, supply, pricing, anything.", ASK_CHIPS);
+    if (text === START_CHIPS[0] || /investor|invest\b|\bdeck\b|funding|\bloan\b/.test(low)) return startFlow("invest");
+    if (text === START_CHIPS[2] || /^buy\b|buy granule|need granule/.test(low)) return startFlow("buy");
+    if (/sell (my )?(granules|scrap)|^sell\b/.test(low)) return startFlow("sell");
+    if (text === START_CHIPS[1])
+      return say(
+        "GreenCirkit is building India's trusted supply of recycled plastic, starting with recycled HDPE. Today we source from vetted partner manufacturers, test every lot in our own lab and supply ready-to-run grades. Next: our own plant in North India. Ask me anything.",
+        ASK_CHIPS,
+      );
     if (text === "Talk to a human")
-      return say(`Sure. WhatsApp us at ${SITE.phone} or email ${SITE.email}. Or leave your details and we'll call you:`, START_CHIPS.slice(0, 2));
+      return say(`Sure. WhatsApp us at ${SITE.phone} or email ${SITE.email}. Or leave your details and we'll call you:`, [START_CHIPS[0], START_CHIPS[2]]);
     return askAi(text);
   };
 
@@ -243,7 +268,7 @@ const GigiChatbot = () => {
                     <X size={14} />
                   </button>
                   <button onClick={openChat} className="text-left">
-                    Buying or selling rHDPE? <span className="text-primary">I can help in 30 seconds →</span>
+                    Investor, partner or customer? <span className="text-primary">Ask me about GreenCirkit →</span>
                   </button>
                 </motion.div>
               )}

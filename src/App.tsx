@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import Index from "./pages/Index";
 import Granules from "./pages/HDPEGranules";
 import SellGranules from "./pages/SellGranules";
+import Investors from "./pages/Investors";
 import NotFound from "./pages/NotFound";
 import TDS from "./pages/TDS";
 import Prices from "./pages/Prices";
@@ -33,6 +34,7 @@ const Site = () => {
         <Route path="/" element={<Index />} />
         <Route path="/granules" element={<Granules />} />
         <Route path="/sell-granules" element={<SellGranules />} />
+        <Route path="/investors" element={<Investors />} />
         <Route path="/sell-scrap" element={<Navigate to="/sell-granules" replace />} />
         <Route path="/prices" element={<Prices />} />
         <Route path="/impact" element={<Impact />} />

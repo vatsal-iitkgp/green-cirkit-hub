@@ -4,6 +4,7 @@ import { Page } from "@/components/site/Chrome";
 import { Btn, Eyebrow, Magnetic, Reveal, SplitHeadline, spotlightMove } from "@/components/site/motion";
 import { Counter, PelletCluster } from "@/components/site/visuals";
 import { SITE } from "@/lib/site";
+import { Team } from "@/components/site/story";
 
 const PROBLEMS = [
   { k: "01", t: "No test report", d: "Most recycled granules are sold on a sample and a promise. No datasheet. No lab numbers. Nothing to hold the seller to." },
@@ -15,23 +16,6 @@ const ANSWERS = [
   { t: "A vetted partner network", d: "We work with a small group of recycled-granule manufacturers we've audited, not whoever is cheapest this week." },
   { t: "Our lab, your proof", d: "Every lot is tested by us before it's accepted. The report ships with the material." },
   { t: "Matched to your spec", d: "Blended to your requirement, with masterbatch or virgin if needed. Packed and supplied under GreenCirkit." },
-];
-
-const FOUNDERS = [
-  {
-    n: "Vatsal Gupta",
-    r: "Co-founder & Director",
-    iit: "IIT Kharagpur",
-    b: "B.Tech, IIT Kharagpur. Investment banking at Houlihan Lokey, then a fintech founder's office. Leads strategy, sales and operations.",
-    q: "An engineer by education, a strategy guy by profession, and a recycler by choice.",
-  },
-  {
-    n: "Anuj Gupta",
-    r: "Co-founder & Director",
-    iit: "IIT Roorkee",
-    b: "B.Arch, IIT Roorkee. 30+ years building and running ventures in real estate and industrial development. Leads operations and finance.",
-    q: "",
-  },
 ];
 
 const About = () => {
@@ -151,37 +135,25 @@ const About = () => {
         </motion.p>
       </section>
 
-      {/* Founders */}
-      <section className="container max-w-6xl py-20 md:py-28">
+      {/* Team */}
+      <Team eyebrow="Founders & advisors" />
+
+      {/* Founder note */}
+      <section className="container max-w-4xl py-10 md:py-16">
         <Reveal>
-          <Eyebrow>The founders</Eyebrow>
+          <p className="serif italic text-[clamp(1.8rem,4vw,3rem)] leading-snug text-foreground/90">
+            "An engineer by education, a strategy guy by profession, and a recycler by choice."
+          </p>
+          <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Vatsal Gupta · Co-founder</p>
         </Reveal>
-        <SplitHeadline text={"Engineers first.\n*Obsessed with quality.*"} className="mt-5 text-4xl md:text-6xl font-medium leading-[0.95]" />
-        <div className="mt-12 grid gap-5 md:grid-cols-2">
-          {FOUNDERS.map((f, i) => (
-            <Reveal key={f.n} delay={i * 0.1}>
-              <div onMouseMove={spotlightMove} className="spotlight h-full rounded-[28px] border border-foreground/10 bg-card p-8 md:p-10 flex flex-col">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="text-3xl md:text-4xl font-medium">{f.n}</h3>
-                    <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{f.r}</p>
-                  </div>
-                  <span className="shrink-0 rounded-full border border-primary/40 bg-primary/10 px-3.5 py-1.5 text-xs font-medium text-primary">{f.iit}</span>
-                </div>
-                <p className="mt-6 text-muted-foreground leading-relaxed">{f.b}</p>
-                {f.q && <p className="mt-auto pt-8 serif italic text-2xl leading-snug text-foreground/90">"{f.q}"</p>}
-              </div>
-            </Reveal>
-          ))}
-        </div>
       </section>
 
       {/* Vision */}
       <section className="container max-w-6xl py-16">
         <div className="grid md:grid-cols-2 gap-5">
           {[
-            { l: "Vision", t: "To be India's most trusted name in recycled HDPE." },
-            { l: "Mission", t: "Make recycled HDPE something brands choose with confidence, not compromise." },
+            { l: "Vision", t: "To build the infrastructure India's recycling economy runs on, starting as its most trusted name in recycled HDPE." },
+            { l: "Mission", t: "Make recycled plastic something brands choose with confidence, not compromise." },
           ].map((v, i) => (
             <Reveal key={v.l} delay={i * 0.08}>
               <div className="h-full rounded-[28px] border border-foreground/10 p-8 md:p-10">
@@ -198,11 +170,11 @@ const About = () => {
 
       {/* CTA */}
       <section className="container max-w-6xl py-20 md:py-28 text-center">
-        <SplitHeadline text={"Work with *us.*"} className="text-[clamp(3rem,8vw,6.5rem)] font-medium leading-[0.92]" />
+        <SplitHeadline text={"Build with *us.*"} className="text-[clamp(3rem,8vw,6.5rem)] font-medium leading-[0.92]" />
         <Reveal delay={0.2} className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
           <Magnetic>
-            <Btn to="/granules#sample" size="lg">
-              Request a sample
+            <Btn to="/investors" size="lg">
+              Investor relations
             </Btn>
           </Magnetic>
           <Magnetic>

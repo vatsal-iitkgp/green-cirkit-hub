@@ -58,7 +58,7 @@ export const Counter = ({ to, decimals = 0, prefix = "", suffix = "", className 
   return (
     <span ref={ref} className={cn("tabular-nums", className)}>
       {prefix}
-      {v.toFixed(decimals)}
+      {decimals ? v.toFixed(decimals) : Math.round(v).toLocaleString("en-IN")}
       {suffix}
     </span>
   );

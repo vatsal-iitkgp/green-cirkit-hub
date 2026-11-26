@@ -7,6 +7,7 @@ import Journey from "@/components/site/Journey";
 import { Btn, Eyebrow, Magnetic, Reveal, SplitHeadline, spotlightMove, EASE } from "@/components/site/motion";
 import { Counter, PelletCluster } from "@/components/site/visuals";
 import { Page } from "@/components/site/Chrome";
+import { Roadmap, MarketFunnel, ImpactGoals, Team } from "@/components/site/story";
 import { VIRGIN_HDPE_BM_DELHI } from "@/content/prices";
 import { POSTS, formatDate } from "@/lib/news";
 
@@ -35,14 +36,14 @@ const Hero = () => {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
           </span>
-          Now onboarding buyers & supply partners
+          Pre-seed · Building in North India
         </motion.div>
 
         <SplitHeadline
           as="h1"
           animateOnMount
           delay={0.6}
-          text={"Not your usual\n*supplier.*"}
+          text={"Recycled plastic,\n*finally trusted.*"}
           className="font-medium leading-[0.92] text-[clamp(2.9rem,9vw,7.6rem)] tracking-[-0.055em]"
         />
 
@@ -52,7 +53,7 @@ const Hero = () => {
           transition={{ delay: 1.3, duration: 0.9, ease: EASE }}
           className="mt-8 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed text-balance"
         >
-          Premium recycled HDPE granules.<br />Tested. Trusted. Traceable.<br /><span className="text-foreground/80">Built by IITians, designed around industry's needs.</span>
+          India now requires brands to use recycled plastic. We're building the tested, traceable supply they can rely on, starting with recycled HDPE.<br /><span className="text-foreground/80">Built by IITians.</span>
         </motion.p>
 
         <motion.div
@@ -62,13 +63,13 @@ const Hero = () => {
           className="mt-10 flex flex-col sm:flex-row gap-3"
         >
           <Magnetic>
-            <Btn to="/granules" size="lg">
-              Buy Granules
+            <Btn to="/investors" size="lg">
+              Investor relations
             </Btn>
           </Magnetic>
           <Magnetic>
-            <Btn to="/sell-granules" size="lg" variant="ghost">
-              Sell Granules
+            <Btn to="/about" size="lg" variant="ghost">
+              Our story
             </Btn>
           </Magnetic>
         </motion.div>
@@ -80,7 +81,7 @@ const Hero = () => {
 };
 
 /* ---------------- Marquee ---------------- */
-const WORDS = ["Near-virgin rHDPE", "Colour-consistent", "Batch traceable", "Lab-tested lots", "Consistent MFI", "PAN India"];
+const WORDS = ["Regulation-backed demand", "Lab-tested lots", "Batch traceable", "North India first", "Built by IITians", "PAN India"];
 const Marquee = () => {
   const { scrollY } = useScroll();
   const vel = useVelocity(scrollY);
@@ -114,74 +115,71 @@ const Marquee = () => {
   );
 };
 
-/* ---------------- Two doors ---------------- */
-const Door = ({
-  to,
-  tag,
-  title,
-  body,
-  cta,
-  art,
-}: {
-  to: string;
-  tag: string;
-  title: string;
-  body: string;
-  cta: string;
-  art: React.ReactNode;
-}) => (
-  <Link
-    to={to}
-    onMouseMove={spotlightMove}
-    className="spotlight group relative flex min-h-[560px] flex-col justify-between overflow-hidden rounded-[28px] border border-foreground/10 bg-card p-8 md:p-10 transition-transform duration-700 hover:-translate-y-1"
-  >
-    <div className="flex items-start justify-between">
-      <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{tag}</span>
-      <span className="grid h-12 w-12 place-items-center rounded-full border border-foreground/15 transition-all duration-500 group-hover:bg-primary group-hover:text-primary-foreground group-hover:rotate-45 group-hover:border-primary">
-        <ArrowUpRight className="h-5 w-5" />
-      </span>
+/* ---------------- Why now ---------------- */
+const STATS = [
+  { v: <Counter to={60} suffix="%" />, l: "recycled content required in rigid plastic packaging by FY 2028–29, up from 30% today" },
+  { v: <>₹<Counter to={4000} /> Cr</>, l: "HDPE rigid-packaging market that falls under those targets (our estimate)" },
+  { v: <><Counter to={10} /> Mn t</>, l: "of plastic waste India generates a year, mostly handled informally" },
+];
+const WhyNow = () => (
+  <section className="container max-w-6xl py-24 md:py-32">
+    <Reveal>
+      <Eyebrow>Why now</Eyebrow>
+    </Reveal>
+    <SplitHeadline text={"The rules changed.\n*The supply didn't.*"} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
+    <div className="mt-14 grid md:grid-cols-3 border-t border-foreground/10">
+      {STATS.map((s, i) => (
+        <Reveal key={i} delay={i * 0.1} className={`py-10 md:pr-8 ${i ? "md:border-l md:pl-8 border-t md:border-t-0" : ""} border-foreground/10`}>
+          <p className="text-6xl md:text-7xl font-medium tracking-[-0.05em]">{s.v}</p>
+          <p className="mt-4 max-w-xs text-muted-foreground leading-relaxed">{s.l}</p>
+        </Reveal>
+      ))}
     </div>
-    <div className="pointer-events-none mx-auto my-6 h-52 w-52 md:h-60 md:w-60 opacity-90 transition-transform duration-1000 group-hover:scale-110 group-hover:-rotate-6">
-      {art}
-    </div>
-    <div className="relative">
-      <h3 className="text-4xl md:text-5xl font-medium leading-[0.95] max-w-[12ch]">{title}</h3>
-      <p className="mt-4 max-w-sm text-muted-foreground leading-relaxed">{body}</p>
-      <span className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-primary">
-        {cta}
-        <span className="h-px w-8 bg-primary transition-all duration-500 group-hover:w-16" />
-      </span>
-    </div>
-  </Link>
+  </section>
 );
 
-const Doors = () => (
-  <section className="container max-w-6xl py-28 md:py-36">
-    <Reveal>
-      <Eyebrow>Buy · Sell</Eyebrow>
-    </Reveal>
-    <SplitHeadline text={"Pick your *side*\nof the circuit."} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
-    <div className="mt-14 grid gap-5 md:grid-cols-2">
-      <Reveal>
-        <Door
-          to="/granules"
-          tag="For brands & converters"
-          title="Buy near-virgin granules"
-          body="Near-virgin rHDPE. Tested every lot. Sample first."
-          cta="See grades & request a sample"
-          art={<PelletCluster />}
-        />
-      </Reveal>
-      <Reveal delay={0.1}>
-        <Door
-          to="/sell-granules"
-          tag="For recyclers & granule makers"
-          title="Sell us your granules"
-          body="Steady offtake. Fair, market-linked price. On-time payment."
-          cta="Become a supply partner"
-          art={<PelletCluster tone="blue" />}
-        />
-      </Reveal>
+/* ---------------- What we do ---------------- */
+const PILLARS = [
+  { k: "01", t: "Source", d: "Recycled HDPE from vetted partner manufacturers today. Our own North India plant next." },
+  { k: "02", t: "Verify", d: "Every lot tested in our QC lab. A test report travels with every shipment." },
+  { k: "03", t: "Supply", d: "Ready-to-run grades blended to each customer's spec, under the GreenCirkit name." },
+];
+const WhatWeDo = () => (
+  <section className="relative overflow-hidden py-24 md:py-32">
+    <div className="absolute inset-0 grid-bg [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
+    <div className="relative container max-w-6xl grid gap-14 md:grid-cols-12 items-center">
+      <div className="md:col-span-5">
+        <Reveal>
+          <Eyebrow>What we do</Eyebrow>
+        </Reveal>
+        <SplitHeadline text={"Recycled HDPE,\n*with proof.*"} className="mt-5 text-5xl md:text-6xl font-medium leading-[0.95]" />
+        <Reveal delay={0.2}>
+          <p className="mt-6 max-w-md text-lg text-muted-foreground leading-relaxed">
+            We turn recycled plastic into something a brand can put its name on: consistent, tested and traceable.
+          </p>
+        </Reveal>
+        <Reveal delay={0.3}>
+          <PelletCluster className="mt-8 max-w-[300px]" />
+        </Reveal>
+      </div>
+      <div className="md:col-span-7 space-y-4">
+        {PILLARS.map((p, i) => (
+          <Reveal key={p.k} delay={i * 0.08}>
+            <div onMouseMove={spotlightMove} className="spotlight rounded-[24px] border border-foreground/10 bg-card p-8 flex gap-6">
+              <span className="font-mono text-sm text-primary pt-1.5">{p.k}</span>
+              <div>
+                <h3 className="text-3xl font-medium">{p.t}</h3>
+                <p className="mt-2 text-muted-foreground leading-relaxed">{p.d}</p>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+        <Reveal delay={0.3}>
+          <Link to="/granules" className="inline-flex items-center gap-2 pt-2 text-sm font-medium text-primary hover:underline underline-offset-4">
+            See our first product, GC Prime™ BM 115 <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </Reveal>
+      </div>
     </div>
   </section>
 );
@@ -218,49 +216,6 @@ const Manifesto = () => {
   );
 };
 
-/* ---------------- Product spotlight ---------------- */
-const SPEC_PREVIEW = [
-  { l: "Melt flow index", v: <Counter to={1.15} decimals={2} />, u: "g/10 min · 190°C/5 kg" },
-  { l: "Density", v: <Counter to={0.958} decimals={3} />, u: "g/cm³" },
-  { l: "Tensile at yield", v: <Counter to={24} />, u: "MPa" },
-  { l: "Flexural modulus", v: <Counter to={975} />, u: "MPa" },
-];
-
-const Product = () => (
-  <section className="relative overflow-hidden py-28 md:py-40">
-    <div className="absolute inset-0 grid-bg [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
-    <div className="relative container max-w-6xl grid gap-16 md:grid-cols-2 items-center">
-      <Reveal className="order-2 md:order-1">
-        <PelletCluster className="max-w-[520px] mx-auto" />
-      </Reveal>
-      <div className="order-1 md:order-2">
-        <Reveal>
-          <Eyebrow>The product</Eyebrow>
-        </Reveal>
-        <SplitHeadline text={"GC Prime™\n*near-virgin* rHDPE."} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
-        <Reveal delay={0.2}>
-          <p className="mt-6 max-w-md text-muted-foreground text-lg leading-relaxed">
-            Our first grade is live: BM 115, blue HDPE for blow moulding. More grades are on the way.
-          </p>
-        </Reveal>
-        <div className="mt-10 grid grid-cols-2 border-t border-foreground/10">
-          {SPEC_PREVIEW.map((s, i) => (
-            <Reveal key={s.l} delay={0.1 * i} className={`py-6 border-b border-foreground/10 ${i % 2 === 0 ? "pr-6 border-r" : "pl-6"}`}>
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{s.l}</p>
-              <p className="mt-2 text-4xl md:text-5xl font-medium tracking-tight">{s.v}</p>
-              <p className="mt-1 text-xs text-muted-foreground">{s.u}</p>
-            </Reveal>
-          ))}
-        </div>
-        <Reveal delay={0.3} className="mt-10 flex items-center gap-5">
-          <Btn to="/granules">View grades</Btn>
-          <Btn to="/granules#sample" variant="ghost">Request sample</Btn>
-        </Reveal>
-      </div>
-    </div>
-  </section>
-);
-
 /* ---------------- Market pulse (tools teaser) ---------------- */
 const Pulse = () => {
   const latest = VIRGIN_HDPE_BM_DELHI[VIRGIN_HDPE_BM_DELHI.length - 1];
@@ -268,7 +223,7 @@ const Pulse = () => {
   return (
     <section className="container max-w-6xl py-24 md:py-32">
       <Reveal>
-        <Eyebrow>Market pulse</Eyebrow>
+        <Eyebrow>Insights</Eyebrow>
       </Reveal>
       <SplitHeadline text={"Market *pulse.*"} className="mt-5 text-5xl md:text-7xl font-medium leading-[0.95]" />
       <div className="mt-14 grid gap-5 md:grid-cols-6">
@@ -325,64 +280,21 @@ const Pulse = () => {
   );
 };
 
-/* ---------------- About ---------------- */
-const About = () => (
-  <section id="about" className="container max-w-6xl py-28 md:py-40 scroll-mt-24">
-    <div className="grid gap-14 md:grid-cols-12">
-      <div className="md:col-span-5">
-        <Reveal>
-          <Eyebrow>About</Eyebrow>
-        </Reveal>
-        <SplitHeadline text={"Built to be\n*trusted.*"} className="mt-5 text-4xl md:text-6xl font-medium leading-[0.98]" />
-      </div>
-      <div className="md:col-span-6 md:col-start-7 space-y-6 text-lg text-muted-foreground leading-relaxed">
-        <Reveal>
-          <p>
-            Most recycled plastic in India is sold on trust alone. We'd rather earn it, one tested, traceable lot at a time.
-          </p>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <p>
-            Sourced from vetted partner manufacturers. Tested in our lab. Built by IIT alumni.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <span className="rounded-full border border-primary/40 bg-primary/10 px-3.5 py-1.5 text-xs font-medium text-primary">IIT Kharagpur</span>
-            <span className="rounded-full border border-primary/40 bg-primary/10 px-3.5 py-1.5 text-xs font-medium text-primary">IIT Roorkee</span>
-            <Link to="/about" className="ml-2 text-sm text-foreground underline underline-offset-4 hover:text-primary">Read our story →</Link>
-          </div>
-        </Reveal>
-        <Reveal delay={0.2} className="grid sm:grid-cols-2 gap-4 pt-6">
-          {[
-            { n: "Anuj Gupta", r: "Director", b: "IIT Roorkee · 30+ years building and running ventures" },
-            { n: "Vatsal Gupta", r: "Director", b: "IIT Kharagpur · ex-Houlihan Lokey, strategy & operations" },
-          ].map((p) => (
-            <div key={p.n} className="rounded-2xl border border-foreground/10 bg-card p-6">
-              <p className="text-foreground text-xl font-medium">{p.n}</p>
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-primary mt-1">{p.r}</p>
-              <p className="mt-3 text-sm">{p.b}</p>
-            </div>
-          ))}
-        </Reveal>
-      </div>
-    </div>
-  </section>
-);
-
 /* ---------------- Final CTA ---------------- */
 const FinalCTA = () => (
   <section className="container max-w-6xl py-16 md:py-24">
     <div className="forest relative overflow-hidden rounded-[36px] border border-primary/20 px-6 py-24 md:py-32 text-center">
       <div className="absolute inset-0 grid-bg opacity-40 [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]" />
-      <SplitHeadline text={"Trust,\n*by the granule.*"} className="relative text-[clamp(3rem,8vw,7rem)] font-medium leading-[0.92]" />
+      <SplitHeadline text={"Build the circuit\n*with us.*"} className="relative text-[clamp(3rem,8vw,7rem)] font-medium leading-[0.92]" />
       <Reveal delay={0.3} className="relative mt-12 flex flex-col sm:flex-row gap-3 justify-center">
         <Magnetic>
-          <Btn to="/granules#sample" size="lg">
-            Request a sample
+          <Btn to="/investors#deck" size="lg">
+            Request the investor deck
           </Btn>
         </Magnetic>
         <Magnetic>
-          <Btn to="/sell-granules#sell" size="lg" variant="ghost">
-            Sell us granules
+          <Btn href="mailto:contact@greencirkit.com" size="lg" variant="ghost">
+            Get in touch
           </Btn>
         </Magnetic>
       </Reveal>
@@ -394,12 +306,15 @@ const Index = () => (
   <Page>
     <Hero />
     <Marquee />
-    <Doors />
+    <WhyNow />
     <Manifesto />
+    <WhatWeDo />
     <Journey />
-    <Product />
+    <Roadmap />
+    <MarketFunnel />
+    <ImpactGoals />
+    <Team />
     <Pulse />
-    <About />
     <FinalCTA />
   </Page>
 );
