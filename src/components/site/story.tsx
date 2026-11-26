@@ -109,14 +109,14 @@ export const Roadmap = ({ title = "Where we're *going.*" }: { title?: string }) 
             </ul>
           </motion.div>
         </AnimatePresence>
-        <div className="mt-8 flex gap-2">
+        <div className="mt-8 flex flex-wrap items-center gap-2">
           <button onClick={() => setI((n) => Math.max(0, n - 1))} disabled={i === 0} className="rounded-full border border-foreground/15 px-4 py-2 text-sm disabled:opacity-30 hover:border-primary">
             ← Back
           </button>
           <button onClick={() => setI((n) => Math.min(PHASES.length - 1, n + 1))} disabled={i === PHASES.length - 1} className="rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground disabled:opacity-30">
             Next phase →
           </button>
-          <Link to="/vision" className="ml-auto self-center text-sm text-primary hover:underline underline-offset-4">
+          <Link to="/vision" className="w-full sm:w-auto sm:ml-auto pt-2 sm:pt-0 text-sm text-primary hover:underline underline-offset-4">
             The full plan →
           </Link>
         </div>
@@ -232,6 +232,75 @@ export const ImpactGoals = () => {
         </div>
         <p className="relative mt-4 text-xs text-muted-foreground">
           Targets at full capacity. Assumes ~1.64 kg CO₂e saved per kg of recycled HDPE used instead of virgin, 50 g per bottle, 4.6 t CO₂e per car a year.
+        </p>
+      </div>
+    </section>
+  );
+};
+
+/* ------------------------------------------------------------------ */
+/* Playable impact: one slider, two relatable results                  */
+/* ------------------------------------------------------------------ */
+const BOTTLES_PER_T = 20000; // 50 g HDPE bottles per tonne
+const TREES_PER_T = 75; // 1.64 t CO2e saved per tonne / ~22 kg CO2 a tree absorbs a year
+
+export const ImpactPlay = () => {
+  const [t, setT] = useState(100);
+  const bottles = t * BOTTLES_PER_T;
+  const trees = t * TREES_PER_T;
+  const fmt = (n: number) => (n >= 1e7 ? `${+(n / 1e7).toFixed(1)} crore` : n >= 1e5 ? `${+(n / 1e5).toFixed(1)} lakh` : n.toLocaleString("en-IN"));
+  const forest = Math.min(120, Math.max(3, Math.round(trees / 250)));
+  return (
+    <section className="container max-w-6xl py-16 md:py-24">
+      <div className="forest relative overflow-hidden rounded-[36px] border border-primary/20 p-8 md:p-14">
+        <div className="absolute inset-0 grid-bg opacity-30 [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]" />
+        <div className="relative grid gap-12 md:grid-cols-2 items-center">
+          <div>
+            <Eyebrow>Impact · try it</Eyebrow>
+            <SplitHeadline text={"Slide it.\n*See the difference.*"} className="mt-5 text-4xl md:text-6xl font-medium leading-[0.95]" />
+            <p className="mt-8 text-lg text-muted-foreground">
+              If brands used <span className="text-foreground font-medium">{t} tonnes</span> of recycled HDPE instead of new plastic…
+            </p>
+            <input
+              type="range"
+              min={10}
+              max={1000}
+              step={10}
+              value={t}
+              onChange={(e) => setT(+e.target.value)}
+              aria-label="Tonnes of recycled HDPE"
+              className="mt-6 w-full accent-[hsl(var(--primary))] h-2 cursor-pointer"
+            />
+            <div className="mt-2 flex justify-between font-mono text-[11px] text-muted-foreground">
+              <span>10 t</span>
+              <span>1,000 t</span>
+            </div>
+          </div>
+          <div className="space-y-8">
+            <div>
+              <p className="text-5xl md:text-7xl font-medium tracking-[-0.05em] tabular-nums">{fmt(bottles)}</p>
+              <p className="mt-2 text-muted-foreground">plastic bottles get a second life</p>
+            </div>
+            <div>
+              <p className="text-5xl md:text-7xl font-medium tracking-[-0.05em] tabular-nums text-primary">{fmt(trees)}</p>
+              <p className="mt-2 text-muted-foreground">trees' worth of CO₂ saved in a year</p>
+              <div className="mt-5 flex flex-wrap gap-1.5" aria-hidden>
+                {Array.from({ length: forest }).map((_, n) => (
+                  <motion.span
+                    key={n}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 18 }}
+                    className="h-3 w-3 rounded-full bg-primary/80"
+                  />
+                ))}
+              </div>
+              <p className="mt-2 text-[11px] text-muted-foreground">Each dot ≈ 250 trees</p>
+            </div>
+          </div>
+        </div>
+        <p className="relative mt-10 text-xs text-muted-foreground">
+          Assumes a 50 g bottle and ~1.64 kg CO₂e saved per kg of recycled HDPE used instead of virgin. <Link to="/impact" className="text-primary hover:underline">Full calculator →</Link>
         </p>
       </div>
     </section>

@@ -90,7 +90,7 @@ const fallbackAnswer = (q: string) => {
     return "We don't buy scrap. We buy finished rHDPE granules from recyclers. If you make granules, just type 'sell granules'.";
   if (/(sell|supply|supplier|partner|recycler)/.test(s))
     return "We buy consistent rHDPE granules (blow moulding first, also injection and pipe/film grades) in steady monthly volumes. Share your grade, MFI and quantity and we'll plan a sample.";
-  if (/(where|location|address|office|plant)/.test(s)) return `Our office is at ${SITE.office}.`;
+  if (/(where|location|address|office|plant)/.test(s)) return `We're based in ${SITE.office}. For a visit, message us on WhatsApp at ${SITE.phone}.`;
   if (/(food|fda|contact)/.test(s)) return "Our granules are for non-food-contact packaging: jerry cans, bottles up to 15 L, personal-care packaging and general blow-moulded containers.";
   if (/(machine|plant|capacity|technology|equipment)/.test(s)) return "We'd rather let the material speak. Request a sample and test it on your own line. The team can share more on a call.";
   return "Good question. Let me get a human on it. Tap 'Talk to a human' or message us on WhatsApp.";

@@ -7,7 +7,7 @@ import Journey from "@/components/site/Journey";
 import { Btn, Eyebrow, Magnetic, Reveal, SplitHeadline, spotlightMove, EASE } from "@/components/site/motion";
 import { Counter, PelletCluster } from "@/components/site/visuals";
 import { Page } from "@/components/site/Chrome";
-import { Roadmap, MarketFunnel, ImpactGoals, Team } from "@/components/site/story";
+import { Roadmap, ImpactPlay, Team } from "@/components/site/story";
 import { VIRGIN_HDPE_BM_DELHI } from "@/content/prices";
 import { POSTS, formatDate } from "@/lib/news";
 
@@ -384,8 +384,7 @@ const Index = () => (
     <Doors />
     <Journey />
     <Roadmap />
-    <MarketFunnel />
-    <ImpactGoals />
+    <ImpactPlay />
     <Team />
     <Pulse />
     <FinalCTA />

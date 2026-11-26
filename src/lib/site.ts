@@ -7,7 +7,7 @@ export const SITE = {
   gstin: "09AAMCG3570G1ZD",
   phone: "+91 82797 12657",
   phoneRaw: "918279712657",
-  office: "B-37, Block B, Sector 1, Noida, UP",
+  office: "Noida, India",
 };
 
 export const whatsappLink = (text: string) =>

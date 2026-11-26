@@ -33,7 +33,7 @@ const About = () => {
           as="h1"
           animateOnMount
           delay={0.2}
-          text={"Recycled plastic\ndeserves *trust.*"}
+          text={"Building India's\n*recycled-plastic*\ninfrastructure."}
           className="mt-6 text-[clamp(3rem,9vw,7.5rem)] font-medium leading-[0.9]"
         />
         <Reveal delay={0.6}>
@@ -148,22 +148,8 @@ const About = () => {
         </Reveal>
       </section>
 
-      {/* Vision */}
-      <section className="container max-w-6xl py-16">
-        <div className="grid md:grid-cols-2 gap-5">
-          {[
-            { l: "Vision", t: "To build the infrastructure India's recycling economy runs on, starting as its most trusted name in recycled HDPE." },
-            { l: "Mission", t: "Make recycled plastic something brands choose with confidence, not compromise." },
-          ].map((v, i) => (
-            <Reveal key={v.l} delay={i * 0.08}>
-              <div className="h-full rounded-[28px] border border-foreground/10 p-8 md:p-10">
-                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-primary">{v.l}</p>
-                <p className="mt-4 text-2xl md:text-3xl font-medium leading-snug">{v.t}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-        <Reveal className="mt-8 text-sm text-muted-foreground">
+      <section className="container max-w-6xl pb-6">
+        <Reveal className="text-sm text-muted-foreground">
           {SITE.legal} · {SITE.office} · CIN {SITE.cin} · GSTIN {SITE.gstin}
         </Reveal>
       </section>
